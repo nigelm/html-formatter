@@ -106,7 +106,7 @@ use Carp;
 use UNIVERSAL qw(can);
 
 use vars qw($VERSION @Size_magic_numbers);
-$VERSION = sprintf("%d.%02d", q$Revision: 2.01 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.02 $ =~ /(\d+)\.(\d+)/);
 
 #
 # A typical formatter will not use all of the features of this
@@ -275,16 +275,33 @@ sub end
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 sub set_version_tag {
   my($self, $html) = @_;
-  $self->{'version_tag'} = sprintf(
-    "%s (v%s, using %s v%s%s)",
-    ref($self), $self->VERSION,
-    ref($html), $html->VERSION,
-    $HTML::Parser::VERSION ? ", and HTML::Parser v$HTML::Parser::VERSION" : ''
-  );
+  
+  if($html) {
+    $self->{'version_tag'} = sprintf(
+      "%s (v%s, using %s v%s%s)",
+      ref($self), $self->VERSION || '?',
+      ref($html), $html->VERSION || '?',
+      $HTML::Parser::VERSION
+        ? ", and HTML::Parser v$HTML::Parser::VERSION"
+        : ''
+    );
+  } elsif( $HTML::Parser::VERSION ) {
+    $self->{'version_tag'} = sprintf(
+      "%s (v%s, using %s)",
+      ref($self), $self->VERSION || "?",
+      "HTML::Parser v$HTML::Parser::VERSION",
+    );
+  } else {
+    $self->{'version_tag'} = sprintf(
+      "%s (v%s)",
+      ref($self), $self->VERSION || '?',
+    );
+  }
 }
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 sub version_tag { shift->{'version_tag'} }
 
