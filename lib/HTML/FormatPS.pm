@@ -172,6 +172,9 @@ reserved.
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
+This program is distributed in the hope that it will be useful, but
+without any warranty; without even the implied warranty of
+merchantability or fitness for a particular purpose.
 
 
 =head1 AUTHOR
@@ -191,7 +194,7 @@ BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
 
 @ISA = qw(HTML::Formatter);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 2.01 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.04 $ =~ /(\d+)\.(\d+)/);
 
 use vars qw(%PaperSizes %FontFamilies @FontSizes %param $DEBUG);
 

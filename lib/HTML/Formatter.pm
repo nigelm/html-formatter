@@ -88,6 +88,10 @@ reserved.
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
+This program is distributed in the hope that it will be useful, but
+without any warranty; without even the implied warranty of
+merchantability or fitness for a particular purpose.
+
 
 =head1 AUTHOR
 
@@ -106,7 +110,7 @@ use Carp;
 use UNIVERSAL qw(can);
 
 use vars qw($VERSION @Size_magic_numbers);
-$VERSION = sprintf("%d.%02d", q$Revision: 2.03 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.04 $ =~ /(\d+)\.(\d+)/);
 
 #
 # A typical formatter will not use all of the features of this
