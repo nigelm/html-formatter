@@ -1,20 +1,23 @@
+                               # Time-stamp: "2002-10-29 01:21:11 MST"
+
 HTML-Format
 -----------
 
-This is a collection of modules that formats text from HTML syntax
-trees. Bug reports and discussions about these modules can be sent to
-the <libwww@perl.org> mailing list.
+This is a collection of modules that formats HTML as plaintext,
+PostScript or RTF.
 
 The modules present in this package are:
-
-  HTML::Formatter - Base class for various formatters.  Formatters
-        traverse a syntax tree and produce some textual output.  None
-        of the current formatters handle tables or forms yet.
 
   HTML::FormatText - Formatter that converts a syntax tree to plain
         readable text.
 
   HTML::FormatPS - Formatter that outputs PostScript code.
+
+  HTML::FormatRTF - Formatter that outputs RTF code.
+
+  HTML::Formatter - Base class for various formatters.  Formatters
+        traverse a syntax tree and produce some textual output.  None
+        of the current formatters handle tables or forms yet.
 
 
 
@@ -41,7 +44,7 @@ Just follow the usual procedure:
 
 COPYRIGHT
 
-  © 1995-2000 Gisle Aas. All rights reserved.
+  © 1995-2002 Gisle Aas and Sean M. Burke.  All rights reserved.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

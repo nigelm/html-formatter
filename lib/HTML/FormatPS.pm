@@ -1,6 +1,7 @@
-package HTML::FormatPS;
 
-# $Id: FormatPS.pm,v 1.27 1999/12/16 13:00:39 gisle Exp $
+require 5;
+package HTML::FormatPS;
+# Time-stamp: "2002-10-29 01:36:52 MST"
 
 =head1 NAME
 
@@ -97,14 +98,17 @@ L<HTML::Formatter>
 
 =head1 COPYRIGHT
 
-Copyright (c) 1995-1999 Gisle Aas. All rights reserved.
+Copyright (c) 1995-1999 Gisle Aas and 2002- Sean M. Burke. All rights
+reserved.
 
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-Gisle Aas <gisle@aas.no>
+Current maintainer: Sean M. Burke <sburkeE<64>cpan.org>
+
+Original author: Gisle Aas <gisle@aas.no>
 
 =cut
 
@@ -115,7 +119,7 @@ use vars qw(@ISA $VERSION);
 require HTML::Formatter;
 @ISA = qw(HTML::Formatter);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.27 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.28 $ =~ /(\d+)\.(\d+)/);
 
 use vars qw(%PaperSizes %FontFamilies @FontSizes %param $DEBUG);
 

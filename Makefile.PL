@@ -1,4 +1,5 @@
 require 5.004;
+# Time-stamp: "2002-10-29 01:22:18 MST"
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
@@ -8,5 +9,5 @@ WriteMakefile(
 		     'HTML::Element' => 1.44,
 		     'Font::AFM'     => 1.17,
 		    },
-    dist         => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    dist         => { COMPRESS => 'gzip -6f', SUFFIX => 'gz', },
 );

@@ -1,6 +1,7 @@
-package HTML::Formatter;
 
-# $Id: Formatter.pm,v 1.23 2000/06/09 10:34:08 gisle Exp $
+require 5;
+package HTML::Formatter;
+# Time-stamp: "2002-10-29 01:35:33 MST"
 
 =head1 NAME
 
@@ -26,14 +27,17 @@ L<HTML::FormatText>, L<HTML::FormatPS>, L<HTML::Element>
 
 =head1 COPYRIGHT
 
-Copyright (c) 1995-2000 Gisle Aas. All rights reserved.
+Copyright (c) 1995-2000 Gisle Aas, and 2002- Sean M. Burke. All rights
+reserved.
 
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-Gisle Aas <gisle@aas.no>
+Current maintainer: Sean M. Burke <sburkeE<64>cpan.org>
+
+Original author: Gisle Aas <gisle@aas.no>
 
 =cut
 
@@ -45,7 +49,7 @@ use Carp;
 use UNIVERSAL qw(can);
 
 use vars qw($VERSION);
-$VERSION = sprintf("%d.%02d", q$Revision: 1.23 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.24 $ =~ /(\d+)\.(\d+)/);
 
 sub new
 {

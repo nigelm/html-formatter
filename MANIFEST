@@ -1,10 +1,11 @@
 Changes
 MANIFEST
+MANIFEST.SKIP
 Makefile.PL
 README
 lib/HTML/FormatPS.pm
 lib/HTML/FormatText.pm
 lib/HTML/Formatter.pm
-test.html
 t/ps.t
 t/text.t
+test.html
