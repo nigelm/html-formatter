@@ -1,4 +1,14 @@
-                                   #Time-stamp: "2002-10-29 01:27:25 MST"
+                                   #Time-stamp: "2002-11-07 00:31:48 MST"
+
+2002-11-07   Sean M. Burke <sburke@cpan.org>
+
+   Release 2.01 - experimental major version change
+
+   Added HTML::FormatRTF.
+   Lots of internal changes to HTML::FormatPS and HTML::Formatter.
+   Added format_file and format_string methods to HTML::Formatter.
+   Lots of little tidying up in the docs.
+
 
 2002-10-29   Sean M. Burke <sburke@cpan.org>
 
@@ -6,6 +16,8 @@
 
    Just taking it over from Gisle, and releasing this to make sure
    CPAN et al register this change.
+
+
 
 
 

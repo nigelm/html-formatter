@@ -1,25 +1,25 @@
 
 use Test;
-BEGIN { plan 'tests' => 5 }
+BEGIN { plan 'tests' => 4 }
 
 use strict;
 ok 1;
 
-use HTML::FormatText;
+use HTML::FormatRTF;
 
-my $x = HTML::FormatText->format_file(
+open(RTF, ">test.rtf") || die "Can't create test.rtf";
+binmode(RTF);
+print RTF HTML::FormatRTF->format_file(
   "test.html",
-     leftmargin => 5, rightmargin => 50
+    "leftmargin" => 0,
+    "rightmargin" => 50,
 );
-print "# Got back ", length($x), " characters.\n";
-ok(length($x));
-$x =~ s/^/#/mg;
+close RTF;
+sleep 0;
+ok(-s "test.rtf");
+print "# Resulting file is ", -s "test.rtf", " bytes long.\n";
 
-print "# This should look right... \n$x\n";
-
-ok( $x, '/\S/' );
-
-ok(  HTML::FormatText->format_string('puppies'), '/puppies/'  );
+ok(  HTML::FormatRTF->format_string('puppies'), '/puppies/'  );
 
 print "# HTML::Formatter version $HTML::Formatter::VERSION\n"
  if defined $HTML::Formatter::VERSION;

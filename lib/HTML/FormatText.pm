@@ -1,11 +1,10 @@
 
 require 5;
 package HTML::FormatText;
-# Time-stamp: "2002-10-29 01:35:57 MST"
 
 =head1 NAME
 
-HTML::FormatText - Format HTML as text
+HTML::FormatText - Format HTML as plaintext
 
 =head1 SYNOPSIS
 
@@ -43,32 +42,37 @@ L<HTML::Formatter>
 
 =head1 COPYRIGHT
 
-Copyright (c) 1995-1999 Gisle Aas, and 2002- Sean M. Burke. All rights
+Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
 reserved.
 
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
+
 =head1 AUTHOR
 
-Current maintainer: Sean M. Burke <sburkeE<64>cpan.org>
+Current maintainer: Sean M. Burke <sburke@cpan.org>
 
 Original author: Gisle Aas <gisle@aas.no>
+
 
 =cut
 
 use strict;
 use vars qw(@ISA $VERSION);
 
-require HTML::Formatter;
+use HTML::Formatter ();
+BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
+
 @ISA = qw(HTML::Formatter);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.19 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.01 $ =~ /(\d+)\.(\d+)/);
 
 
 sub default_values
 {
     (
+     shift->SUPER::default_values(),
      lm =>  3, # left margin
      rm => 72, # right margin (actually, maximum text width)
     );
@@ -142,6 +146,11 @@ sub header_end
     1;
 }
 
+sub bullet {
+  my $self = shift;
+  $self->SUPER::bullet($_[0] . ' ');
+}
+
 
 sub hr_start
 {
@@ -174,6 +183,8 @@ sub out
 {
     my $self = shift;
     my $text = shift;
+
+    $text =~ tr/\xA0\xAD/ /d;
 
     if ($text =~ /^\s*$/) {
 	$self->{hspace} = 1;
@@ -244,3 +255,4 @@ sub adjust_rm
 }
 
 1;
+

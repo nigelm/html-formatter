@@ -1,29 +1,39 @@
 
 require 5;
 package HTML::FormatPS;
-# Time-stamp: "2002-10-29 01:36:52 MST"
 
 =head1 NAME
 
-HTML::FormatPS - Format HTML as postscript
+HTML::FormatPS - Format HTML as PostScript
 
 =head1 SYNOPSIS
 
-  require HTML::TreeBuilder;
+  use HTML::TreeBuilder;
   $tree = HTML::TreeBuilder->new->parse_file("test.html");
 
-  require HTML::FormatPS;
-  $formatter = new HTML::FormatPS
+  use HTML::FormatPS;
+  $formatter = HTML::FormatPS->new(
 		   FontFamily => 'Helvetica',
-		   PaperSize  => 'Letter';
+		   PaperSize  => 'Letter',
+  );
   print $formatter->format($tree);
+
+Or, for short:
+
+  use HTML::FormatPS;
+  print HTML::FormatPS->format_file(
+    "test.html",
+      'FontFamily' => 'Helvetica',
+      'PaperSize'  => 'Letter',
+  );
 
 =head1 DESCRIPTION
 
 The HTML::FormatPS is a formatter that outputs PostScript code.
 Formatting of HTML tables and forms is not implemented.
 
-You might specify the following parameters when constructing the formatter:
+You might specify the following parameters when constructing the formatter
+object (or when calling format_file or format_string):
 
 =over 4
 
@@ -37,21 +47,21 @@ The default is "A4".
 
 =item PaperWidth
 
-The width of the paper in points.  Setting PaperSize also defines this
+The width of the paper, in points.  Setting PaperSize also defines this
 value.
 
 =item PaperHeight
 
-The height of the paper in points.  Setting PaperSize also defines
+The height of the paper, in points.  Setting PaperSize also defines
 this value.
 
 =item LeftMargin
 
-The left margin in points.
+The left margin, in points.
 
 =item RightMargin
 
-The right margin in points.
+The right margin, in points.
 
 =item HorizontalMargin
 
@@ -59,36 +69,64 @@ Both left and right margin at the same time.  The default value is 4 cm.
 
 =item TopMargin
 
-The top margin in points.
+The top margin, in points.
 
 =item BottomMargin
 
-The bottom margin in points.
+The bottom margin, in points.
 
 =item VerticalMargin
 
-Both top and bottom margin at the same time.  The default value is 2 cm.
+Both top and bottom margin at the same time.  The default value is 2 cm,
+
 
 =item PageNo
 
-The parameter determines if we should put page numbers on the pages.
-The default is yes, so you have to set this value to 0 in order to
-suppress page numbers.
+This parameter determines if we should put page numbers on the pages.
+The default value is true; so you have to set this value to 0 in order to
+suppress page numbers.  (The "No" in "PageNo" means number/numero!)
 
 =item FontFamily
 
-The parameter specifies which family of fonts to use for the formatting.
+This parameter specifies which family of fonts to use for the formatting.
 Legal values are "Courier", "Helvetica" and "Times".  The default is
 "Times".
 
 =item FontScale
 
-All fontsizes might be scaled by this factor.
+This is a scaling factor for all the font sizes.  The default value is 1.
+
+For example, if you want everything to be almost three times as large,
+you could set this to 2.7.  If you wanted things just a bit smaller than
+normal, you could set it to .92.
 
 =item Leading
 
-How much space between lines.  This is a factor of the fontsize used
-for that line.  Default is 0.1.
+This option (pronounced "ledding", not "leeding") controls how much is
+space between lines. This is a factor of the font size used for that
+line.  Default is 0.1 -- so between two 12-point lines, there will be
+1.2 points of space.
+
+=item StartPage
+
+Assuming you have PageNo on, StartPage controls what the page number of
+the first page will be. By default, it is 1. So if you set this to 87,
+the first page would say "87" on it, the next "88", and so on.
+
+=item NoProlog
+
+If this option is set to a true value, HTML::FormatPS will make a point of
+I<not> emitting the PostScript prolog before the document. By default,
+this is off, meaning that HTML::FormatPS I<will> emit the prolog. This
+option is of interest only to advanced users.
+
+=item NoTrailer
+
+If this option is set to a true value, HTML::FormatPS will make a point of
+I<not> emitting the PostScript trailer at the end of the document. By
+default, this is off, meaning that HTML::FormatPS I<will> emit the bit
+of PostScript that ends the document. This option is of interest only to
+advanced users.
 
 =back
 
@@ -96,17 +134,49 @@ for that line.  Default is 0.1.
 
 L<HTML::Formatter>
 
+
+=head1 TO DO
+
+=over
+
+=item *
+
+Support for some more character styles, notably including:
+strike-through, underlining, superscript, and subscript.
+
+=item *
+
+Support for Unicode.
+
+=item *
+
+Support for Win-1252 encoding, since that's what most people
+mean when they use characters in the range 0x80-0x9F in HTML.
+
+=item *
+
+And, if it's ever even reasonably possible, support for tables.
+
+=back
+
+I would welcome email from people who can help me out or advise
+me on the above.
+
+
+
 =head1 COPYRIGHT
 
-Copyright (c) 1995-1999 Gisle Aas and 2002- Sean M. Burke. All rights
+Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
 reserved.
 
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
+
+
 =head1 AUTHOR
 
-Current maintainer: Sean M. Burke <sburkeE<64>cpan.org>
+Current maintainer: Sean M. Burke <sburke@cpan.org>
 
 Original author: Gisle Aas <gisle@aas.no>
 
@@ -116,10 +186,12 @@ use Carp;
 use strict;
 use vars qw(@ISA $VERSION);
 
-require HTML::Formatter;
+use HTML::Formatter ();
+BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
+
 @ISA = qw(HTML::Formatter);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.28 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.01 $ =~ /(\d+)\.(\d+)/);
 
 use vars qw(%PaperSizes %FontFamilies @FontSizes %param $DEBUG);
 
@@ -165,8 +237,8 @@ sub in { $_[0] * 72; }
       # size   0   1   2   3   4   5   6   7
 @FontSizes = ( 5,  6,  8, 10, 12, 14, 18, 24, 32);
 
-sub BOLD   { 0x01; }
-sub ITALIC { 0x02; }
+sub BOLD   () { 0x01; }
+sub ITALIC () { 0x02; }
 
 %param =
 (
@@ -179,7 +251,10 @@ sub ITALIC { 0x02; }
  topmargin        => 'tmH',
  bottommargin     => 'bmH',
  verticalmargin   => 'mH',
+ no_prolog        => 'no_prolog',
+ no_trailer       => 'no_trailer',
  pageno           => 'printpageno',
+ startpage        => 'startpage',
  fontfamily       => 'family',
  fontscale        => 'fontscale',
  leading          => 'leading',
@@ -209,10 +284,13 @@ sub new
 sub default_values
 {
     (
+     shift->SUPER::default_values(),
+
      family      => "Times",
      mH          => mm(40),
      mW          => mm(20),
      printpageno => 1,
+     startpage   => 1,  # yes, you can start numbering at 10, or whatever.
      fontscale   => 1,
      leading     => 0.1,
      papersize   => 'A4',
@@ -238,7 +316,12 @@ sub configure
 		last;
 	    };
 	    $key eq "papersize" && do {
-		$self->papersize($val) || croak "Unknown papersize ($val)";
+		$self->papersize($val) ||
+		  croak sprintf
+                  "Unknown papersize '%s'.\nThe knowns are: %s.\nAborting",
+                  	$val,
+                  	join(', ',  sort keys %PaperSizes)
+                ;
 		last;
 	    };
 	    $self->{$key} = lc $val;
@@ -250,7 +333,7 @@ sub papersize
 {
     my($self, $val) = @_;
     $val = "\u\L$val";
-    my($width, $height) = @{$PaperSizes{$val}};
+    my($width, $height) = @{$PaperSizes{$val} || return 0};
     return 0 unless defined $width;
     $self->{papersize} = $val;
     $self->{paperwidth} = $width;
@@ -342,7 +425,7 @@ sub width
     my $wx = $self->{wx};
     my $sz = $self->{pointsize};
     for (unpack("C*", $_[0])) {
-	$w += $wx->[$_] * $sz;
+	$w += $wx->[$_] * $sz   # unless  $_ eq 0xAD; # optional hyphen
     }
     $w;
 }
@@ -351,13 +434,18 @@ sub width
 sub begin
 {
     my $self = shift;
-    $self->HTML::Formatter::begin;
+    $self->SUPER::begin;
 
-    # Margins is points
+    # Margins are in points
     $self->{lm} = $self->{lmW} || $self->{mW};
     $self->{rm} = $self->{paperwidth}  - ($self->{rmW} || $self->{mW});
     $self->{tm} = $self->{paperheight} - ($self->{tmH} || $self->{mH});
     $self->{bm} = $self->{bmH} || $self->{mH};
+
+    $self->{'orig_margins'} = # used only by the debug-mode print-area marker
+    	[  map { sprintf "%.1f", $_}
+	     @{$self}{qw(lm bm rm tm)}
+	];
 
     # Font setup
     $self->{fno} = 0;
@@ -369,6 +457,7 @@ sub begin
     $self->{ypos} = $self->{tm};
 
     $self->{pageno} = 1;
+    $self->{visible_page_number} = $self->{startpage};
 
     $self->{line} = "";
     $self->{showstring} = "";
@@ -383,14 +472,15 @@ sub begin
 sub end
 {
     my $self = shift;
+    
     $self->showline;
-    $self->endpage if $self->{out};
+    $self->endpage if $self->{'out'};
     my $pages = $self->{pageno} - 1;
 
     my @prolog = ();
     push(@prolog, "%!PS-Adobe-3.0\n");
     #push(@prolog,"%%Title: No title\n"); # should look for the <title> element
-    push(@prolog, "%%Creator: HTML::FormatPS (libwww-perl)\n");
+    push(@prolog, "%%Creator: " . $self->version_tag . "\n");
     push(@prolog, "%%CreationDate: " . localtime() . "\n");
     push(@prolog, "%%Pages: $pages\n");
     push(@prolog, "%%PageOrder: Ascend\n");
@@ -422,6 +512,7 @@ systemdict /ISOLatin1Encoding known not {
 	/space /space /space /space /space /space /space /space
 	/space /space /space /space /space /space /space /space
 	/space /space /space /space /space /space /space /space
+	
 	/space /exclam /quotedbl /numbersign /dollar /percent /ampersand
 	    /quoteright
 	/parenleft /parenright /asterisk /plus /comma /minus /period /slash
@@ -435,10 +526,12 @@ systemdict /ISOLatin1Encoding known not {
 	/h /i /j /k /l /m /n /o
 	/p /q /r /s /t /u /v /w
 	/x /y /z /braceleft /bar /braceright /asciitilde /space
+	
 	/space /space /space /space /space /space /space /space
 	/space /space /space /space /space /space /space /space
 	/dotlessi /grave /acute /circumflex /tilde /macron /breve /dotaccent
 	/dieresis /space /ring /cedilla /space /hungarumlaut /ogonek /caron
+	
 	/space /exclamdown /cent /sterling /currency /yen /brokenbar /section
 	/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen
 	    /registered /macron
@@ -489,8 +582,11 @@ EOT
     }
     push(@prolog, "%%EndSetup\n");
 
-    $self->collect("\n%%Trailer\n%%EOF\n");
-    unshift(@{$self->{output}}, @prolog);
+    $self->collect("\n%%Trailer\n%%EOF\n")
+      unless $self->{'no_trailer'};
+    
+    unshift(@{$self->{output}}, @prolog)
+      unless $self->{'no_prolog'};
 }
 
 
@@ -499,6 +595,7 @@ sub header_start
     my($self, $level, $node) = @_;
     # If we are close enough to be bottom of the page, start a new page
     # instead of this:
+    DEBUG > 1 and print "  Heading of level $level\n";
     $self->vspace(1 + (6-$level) * 0.4);
     $self->{bold}++;
     push(@{$self->{font_size}}, 8 - $level);
@@ -518,6 +615,7 @@ sub header_end
 sub hr_start
 {
     my $self = shift;
+    DEBUG > 1 and print "  Making an HR.\n";
     $self->showline;
     $self->vspace(0.5);
     $self->skip_vspace;
@@ -533,18 +631,39 @@ sub hr_start
 sub skip_vspace
 {
     my $self = shift;
+    DEBUG > 2 and print "   Skipping some amount of vspace.\n";
     if (defined $self->{vspace}) {
 	$self->showline;
-	if ($self->{out}) {
+	if ($self->{'out'}) {
 	    $self->{ypos} -= $self->{vspace} * 10 * $self->{fontscale};
+
 	    if ($self->{ypos} < $self->{bm}) {
+		DEBUG > 2 and printf "   Skipping %s bits of vspace meant moving y down by %.1f to %.1f (via fontscale %s), forcing a pagebreak.\n",
+		  $self->{'vspace'},
+		  $self->{'ypos'},
+                  $self->{'vspace'} * 10 * $self->{fontscale},
+		  $self->{'fontscale'},
+		;
 		$self->newpage;
+	    } else {
+		DEBUG > 2 and printf "   Skipping %s bits of vspace meant moving y down by %.1f to %.1f up.\n",
+		  $self->{vspace},
+		  $self->{'ypos'},
+                  $self->{vspace} * 10 * $self->{fontscale},
+		  $self->{'fontscale'},
+		;
 	    }
+	} else {
+	    DEBUG > 2 and printf "   Would skip $$self{vspace} bits of vspace, but 'out' is false.\n", $$self{'ypos'};
 	}
 	$self->{xpos} = $self->{lm};
 	$self->{vspace} = undef;
 	$self->{hspace} = undef;
+    } else {
+      DEBUG > 2 and print "   (But no vspace to skip.)\n";
     }
+    DEBUG > 3 and print "    Done skipping that vspace.\n";
+    return;
 }
 
 
@@ -552,8 +671,14 @@ sub show
 {
     my $self = shift;
     my $str = $self->{showstring};
+    $str =~ tr/\x01//d;
     return unless length $str;
-    $str =~ s/([\(\)\\])/\\$1/g;    # must escape parentesis
+    
+    $str =~ s/[^\x00-\xff]/\xA4/g;
+     # replace any Unicode characters with the otherwise useless
+     #  International Communist Conspiracy money logo!
+    
+    $str =~ s/([\(\)\\])/\\$1/g;    # must escape parentheses and backslash
     $self->{line} .= "($str)S\n";
     $self->{showstring} = "";
 }
@@ -564,17 +689,55 @@ sub showline
     my $self = shift;
     $self->show;
     my $line = $self->{line};
-    return unless length $line;
+    unless( length $line ) {
+        DEBUG > 2
+         and print "   Showline is a no-op because line buffer is empty\n";
+        return;
+    }
+    
+    if( DEBUG > 2 ) {
+        my $l = $line;
+        $l =~ tr/\n/\xB6/;
+        print "   Showline is going to emit <$l>\n";
+    }
+    
     $self->{ypos} -= $self->{largest_pointsize} || $self->{pointsize};
     if ($self->{ypos} < $self->{bm}) {
+        DEBUG > 2
+         and print "   Showline has to start a new page first.\n";
+        
+        DEBUG > 2 and print "   vspace value before newpage: ",
+          defined($self->{vspace}) ? $self->{vspace} : 'undef', "\n";
+
+        DEBUG > 10 and $self->dump_state;
 	$self->newpage;
+         # newpage might alter currentfont!
+        
+        DEBUG > 2 and print "  vspace value after newpage: ",
+          defined($self->{vspace}) ? $self->{vspace} : 'undef', "\n";
+
+        DEBUG > 2 and printf "   Moving y from %.1f down to %.f because of pointsize %s\n",
+         $self->{ypos}, $self->{ypos} - $self->{pointsize}, $self->{pointsize},
+        ;
+
 	$self->{ypos} -= $self->{pointsize};
+	
+        DEBUG > 2 and printf "   Newpage's (x,y) is (%.1f, %.1f).\n",
+         @$self{'xpos', 'ypos'};
+
 	# must set current font again
 	my $font = $self->{prev_currentfont};
 	if ($font) {
-	    $self->collect("$self->{fonts}{$font} SF\n");
+	    $self->collect("$self->{fonts}{$font} SF\n\n");
 	}
+
+        DEBUG > 10 and $self->dump_state;
+        DEBUG > 2 and print "   End of doing newpage.\n";
     }
+
+    #DEBUG > 2 and $self->dump_state;
+    
+
     my $lm = $self->{lm};
     my $x = $lm;
     if ($self->{center}) {
@@ -585,8 +748,18 @@ sub showline
     }
 
     $self->collect(sprintf "%.1f %.1f M\n", $x, $self->{ypos});  # moveto
-    $line =~ s/\s\)S$/)S/;  # many lines will end with space
+    $line =~ s/\s\)S$/)S/;  # many lines will end uselessly with space
     $self->collect($line);
+    $self->{'out'}++;
+
+    if( DEBUG > 3 ) {
+        my $l = $line;
+        $l =~ tr/\n/\xB6/;
+        print "   Showline has just emitted <$l>\n";
+    }
+
+    DEBUG > 3 and print "   vspace value after collection: ",
+          defined($self->{vspace}) ? $self->{vspace} : 'undef', "\n";
 
     if ($self->{bullet}) {
 	# Putting this behind the first line of the list item
@@ -594,16 +767,27 @@ sub showline
 	# really set the font that we want to use.
 	my $bullet = $self->{bullet};
 	if ($bullet eq '*') {
-	    # There is no character that is really suitable.  Lets make
-	    # filled cirle ourself.
-	    my $radius = $self->{pointsize} / 4;
+	    # There is no character that is really suitable.  Let's make
+	    # a medium-sized filled cirle ourself.
+	    my $radius = $self->{pointsize} / 8;
+            DEBUG > 2 and
+             print "   Adding code for a '*' bullet for that line.\n";
+
 	    $self->collect(sprintf "newpath %.1f %.1f %.1f 0 360 arc fill\n",
 		       $self->{bullet_pos} + $radius,
-		       $self->{ypos} + $radius, $radius);
+		       $self->{ypos} + $radius * 2,
+		       $radius,
+	    );
 	} else {
-	    $self->collect(sprintf "%.1f %.1f M\n", # moveto
+            DEBUG > 2 and
+             print "   Adding code for a '$bullet' bullet for that line.\n";
+
+	    $self->collect(sprintf "%.1f (%s) stringwidth pop sub %.1f add %.1f M\n", # moveto
 			   $self->{bullet_pos},
-			   $self->{ypos});
+			   $bullet,
+			   $self->{pointsize} * 0.62,
+			   $self->{ypos},
+	    );
 	    $self->collect("($bullet)S\n");
 	}
 	$self->{bullet} = '';
@@ -615,15 +799,24 @@ sub showline
     $self->{line} = "";
     $self->{xpos} = $lm;
     # Additional linespacing
+
+    DEBUG > 2 and printf "   Leading makes me move down from (%.1f, %.1f) by (%.1f * %.1f = %.1f).\n", @$self{'xpos', 'ypos'}, $self->{leading}, $self->{pointsize} , $self->{leading} * $self->{pointsize};
+
     $self->{ypos} -= $self->{leading} * $self->{pointsize};
+    DEBUG > 2 and printf "   Showline ends by setting (x,y) to (%.1f, %.1f).\n",
+     @$self{'xpos', 'ypos'};
+    
+    return;
 }
 
 
 sub endpage
 {
     my $self = shift;
+    DEBUG > 1 and print "  Ending page $$self{pageno}\n";
     # End previous page
     $self->collect("showpage\n");
+    $self->{visible_page_number}++;
     $self->{pageno}++;
 }
 
@@ -631,17 +824,30 @@ sub endpage
 sub newpage
 {
     my $self = shift;
-    if ($self->{'out'}) {
+    
+    local $self->{'pointsize'} = $self->{'pointsize'};
+     # That's needed for protecting against one bit of the
+     #  potential side-effects from from page-numbering code
+
+    if ($self->{'out'}) { # whether we've sent anything to the current page so far.
+        DEBUG > 2 and print "   Newpage sees that 'out' is true ($$self{'out'}), so calls endpage.\n";
 	$self->endpage;
+        $self->collect( sprintf
+         "%% %s has sent %s write-events to the above page.\n",
+         ref($self), $self->{'out'},
+        );
     }
+
     $self->{'out'} = 0;
     my $pageno = $self->{pageno};
+    my $visible_page_number = $self->{visible_page_number};
+
     $self->collect("\n%%Page: $pageno $pageno\n");
+    DEBUG and print " Starting page $pageno\n";
 
     # Print area marker (just for debugging)
-    if ($DEBUG) {
-	my($llx, $lly, $urx, $ury) = map { sprintf "%.1f", $_}
-				     @{$self}{qw(lm bm rm tm)};
+    if ($DEBUG or DEBUG > 5) {
+	my($llx, $lly, $urx, $ury) = @{ $self->{'orig_margins'} };
 	$self->collect("gsave 0.1 setlinewidth\n");
 	$self->collect("clippath 0.9 setgray fill 1 setgray\n");
 	$self->collect("$llx $lly moveto $urx $lly lineto $urx $ury lineto $llx $ury lineto closepath fill\n");
@@ -650,28 +856,39 @@ sub newpage
 
     # Print page number
     if ($self->{printpageno}) {
+        DEBUG > 2 and print "   Printing page number $visible_page_number (really page $pageno).\n";
 	$self->collect("%% Title and pageno\n");
 	my $f = $self->findfont(8);
 	$self->collect("$f\n") if $f;
         my $x = $self->{paperwidth};
         if ($x) { $x -= 30; } else { $x = 30; }
-        $self->collect(sprintf "%.1f 30.0 M($pageno)S\n", $x);
+        $self->collect(sprintf "%.1f 30.0 M($visible_page_number)S\n", $x);
 	$x = $self->{lm};
+	$self->{title} =~ tr/\x01//d;
 	$self->collect(sprintf "%.1f 30.0 M($self->{title})S\n", $x);
+    } else {
+        DEBUG > 2 and print "   Pointedly not printing page number.\n";
     }
     $self->collect("\n");
 
+    DEBUG > 2 and printf "  Newpage ends by setting (x,y) to (%.1f across, %.1f up)\n",
+     @$self{'lm','tm'};
+    
     $self->{xpos} = $self->{lm};
     $self->{ypos} = $self->{tm};
 }
 
 
-sub out
+sub out   # Output a word
 {
     my($self, $text) = @_;
+    
+    $text =~ tr/\xA0\xAD/ /d;
+    DEBUG > 3 and print "    Trapping new word <$text>\n";
+    
     if ($self->{collectingTheTitle}) {
         # Both collect and print the title
-    	$text =~ s/([\(\)\\])/\\$1/g; # Escape parens.
+    	$text =~ s/([\(\)\\])/\\$1/g; # Escape parens and the backslash
         $self->{title} .= $text;
 	return;
     }
@@ -715,6 +932,10 @@ sub show_with_font {
 
     $self->{xpos} += $w;
     $self->{showstring} .= $text;
+
+    DEBUG > 4 and print "     Appending to string buffer: \"$text\" with font $fontid\n";
+    DEBUG > 4 and printf "     xpos is now %.1f across.\n", ${$self}{'xpos'};
+
     $self->{largest_pointsize} = $self->{pointsize}
       if $self->{largest_pointsize} < $self->{pointsize};
     $self->{'out'}++;
@@ -738,6 +959,7 @@ sub pre_out
     }
     $self->{showstring} .= $text;
     $self->tt_end;
+    1;
 }
 
 sub bullet
@@ -750,15 +972,35 @@ sub bullet
 sub adjust_lm
 {
     my $self = shift;
+    DEBUG > 1 and printf "  Adjusting lm by %s, called by %s line %s\n",
+      $_[0], (caller(1))[3,2];
     $self->showline;
+    
+    DEBUG > 2 and printf "  ^=Changing lm from %.1f to %.1f, because en=%.1f\n",
+      $self->{lm},
+      $self->{lm} + $_[0] * $self->{en},
+      $self->{en},
+    ;
+    
     $self->{lm} += $_[0] * $self->{en};
+    1;
 }
 
 
 sub adjust_rm
 {
     my $self = shift;
+    DEBUG > 1 and printf "  Adjusting rm by %s, called by %s line %s\n",
+      $_[0], (caller(1))[3,2];
+
     $self->showline;
+
+    DEBUG > 2 and printf "  ^ Changing rm from %.1f to %.1f, because en=%.1f\n",
+      $self->{lm},
+      $self->{lm} + $_[0] * $self->{en},
+      $self->{en},
+    ;
+
     $self->{rm} += $_[0] * $self->{en};
 }
 
@@ -781,5 +1023,38 @@ sub title_end {
     $self->{collectingTheTitle} = 0;
     1;
 }
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+my($counter, $last_state_filename);
+
+# For use in circumstances of total desperation:
+
+sub dump_state {
+    my $self = shift;
+    require Data::Dumper;
+
+    ++$counter;
+    my $filename = sprintf("state%04d.txt", $counter);
+    open(STATE, ">$filename") or die "Can't write-open $filename: $!";
+    printf STATE "%s line %s\n", (caller(1) )[3,2];
+    {
+      local( $self->{'wx'}     ) = '<SUPPRESSED>' ;
+      local( $self->{'output'} ) = '<SUPPRESSED>' ;
+      print STATE Data::Dumper::Dumper($self);
+    }
+    close(STATE);
+    sleep 0;
+
+    if( $last_state_filename ) {
+      system("perl -S diff.bat $last_state_filename $filename > $filename.diff");
+    }
+
+    $last_state_filename = $filename;
+    return 1;
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 1;

@@ -1,4 +1,4 @@
-                               # Time-stamp: "2002-10-29 01:21:11 MST"
+                               # Time-stamp: "2002-11-07 00:20:59 MST"
 
 HTML-Format
 -----------
@@ -25,7 +25,7 @@ PREREQUISITES
 
 In order to install and use this package you will need Perl version
 5.004 or better.  You will also need to have the HTML-Tree
-distribution (version 0.61 or better) installed.  If you intend to use
+distribution (version 3.15 or better) installed.  If you intend to use
 the PostScript formatter you need the Font-AFM distribution.  All of
 these should be available from CPAN.
 
