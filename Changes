@@ -1,4 +1,11 @@
-                                   #Time-stamp: "2002-11-16 01:42:37 MST"
+                                   #Time-stamp: "2002-11-22 01:25:13 MST"
+
+2002-11-22   Sean M. Burke <sburke@cpan.org>
+
+   Release 2.03 -- minor bugfix
+   The lack of \plain's in HTML::FormatRTF's output was confusing some
+   formatters.  Fixed.
+
 
 2002-11-16   Sean M. Burke <sburke@cpan.org>
 

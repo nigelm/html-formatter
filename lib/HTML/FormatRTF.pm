@@ -9,7 +9,7 @@ BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
 
 @ISA = qw(HTML::Formatter);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 2.01 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.03 $ =~ /(\d+)\.(\d+)/);
 
 
 sub default_values {
@@ -233,14 +233,14 @@ sub emit_para {      # rather like showline in FormatPS
   ;
   
   $self->collect(
-    sprintf( '{\pard\sa%d\li%d\ri%d%s',
+    sprintf( '{\pard\sa%d\li%d\ri%d%s\plain'."\n",
       #100 + 
       10 * $self->{'normal_halfpoint_size'} * ($self->{'vspace'} || 0),
             
       $self->{'lm'},
       $self->{'rm'},
       
-      $self->{'center'} ? "\\qc\n" : "\\ql\n",
+      $self->{'center'} ? '\qc' : '\ql',
     ),
 
     defined($self->{'next_bullet'}) ? do {

@@ -106,7 +106,7 @@ use Carp;
 use UNIVERSAL qw(can);
 
 use vars qw($VERSION @Size_magic_numbers);
-$VERSION = sprintf("%d.%02d", q$Revision: 2.02 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.03 $ =~ /(\d+)\.(\d+)/);
 
 #
 # A typical formatter will not use all of the features of this
