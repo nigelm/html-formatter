@@ -1,3 +1,11 @@
+2000-06-09   Gisle Aas <gisle@ActiveState.com>
+
+   Release 1.23
+
+   Skip <script> and <style> stuff.
+
+
+
 1999-12-16   Gisle Aas <gisle@aas.no>
 
    Release HTML-Format-1.22
