@@ -1,0 +1,47 @@
+HTML-Format
+-----------
+
+This is a collection of modules that formats text from HTML syntax
+trees. Bug reports and discussions about these modules can be sent to
+the <libwww@perl.org> mailing list.
+
+The modules present in this package are:
+
+  HTML::Formatter - Base class for various formatters.  Formatters
+        traverse a syntax tree and produce some textual output.  None
+        of the current formatters handle tables or forms yet.
+
+  HTML::FormatText - Formatter that converts a syntax tree to plain
+        readable text.
+
+  HTML::FormatPS - Formatter that outputs PostScript code.
+
+
+
+PREREQUISITES
+
+In order to install and use this package you will need Perl version
+5.004 or better.  You will also need to have the HTML-Tree
+distribution (version 0.61 or better) installed.  If you intend to use
+the PostScript formatter you need the Font-AFM distribution.  All of
+these should be available from CPAN.
+
+
+
+INSTALLATION
+
+Just follow the usual procedure:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+
+
+COPYRIGHT
+
+  © 1995-1999 Gisle Aas. All rights reserved.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.

@@ -1,0 +1,43 @@
+1999-12-16   Gisle Aas <gisle@aas.no>
+
+   Release HTML-Format-1.22
+
+   Splitted off HTML::Format* modules from HTML-Tree when Sean M. Burke
+   took over maintainance.  You should have HTML-Tree version 0.61 or
+   better installed before installing this.
+
+   Added some simple formatter tests.
+
+
+
+1999-12-15   Gisle Aas <gisle@aas.no>
+
+   Release HTML-Tree-0.53
+
+   Make it compatible with HTML-Parser-3.00
+
+
+
+1999-11-10   Gisle Aas <gisle@aas.no>
+
+   Release 0.52
+
+   Fix SYNOPSIS for HTML::FormatText as suggested by
+   Michael G Schwern <schwern@pobox.com>
+
+   Updated my email address.
+
+
+
+1998-07-07   Gisle Aas <aas@sn.no>
+
+   Release 0.51
+
+   Avoid new warnings introduced by perl5.004_70
+
+
+
+1998-04-01   Gisle Aas <aas@sn.no>
+
+   Release 0.50, the HTML::* modules the dealt with HTML syntax trees
+   was unbundled from libwww-perl-5.22.
