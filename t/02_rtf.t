@@ -1,36 +1,33 @@
-
-use Test;
-BEGIN { plan 'tests' => 4 }
-
 use strict;
-ok 1;
+use warnings;
+use File::Spec;    # try to keep pathnames neutral
+use Test::More 0.96;
 
-use HTML::FormatRTF;
+BEGIN { use_ok("HTML::FormatRTF"); }
+my $obj = new_ok("HTML::FormatRTF");
 
-open(RTF, ">test.rtf") || die "Can't create test.rtf";
-binmode(RTF);
-print RTF HTML::FormatRTF->format_file(
-  "test.html",
-    "leftmargin" => 0,
-    "rightmargin" => 50,
-);
-close RTF;
-sleep 0;
-ok(-s "test.rtf");
-print "# Resulting file is ", -s "test.rtf", " bytes long.\n";
+foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) ) {
+    subtest "Testing file handling for $infile" => sub {
+        my $expfilename = ( File::Spec->splitpath($infile) )[2];
+        $expfilename =~ s/\.html$/.rtf/i;
+        my $expfile = File::Spec->catfile( 't', 'data', 'expected', $expfilename );
+        plan 'skip_all' unless ( -f $infile and -f $expfile );
 
-ok(  HTML::FormatRTF->format_string('puppies'), '/puppies/'  );
+        # read file content - split into lines, but we exclude the
+        # doccomm line since it includes a timestamp and version information
+        local (*FH);
+        open( FH, $expfile ) or die "Unable to open expected file $expfile - $!\n";
+        my $exp_text = do { local ($/); <FH> };
+        my $exp_lines = [ grep !/doccomm/, ( split( /\n/, $exp_text ) ) ];
 
-print "# HTML::Formatter version $HTML::Formatter::VERSION\n"
- if defined $HTML::Formatter::VERSION;
-print "# HTML::Element version $HTML::Element::VERSION\n"
- if defined $HTML::Element::VERSION;
-print "# HTML::TreeBuilder version $HTML::TreeBuilder::VERSION\n"
- if defined $HTML::TreeBuilder::VERSION;
-print "# HTML::Parser version $HTML::Parser::VERSION\n"
- if defined $HTML::Parser::VERSION;
+        # read and convert file
+        my $text = HTML::FormatRTF->format_file( $infile, leftmargin => 5, rightmargin => 50 );
+        my $got_lines = [ grep !/doccomm/, ( split( /\n/, $text ) ) ];
 
+        ok( length($text), "Returned a string" );
+        is_deeply( $got_lines, $exp_lines, "Correct text string returned" );
+    };
+}
 
-ok 1;
-
-
+# finish up
+done_testing();
