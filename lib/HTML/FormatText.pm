@@ -1,10 +1,6 @@
-
-require 5;
 package HTML::FormatText;
 
-=head1 NAME
-
-HTML::FormatText - Format HTML as plaintext
+# ABSTRACT: Format HTML as plaintext
 
 =head1 SYNOPSIS
 
@@ -69,9 +65,6 @@ use HTML::Formatter ();
 BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
 
 @ISA = qw(HTML::Formatter);
-
-$VERSION = sprintf("%d.%02d", q$Revision: 2.04 $ =~ /(\d+)\.(\d+)/);
-
 
 sub default_values
 {

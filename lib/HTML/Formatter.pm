@@ -1,10 +1,6 @@
-
-require 5;
 package HTML::Formatter;
 
-=head1 NAME
-
-HTML::Formatter - Base class for HTML formatters
+# ABSTRACT: Base class for HTML formatters
 
 =head1 SYNOPSIS
 
@@ -110,7 +106,6 @@ use Carp;
 use UNIVERSAL qw(can);
 
 use vars qw($VERSION @Size_magic_numbers);
-$VERSION = sprintf("%d.%02d", q$Revision: 2.04 $ =~ /(\d+)\.(\d+)/);
 
 #
 # A typical formatter will not use all of the features of this

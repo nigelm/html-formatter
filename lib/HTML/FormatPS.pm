@@ -1,31 +1,27 @@
-
-require 5;
 package HTML::FormatPS;
 
-=head1 NAME
-
-HTML::FormatPS - Format HTML as PostScript
+# ABSTRACT: Format HTML as PostScript
 
 =head1 SYNOPSIS
 
-  use HTML::TreeBuilder;
-  $tree = HTML::TreeBuilder->new->parse_file("test.html");
+    use HTML::TreeBuilder;
+    $tree = HTML::TreeBuilder->new->parse_file("test.html");
 
-  use HTML::FormatPS;
-  $formatter = HTML::FormatPS->new(
-		   FontFamily => 'Helvetica',
-		   PaperSize  => 'Letter',
-  );
-  print $formatter->format($tree);
+    use HTML::FormatPS;
+    $formatter = HTML::FormatPS->new(
+        FontFamily => 'Helvetica',
+        PaperSize  => 'Letter',
+    );
+    print $formatter->format($tree);
 
 Or, for short:
 
-  use HTML::FormatPS;
-  print HTML::FormatPS->format_file(
-    "test.html",
-      'FontFamily' => 'Helvetica',
-      'PaperSize'  => 'Letter',
-  );
+    use HTML::FormatPS;
+    print HTML::FormatPS->format_file(
+        "test.html",
+        'FontFamily' => 'Helvetica',
+        'PaperSize'  => 'Letter',
+    );
 
 =head1 DESCRIPTION
 
@@ -193,8 +189,6 @@ use HTML::Formatter ();
 BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
 
 @ISA = qw(HTML::Formatter);
-
-$VERSION = sprintf("%d.%02d", q$Revision: 2.04 $ =~ /(\d+)\.(\d+)/);
 
 use vars qw(%PaperSizes %FontFamilies @FontSizes %param $DEBUG);
 

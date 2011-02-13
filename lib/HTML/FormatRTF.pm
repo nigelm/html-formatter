@@ -1,5 +1,3 @@
-
-require 5;
 package HTML::FormatRTF;
 use strict;
 use vars qw(@ISA $VERSION %Escape);
@@ -8,9 +6,6 @@ use HTML::Formatter ();
 BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
 
 @ISA = qw(HTML::Formatter);
-
-$VERSION = sprintf("%d.%02d", q$Revision: 2.04 $ =~ /(\d+)\.(\d+)/);
-
 
 sub default_values {
   (
@@ -511,9 +506,7 @@ sub rtf_esc_codely {
 
 __END__
 
-=head1 NAME
-
-HTML::FormatRTF - Format HTML as RTF
+# ABSTRACT: Format HTML as RTF
 
 =head1 SYNOPSIS
 
