@@ -113,7 +113,6 @@ use HTML::Element 3.15 ();
 
 use strict;
 use Carp;
-use UNIVERSAL qw(can);
 
 use vars qw($VERSION @Size_magic_numbers);
 
@@ -212,7 +211,7 @@ sub format
     my($self, $html) = @_;
 
     croak "Usage: \$formatter->format(\$tree)"
-     unless defined $html and ref $html and can($html, 'tag');
+     unless defined $html and ref $html and $html->can('tag');
 
     if( $self->DEBUG() > 4 ) {
       print "Tree to format:\n";
@@ -233,9 +232,9 @@ sub format
         if (ref $node) {
         $tag = $node->tag;
         $func = $tag . '_' . ($start ? "start" : "end");
-        # Use UNIVERSAL::can so that we can recover if
+        # Use ->can so that we can recover if
         # a handler is not defined for the tag.
-        if (can($self, $func)) {
+        if ($self->can($func)) {
             DEBUG > 3 and print '  ' x $depth, "Calling $func\n";
             return $self->$func($node);
         } else {
