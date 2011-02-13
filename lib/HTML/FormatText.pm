@@ -88,15 +88,15 @@ sub configure
 
     my $width = $rm - $lm;
     if ($width < 1) {
-	warn "Bad margins, ignored" if $^W;
-	return;
+    warn "Bad margins, ignored" if $^W;
+    return;
     }
     if ($width < 20) {
-	warn "Page probably too narrow" if $^W;
+    warn "Page probably too narrow" if $^W;
     }
 
     for (keys %$hash) {
-	warn "Unknown configure option '$_'" if $^W;
+    warn "Unknown configure option '$_'" if $^W;
     }
 
     $self->{lm} = $lm;
@@ -133,11 +133,11 @@ sub header_end
 {
     my($self, $level, $node) = @_;
     if ($level <= 2) {
-	my $line;
-	$line = '=' if $level == 1;
-	$line = '-' if $level == 2;
-	$self->vspace(0);
-	$self->out($line x ($self->{maxpos} - $self->{lm}));
+    my $line;
+    $line = '=' if $level == 1;
+    $line = '-' if $level == 2;
+    $self->vspace(0);
+    $self->out($line x ($self->{maxpos} - $self->{lm}));
     }
     $self->vspace(1);
     1;
@@ -163,10 +163,10 @@ sub pre_out
     my $self = shift;
     # should really handle bold/italic etc.
     if (defined $self->{vspace}) {
-	if ($self->{out}) {
-	    $self->nl() while $self->{vspace}-- >= 0;
-	    $self->{vspace} = undef;
-	}
+    if ($self->{out}) {
+        $self->nl() while $self->{vspace}-- >= 0;
+        $self->{vspace} = undef;
+    }
     }
     my $indent = ' ' x $self->{lm};
     my $pre = shift;
@@ -184,30 +184,30 @@ sub out
     $text =~ tr/\xA0\xAD/ /d;
 
     if ($text =~ /^\s*$/) {
-	$self->{hspace} = 1;
-	return;
+    $self->{hspace} = 1;
+    return;
     }
 
     if (defined $self->{vspace}) {
-	if ($self->{out}) {
-	    $self->nl while $self->{vspace}-- >= 0;
+    if ($self->{out}) {
+        $self->nl while $self->{vspace}-- >= 0;
         }
-	$self->goto_lm;
-	$self->{vspace} = undef;
-	$self->{hspace} = 0;
+    $self->goto_lm;
+    $self->{vspace} = undef;
+    $self->{hspace} = 0;
     }
 
     if ($self->{hspace}) {
-	if ($self->{curpos} + length($text) > $self->{rm}) {
-	    # word will not fit on line; do a line break
-	    $self->nl;
-	    $self->goto_lm;
-	} else {
-	    # word fits on line; use a space
-	    $self->collect(' ');
-	    ++$self->{curpos};
-	}
-	$self->{hspace} = 0;
+    if ($self->{curpos} + length($text) > $self->{rm}) {
+        # word will not fit on line; do a line break
+        $self->nl;
+        $self->goto_lm;
+    } else {
+        # word fits on line; use a space
+        $self->collect(' ');
+        ++$self->{curpos};
+    }
+    $self->{hspace} = 0;
     }
 
     $self->collect($text);
@@ -223,8 +223,8 @@ sub goto_lm
     my $pos = $self->{curpos};
     my $lm  = $self->{lm};
     if ($pos < $lm) {
-	$self->{curpos} = $lm;
-	$self->collect(" " x ($lm - $pos));
+    $self->{curpos} = $lm;
+    $self->collect(" " x ($lm - $pos));
     }
 }
 

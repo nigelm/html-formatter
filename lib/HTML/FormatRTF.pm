@@ -49,10 +49,10 @@ sub begin {
       "\n"
   )
    unless $self->{'no_prolog'};
-  
+
   $self->{'Para'} = '';
   $self->{'quotelevel'} = 0;
-  
+
   return;
 }
 
@@ -120,7 +120,7 @@ END
 # Override these as necessary for further customization
 
 sub font_table {
-  
+
   my $self = shift;
   return sprintf <<'END' ,  # text font, code font, heading font
 {\fonttbl
@@ -172,7 +172,7 @@ END
 sub doc_really_start {
   my $self = $_[0];
 
-  return sprintf <<'END', 
+  return sprintf <<'END',
 \deflang%s\widowctrl
 {\header\pard\qr\plain\f2\fs%s
 p.\chpgn\par}
@@ -191,11 +191,11 @@ sub emit_para {      # rather like showline in FormatPS
 
   my $para = $self->{'Para'};
   $self->{'Para'} = undef;
-  
+
   if(DEBUG > 4) {
     printf "     &emit_para called by %s\n", (caller(1) )[3];
   }
-  
+
   unless( defined $para ) {
    #and length $para and $para =~ m/[^ ]/
     DEBUG > 20
@@ -205,7 +205,7 @@ sub emit_para {      # rather like showline in FormatPS
 
   $para =~ s/^ +//s;
   $para =~ s/ +$//s;
-    
+
   if( DEBUG > 2 ) {
     my $p = $para;
     $p =~ tr/\n/\xB6/;
@@ -226,15 +226,15 @@ sub emit_para {      # rather like showline in FormatPS
       (\x20{1,10})(?![\cm\cj\n]) # capture some spaces not at line-end
      /$1$2\n/gx     # and put a NL before those spaces
   ;
-  
+
   $self->collect(
     sprintf( '{\pard\sa%d\li%d\ri%d%s\plain'."\n",
-      #100 + 
+      #100 +
       10 * $self->{'normal_halfpoint_size'} * ($self->{'vspace'} || 0),
-            
+
       $self->{'lm'},
       $self->{'rm'},
-      
+
       $self->{'center'} ? '\qc' : '\ql',
     ),
 
@@ -249,7 +249,7 @@ sub emit_para {      # rather like showline in FormatPS
     $para,
     "\n\\par}\n\n",
   );
-    
+
   $self->{'vspace'} = undef; # we finally get to clear it here!
 
   return;
@@ -279,7 +279,7 @@ sub restore_font_size { shift->out(  \ '}'  ) }
 sub hr_start {
   my $self = shift;
   # A bit of a hack:
-  
+
   $self->vspace(.3);
   $self->out( \ ( '\qc\ul\f1\fs20\nocheck\lang1024 ' . ('\~' x (
     $self->{'hr_width'} || 50
@@ -298,26 +298,26 @@ sub br_start {
 sub header_start { # for h1 ... h6's
   # This really should have been called heading_start, but it's too late
   #  to change now.
-  
+
   my($self, $level) = @_;
   DEBUG > 1 and print "  Heading of level $level\n";
 
   #$self->adjust_lm(0); # assert new paragraph
   $self->vspace(1.5);
-  
+
   $self->out( \( sprintf '\s3%s\ql\keepn\f2\fs%s\ul'."\n",
     $level,
     $self->{'head' . $level .'_halfpoint_size'},
     $level,
   ));
-  
+
   return 1;
 }
 
 sub header_end {
   # This really should have been called heading_end but it's too late
   #  to change now.
-  
+
   $_[0]->vspace(1);
   1;
 }
@@ -446,7 +446,7 @@ sub rtf_esc {
 
 sub rtf_esc_codely {
   # Doesn't change "-" to hard-hyphen, nor apply computerese style
-  
+
   my $x; # scratch
   if(!defined wantarray) { # void context: alter in-place!
     for(@_) {
@@ -515,7 +515,7 @@ __END__
   my $out_file = "test.rtf";
   open(RTF, ">$out_file")
    or die "Can't write-open $out_file: $!\nAborting";
-   
+
   print RTF HTML::FormatRTF->format_file(
     'test.html',
       'fontname_headings' => "Verdana",
@@ -528,7 +528,7 @@ HTML::FormatRTF is a class for objects that you use to convert HTML to
 RTF.  There is currently no proper support for tables or forms.
 
 This is a subclass of L<HTML::Formatter>, whose documentation you should
-consult for more information on the new, format, format_file 
+consult for more information on the new, format, format_file
 
 You can specify any of the following parameters in the call to C<new>,
 C<format_file>, or C<format_string>:
@@ -542,7 +542,7 @@ Amount of I<extra> indenting to apply to the left margin, in twips
 
 So if you wanted the left margin to be an additional half inch larger,
 you'd set C<< lm => 720 >> (since there's 1440 twips in an inch).
-If you wanted it to be about 1.5cm larger, you'd set 
+If you wanted it to be about 1.5cm larger, you'd set
 C<< lw => 850 >> (since there's about 567 twips in a centimeter).
 
 =item rm
@@ -571,7 +571,7 @@ underlined and in the heading font).
 
 =item codeblock_halfpoint_size
 
-This controls the font size (in half-points) of the text used for 
+This controls the font size (in half-points) of the text used for
 C<< <pre>...</pre> >> text.  By default, it is 18, meaning 9 point.
 
 
