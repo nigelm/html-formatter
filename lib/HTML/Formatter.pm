@@ -2,6 +2,16 @@ package HTML::Formatter;
 
 # ABSTRACT: Base class for HTML formatters
 
+=begin :prelude
+
+=for test_synopsis
+1;
+__END__
+
+=for stopwords accerting formatters
+
+=end :prelude
+
 =head1 SYNOPSIS
 
   use HTML::FormatSomething;

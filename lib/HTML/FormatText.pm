@@ -2,6 +2,16 @@ package HTML::FormatText;
 
 # ABSTRACT: Format HTML as plaintext
 
+=begin :prelude
+
+=for test_synopsis
+1;
+__END__
+
+=for stopwords latin1 leftmargin lm plaintext rightmargin
+
+=end :prelude
+
 =head1 SYNOPSIS
 
  require HTML::TreeBuilder;

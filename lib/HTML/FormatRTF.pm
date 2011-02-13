@@ -1,4 +1,7 @@
 package HTML::FormatRTF;
+
+# ABSTRACT: Format HTML as RTF
+
 use strict;
 use vars qw(@ISA $VERSION %Escape);
 
@@ -506,7 +509,15 @@ sub rtf_esc_codely {
 
 __END__
 
-# ABSTRACT: Format HTML as RTF
+=begin :prelude
+
+=for test_synopsis
+1;
+__END__
+
+=for stopwords arial bookman lm pagenumber p.pagenumber prolog rtf tahoma verdana
+
+=end :prelude
 
 =head1 SYNOPSIS
 

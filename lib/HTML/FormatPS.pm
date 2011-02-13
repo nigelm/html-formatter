@@ -2,6 +2,19 @@ package HTML::FormatPS;
 
 # ABSTRACT: Format HTML as PostScript
 
+=begin :prelude
+
+=for test_synopsis
+1;
+__END__
+
+=for stopwords bottommargin fontfamily fontscale helvetica
+    horizontalmargin leftmargin noprolog notrailer pageno
+    paperheight papersize paperwidth postscript rightmargin
+    startpage topmargin verticalmargin ledding leeding prolog
+
+=end :prelude
+
 =head1 SYNOPSIS
 
     use HTML::TreeBuilder;
