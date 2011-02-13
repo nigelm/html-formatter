@@ -328,7 +328,7 @@ sub frameset_start { 0; }
 
 sub header_start
 {
-    my($self, $level, $node) = @_;
+    my($self, undef, $node) = @_;
     my $align = $node->attr('align');
     if (defined($align) && lc($align) eq 'center') {
     $self->{center}++;
@@ -338,7 +338,7 @@ sub header_start
 
 sub header_end
 {
-    my($self, $level, $node) = @_;
+    my($self, undef, $node) = @_;
     my $align = $node->attr('align');
     if (defined($align) && lc($align) eq 'center') {
     $self->{center}--;

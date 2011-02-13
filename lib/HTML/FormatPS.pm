@@ -602,7 +602,7 @@ EOT
 
 sub header_start
 {
-    my($self, $level, $node) = @_;
+    my($self, $level) = @_;
     # If we are close enough to be bottom of the page, start a new page
     # instead of this:
     DEBUG > 1 and print "  Heading of level $level\n";
@@ -615,7 +615,7 @@ sub header_start
 
 sub header_end
 {
-    my($self, $level, $node) = @_;
+    my($self) = @_;
     $self->vspace(1);
     $self->{bold}--;
     pop(@{$self->{font_size}});

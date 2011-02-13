@@ -133,7 +133,7 @@ sub end
 
 sub header_start
 {
-    my($self, $level, $node) = @_;
+    my($self, $level) = @_;
     $self->vspace(1 + (6-$level) * 0.4);
     $self->{maxpos} = 0;
     1;
@@ -141,7 +141,7 @@ sub header_start
 
 sub header_end
 {
-    my($self, $level, $node) = @_;
+    my($self, $level) = @_;
     if ($level <= 2) {
     my $line;
     $line = '=' if $level == 1;

@@ -29,7 +29,8 @@ sub default_values {
 }
 
 sub configure {
-  my($self,$hash) = @_;
+  my $self = shift;
+
   $self->{lm} = 0;
   $self->{rm} = 0;
   $self;
