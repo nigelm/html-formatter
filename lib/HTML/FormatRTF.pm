@@ -29,11 +29,14 @@ sub default_values {
 }
 
 sub configure {
-  my $self = shift;
+    my ( $self, $hash ) = shift;
 
-  $self->{lm} = 0;
-  $self->{rm} = 0;
-  $self;
+    $self->{lm} = 0;
+    $self->{rm} = 0;
+
+    # include the hash parameters into self - as RT#56278
+    map { $self->{$_} = $hash->{$_} } keys %$hash if ( ref($hash) );
+    $self;
 }
 
 
