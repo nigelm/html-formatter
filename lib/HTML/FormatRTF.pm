@@ -1,6 +1,13 @@
-
-require 5;
 package HTML::FormatRTF;
+BEGIN {
+  $HTML::FormatRTF::VERSION = '2.04.01'; # TRIAL
+}
+BEGIN {
+  $HTML::FormatRTF::AUTHORITY = 'cpan:NIGELM';
+}
+
+# ABSTRACT: Format HTML as RTF
+
 use strict;
 use vars qw(@ISA $VERSION %Escape);
 
@@ -8,9 +15,6 @@ use HTML::Formatter ();
 BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
 
 @ISA = qw(HTML::Formatter);
-
-$VERSION = sprintf("%d.%02d", q$Revision: 2.04 $ =~ /(\d+)\.(\d+)/);
-
 
 sub default_values {
   (
@@ -31,10 +35,14 @@ sub default_values {
 }
 
 sub configure {
-  my($self,$hash) = @_;
-  $self->{lm} = 0;
-  $self->{rm} = 0;
-  $self;
+    my ( $self, $hash ) = shift;
+
+    $self->{lm} = 0;
+    $self->{rm} = 0;
+
+    # include the hash parameters into self - as RT#56278
+    map { $self->{$_} = $hash->{$_} } keys %$hash if ( ref($hash) );
+    $self;
 }
 
 
@@ -54,10 +62,10 @@ sub begin {
       "\n"
   )
    unless $self->{'no_prolog'};
-  
+
   $self->{'Para'} = '';
   $self->{'quotelevel'} = 0;
-  
+
   return;
 }
 
@@ -125,7 +133,7 @@ END
 # Override these as necessary for further customization
 
 sub font_table {
-  
+
   my $self = shift;
   return sprintf <<'END' ,  # text font, code font, heading font
 {\fonttbl
@@ -177,7 +185,7 @@ END
 sub doc_really_start {
   my $self = $_[0];
 
-  return sprintf <<'END', 
+  return sprintf <<'END',
 \deflang%s\widowctrl
 {\header\pard\qr\plain\f2\fs%s
 p.\chpgn\par}
@@ -196,11 +204,11 @@ sub emit_para {      # rather like showline in FormatPS
 
   my $para = $self->{'Para'};
   $self->{'Para'} = undef;
-  
+
   if(DEBUG > 4) {
     printf "     &emit_para called by %s\n", (caller(1) )[3];
   }
-  
+
   unless( defined $para ) {
    #and length $para and $para =~ m/[^ ]/
     DEBUG > 20
@@ -210,7 +218,7 @@ sub emit_para {      # rather like showline in FormatPS
 
   $para =~ s/^ +//s;
   $para =~ s/ +$//s;
-    
+
   if( DEBUG > 2 ) {
     my $p = $para;
     $p =~ tr/\n/\xB6/;
@@ -231,15 +239,15 @@ sub emit_para {      # rather like showline in FormatPS
       (\x20{1,10})(?![\cm\cj\n]) # capture some spaces not at line-end
      /$1$2\n/gx     # and put a NL before those spaces
   ;
-  
+
   $self->collect(
     sprintf( '{\pard\sa%d\li%d\ri%d%s\plain'."\n",
-      #100 + 
+      #100 +
       10 * $self->{'normal_halfpoint_size'} * ($self->{'vspace'} || 0),
-            
+
       $self->{'lm'},
       $self->{'rm'},
-      
+
       $self->{'center'} ? '\qc' : '\ql',
     ),
 
@@ -254,7 +262,7 @@ sub emit_para {      # rather like showline in FormatPS
     $para,
     "\n\\par}\n\n",
   );
-    
+
   $self->{'vspace'} = undef; # we finally get to clear it here!
 
   return;
@@ -284,7 +292,7 @@ sub restore_font_size { shift->out(  \ '}'  ) }
 sub hr_start {
   my $self = shift;
   # A bit of a hack:
-  
+
   $self->vspace(.3);
   $self->out( \ ( '\qc\ul\f1\fs20\nocheck\lang1024 ' . ('\~' x (
     $self->{'hr_width'} || 50
@@ -303,26 +311,26 @@ sub br_start {
 sub header_start { # for h1 ... h6's
   # This really should have been called heading_start, but it's too late
   #  to change now.
-  
+
   my($self, $level) = @_;
   DEBUG > 1 and print "  Heading of level $level\n";
 
   #$self->adjust_lm(0); # assert new paragraph
   $self->vspace(1.5);
-  
+
   $self->out( \( sprintf '\s3%s\ql\keepn\f2\fs%s\ul'."\n",
     $level,
     $self->{'head' . $level .'_halfpoint_size'},
     $level,
   ));
-  
+
   return 1;
 }
 
 sub header_end {
   # This really should have been called heading_end but it's too late
   #  to change now.
-  
+
   $_[0]->vspace(1);
   1;
 }
@@ -451,7 +459,7 @@ sub rtf_esc {
 
 sub rtf_esc_codely {
   # Doesn't change "-" to hard-hyphen, nor apply computerese style
-  
+
   my $x; # scratch
   if(!defined wantarray) { # void context: alter in-place!
     for(@_) {
@@ -509,11 +517,22 @@ sub rtf_esc_codely {
 
 1;
 
+
+
+=pod
+
+=for test_synopsis 1;
 __END__
+
+=for stopwords arial bookman lm pagenumber p.pagenumber prolog rtf tahoma verdana
 
 =head1 NAME
 
 HTML::FormatRTF - Format HTML as RTF
+
+=head1 VERSION
+
+version 2.04.01
 
 =head1 SYNOPSIS
 
@@ -522,7 +541,7 @@ HTML::FormatRTF - Format HTML as RTF
   my $out_file = "test.rtf";
   open(RTF, ">$out_file")
    or die "Can't write-open $out_file: $!\nAborting";
-   
+
   print RTF HTML::FormatRTF->format_file(
     'test.html',
       'fontname_headings' => "Verdana",
@@ -535,7 +554,7 @@ HTML::FormatRTF is a class for objects that you use to convert HTML to
 RTF.  There is currently no proper support for tables or forms.
 
 This is a subclass of L<HTML::Formatter>, whose documentation you should
-consult for more information on the new, format, format_file 
+consult for more information on the new, format, format_file
 
 You can specify any of the following parameters in the call to C<new>,
 C<format_file>, or C<format_string>:
@@ -549,7 +568,7 @@ Amount of I<extra> indenting to apply to the left margin, in twips
 
 So if you wanted the left margin to be an additional half inch larger,
 you'd set C<< lm => 720 >> (since there's 1440 twips in an inch).
-If you wanted it to be about 1.5cm larger, you'd set 
+If you wanted it to be about 1.5cm larger, you'd set
 C<< lw => 850 >> (since there's about 567 twips in a centimeter).
 
 =item rm
@@ -578,10 +597,8 @@ underlined and in the heading font).
 
 =item codeblock_halfpoint_size
 
-This controls the font size (in half-points) of the text used for 
+This controls the font size (in half-points) of the text used for
 C<< <pre>...</pre> >> text.  By default, it is 18, meaning 9 point.
-
-
 
 =item fontname_body
 
@@ -602,7 +619,6 @@ use the same font as fontname_body, but I prefer a sans-serif font, so
 the default value is currently "Arial".  Also consider
 "Tahoma" and "Verdana".
 
-
 =item document_language
 
 This option controls what Microsoft language number will be specified as
@@ -615,7 +631,6 @@ This option controls how many underline characters will be used for
 rendering a "<hr>" tag. Its default value is currently 50. You can
 usually leave this alone, but under some circumstances you might want to
 use a smaller or larger number.
-
 
 =item no_prolog
 
@@ -632,9 +647,7 @@ this is off, meaning that HTML::FormatRTF I<will> emit the bit of RTF
 that ends the document.  This option is of interest only to advanced
 users.
 
-
 =back
-
 
 =head1 SEE ALSO
 
@@ -655,6 +668,59 @@ merchantability or fitness for a particular purpose.
 
 Sean M. Burke C<< <sburke@cpan.org> >>
 
+=head1 INSTALLATION
+
+See perlmodinstall for information and options on installing Perl modules.
+
+=head1 BUGS AND LIMITATIONS
+
+No bugs have been reported.
+
+Please report any bugs or feature requests through the web interface at
+L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
+
+=head1 AVAILABILITY
+
+The project homepage is L<http://search.cpan.org/dist/HTML-Format>.
+
+The latest version of this module is available from the Comprehensive Perl
+Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
+site near you, or see L<http://search.cpan.org/dist/HTML-Format/>.
+
+The development version lives at L<http://github.com/nigelm/HTML-Format>
+and may be cloned from L<git://github.com/nigelm/HTML-Format.git>.
+Instead of sending patches, please fork this project using the standard
+git and github infrastructure.
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Nigel Metheringham <nigelm@cpan.org>
+
+=item *
+
+Sean M Burke <sburke@cpan.org>
+
+=item *
+
+Gisle Aas <gisle@ActiveState.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
 =cut
+
+
+__END__
+
 
 
