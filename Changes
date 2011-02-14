@@ -1,6 +1,11 @@
 {{$NEXT}}
     - Git conversion
     - Dist::Zilla conversion
+    - RT#54636 - UNIVERSAL::Can deprecated
+    - RT#56278 - RTF formatting parameters ignored by new
+    - Start of a new test harness
+    - TRIAL release pushed out.  Aiming to improve docs and maybe
+      hit rest of RT queue before a full release.
 
 2004-06-01   Sean M. Burke <sburke@cpan.org>
 
