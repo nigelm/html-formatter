@@ -2,15 +2,15 @@ NAME
     HTML::Formatter - Base class for HTML formatters
 
 VERSION
-    version 2.04.02
+    version 2.04.01
 
 SYNOPSIS
       use HTML::FormatSomething;
       my $infile  = "whatever.html";
       my $outfile = "whatever.file";
       open OUT, ">$outfile"
-       or die "Can't write-open $outfile: $!\n";
-
+       or die "Can't write-open $outfile: $!\nAborting";
+      binmode(OUT);
       print OUT HTML::FormatSomething->format_file(
         $infile,
           'option1' => 'value1',
@@ -32,61 +32,55 @@ DESCRIPTION
     takes a HTML::Element object (usually the HTML::TreeBuilder root object)
     as parameter.
 
-METHODS
-  new
-        my $formatter = FormatterClass->new(
-            option1 => value1, option2 => value2, ...
-        );
+    Here are the four main methods that this class provides:
 
-    This creates a new formatter object with the given options.
+    SomeClass->format_file( $filename, *option1 => value1, option2 =>
+    value2, ...* )
+        This returns a string consisting of the result of using the given
+        class to format the given HTML file according to the given
+        (optional) options. Internally it calls "SomeClass->new( ...
+        )->format( ... )" on a new HTML::TreeBuilder object based on the
+        given HTML file.
 
-  format_file
-  format_from_file
-        $string = FormatterClass->format_file(
-            $html_source,
-            option1 => value1, option2 => value2, ...
-            );
+    SomeClass->format_string( $html_source, *option1 => value1, option2 =>
+    value2, ...* )
+        This returns a string consisting of the result of using the given
+        class to format the given HTML source according to the given
+        (optional) options. Internally it calls "SomeClass->new( ...
+        )->format( ... )" on a new HTML::TreeBuilder object based on the
+        given source.
 
-    Return a string consisting of the result of using the given class to
-    format the given HTML file according to the given (optional) options.
-    Internally it calls "SomeClass->new( ... )->format( ... )" on a new
-    HTML::TreeBuilder object based on the given HTML file.
+    $formatter = SomeClass->new( *option1 => value1, option2 => value2, ...*
+    )
+        This creates a new formatter object with the given options.
 
-  format_string
-  format_from_string
-        $string = FormatterClass->format_string(
-            $html_source,
-            option1 => value1, option2 => value2, ...
-            );
-
-    Return a string consisting of the result of using the given class to
-    format the given HTML source according to the given (optional) options.
-    Internally it calls "SomeClass->new( ... )->format( ... )" on a new
-    HTML::TreeBuilder object based on the given source.
-
-  format
-        my $render_string = $formatter->format( $html_tree_object );
-
-    This renders the given HTML object according to the options set for
-    $formatter.
+    $render_string = $formatter->format( $html_tree_object )
+        This renders the given HTML object accerting to the options set for
+        $formatter.
 
     After you've used a particular formatter object to format a particular
     HTML tree object, you probably should not use either again.
 
 SEE ALSO
-    The three specific formatters:-
+    HTML::FormatText, HTML::FormatPS, HTML::FormatRTF
 
-    HTML::FormatText
-        Format HTML into plain text
+    HTML::TreeBuilder, HTML::Element, HTML::Tree
 
-    HTML::FormatPS
-        Format HTML into postscript
+COPYRIGHT
+    Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
+    reserved.
 
-    HTML::FormatRTF
-        Format HTML into Rich Text Format
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
 
-    Also the HTML manipulation libraries used - HTML::TreeBuilder,
-    HTML::Element and HTML::Tree
+    This program is distributed in the hope that it will be useful, but
+    without any warranty; without even the implied warranty of
+    merchantability or fitness for a particular purpose.
+
+AUTHOR
+    Current maintainer: Sean M. Burke <sburke@cpan.org>
+
+    Original author: Gisle Aas <gisle@aas.no>
 
 INSTALLATION
     See perlmodinstall for information and options on installing Perl

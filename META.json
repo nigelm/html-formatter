@@ -25,6 +25,18 @@
          "requires" : {
             "Carp" : 0,
             "Data::Dumper" : 0,
+            "Font::Metrics::Courier" : 0,
+            "Font::Metrics::CourierBold" : 0,
+            "Font::Metrics::CourierBoldOblique" : 0,
+            "Font::Metrics::CourierOblique" : 0,
+            "Font::Metrics::Helvetica" : 0,
+            "Font::Metrics::HelveticaBold" : 0,
+            "Font::Metrics::HelveticaBoldOblique" : 0,
+            "Font::Metrics::HelveticaOblique" : 0,
+            "Font::Metrics::TimesBold" : 0,
+            "Font::Metrics::TimesBoldItalic" : 0,
+            "Font::Metrics::TimesItalic" : 0,
+            "Font::Metrics::TimesRoman" : 0,
             "HTML::Element" : "3.15",
             "HTML::TreeBuilder" : 0,
             "integer" : 0,
@@ -57,7 +69,7 @@
          "web" : "http://github.com/nigelm/HTML-Format"
       }
    },
-   "version" : "2.04.01",
+   "version" : "2.04.02",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -268,6 +280,17 @@
          {
             "class" : "Dist::Zilla::Plugin::UploadToCPAN",
             "name" : "@NIGELM/UploadToCPAN",
+            "version" : "4.200002"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Prereqs",
+            "config" : {
+               "Dist::Zilla::Plugin::Prereqs" : {
+                  "phase" : "runtime",
+                  "type" : "requires"
+               }
+            },
+            "name" : "Prereqs",
             "version" : "4.200002"
          },
          {

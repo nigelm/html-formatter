@@ -6,6 +6,8 @@ META.json
 META.yml
 Makefile.PL
 README
+README.bak
+README.pod
 lib/HTML/FormatPS.pm
 lib/HTML/FormatRTF.pm
 lib/HTML/FormatText.pm

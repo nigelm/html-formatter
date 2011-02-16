@@ -1,6 +1,6 @@
 package HTML::FormatPS;
 BEGIN {
-  $HTML::FormatPS::VERSION = '2.04.01'; # TRIAL
+  $HTML::FormatPS::VERSION = '2.04.02'; # TRIAL
 }
 BEGIN {
   $HTML::FormatPS::AUTHORITY = 'cpan:NIGELM';
@@ -901,7 +901,7 @@ HTML::FormatPS - Format HTML as PostScript
 
 =head1 VERSION
 
-version 2.04.01
+version 2.04.02
 
 =head1 SYNOPSIS
 
@@ -928,6 +928,9 @@ Or, for short:
 
 The HTML::FormatPS is a formatter that outputs PostScript code.
 Formatting of HTML tables and forms is not implemented.
+
+HTML::FormatPS is built on top of L<HTML::Formatter> and so further
+detail may be found in the documentation for L<HTML::Formatter>.
 
 You might specify the following parameters when constructing the formatter
 object (or when calling format_file or format_string):
@@ -1026,6 +1029,16 @@ advanced users.
 
 =back
 
+=head1 METHODS
+
+=head2 new
+
+    my $formatter = FormatterClass->new(
+        option1 => value1, option2 => value2, ...
+    );
+
+This creates a new formatter object with the given options.
+
 =head1 SEE ALSO
 
 L<HTML::Formatter>
@@ -1056,24 +1069,6 @@ And, if it's ever even reasonably possible, support for tables.
 
 I would welcome email from people who can help me out or advise
 me on the above.
-
-=head1 COPYRIGHT
-
-Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
-reserved.
-
-This library is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
-merchantability or fitness for a particular purpose.
-
-=head1 AUTHOR
-
-Current maintainer: Sean M. Burke <sburke@cpan.org>
-
-Original author: Gisle Aas <gisle@aas.no>
 
 =head1 INSTALLATION
 

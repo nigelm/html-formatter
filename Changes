@@ -1,3 +1,8 @@
+2.04.02   2011-02-16 11:30:24 Europe/London
+    - Added dependancies for font metrics files
+    - Documentation tidy up - but needs further work
+    - new TRIAL release - intend to push this as full release if OK
+
 2.04.01   2011-02-14 20:26:07 Europe/London
     - Git conversion
     - Dist::Zilla conversion

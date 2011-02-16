@@ -31,12 +31,24 @@ my %WriteMakefileArgs = (
   'PREREQ_PM' => {
     'Carp' => '0',
     'Data::Dumper' => '0',
+    'Font::Metrics::Courier' => '0',
+    'Font::Metrics::CourierBold' => '0',
+    'Font::Metrics::CourierBoldOblique' => '0',
+    'Font::Metrics::CourierOblique' => '0',
+    'Font::Metrics::Helvetica' => '0',
+    'Font::Metrics::HelveticaBold' => '0',
+    'Font::Metrics::HelveticaBoldOblique' => '0',
+    'Font::Metrics::HelveticaOblique' => '0',
+    'Font::Metrics::TimesBold' => '0',
+    'Font::Metrics::TimesBoldItalic' => '0',
+    'Font::Metrics::TimesItalic' => '0',
+    'Font::Metrics::TimesRoman' => '0',
     'HTML::Element' => '3.15',
     'HTML::TreeBuilder' => '0',
     'integer' => '0',
     'vars' => '0'
   },
-  'VERSION' => '2.04.01',
+  'VERSION' => '2.04.02',
   'test' => {
     'TESTS' => 't/*.t'
   }

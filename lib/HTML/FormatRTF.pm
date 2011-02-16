@@ -1,12 +1,14 @@
 package HTML::FormatRTF;
 BEGIN {
-  $HTML::FormatRTF::VERSION = '2.04.01'; # TRIAL
+  $HTML::FormatRTF::VERSION = '2.04.02'; # TRIAL
 }
 BEGIN {
   $HTML::FormatRTF::AUTHORITY = 'cpan:NIGELM';
 }
 
 # ABSTRACT: Format HTML as RTF
+
+
 
 use strict;
 use vars qw(@ISA $VERSION %Escape);
@@ -532,7 +534,7 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.04.01
+version 2.04.02
 
 =head1 SYNOPSIS
 
@@ -553,8 +555,9 @@ version 2.04.01
 HTML::FormatRTF is a class for objects that you use to convert HTML to
 RTF.  There is currently no proper support for tables or forms.
 
-This is a subclass of L<HTML::Formatter>, whose documentation you should
-consult for more information on the new, format, format_file
+This is a subclass of L<HTML::Formatter>, whose documentation you
+should consult for more information on underlying methods such as
+C<new>, C<format>, C<format_file> etc
 
 You can specify any of the following parameters in the call to C<new>,
 C<format_file>, or C<format_string>:
@@ -652,21 +655,6 @@ users.
 =head1 SEE ALSO
 
 L<HTML::Formatter>, L<RTF::Writer>
-
-=head1 COPYRIGHT
-
-Copyright (c) 2002 Sean M. Burke.  All rights reserved.
-
-This library is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
-merchantability or fitness for a particular purpose.
-
-=head1 AUTHOR
-
-Sean M. Burke C<< <sburke@cpan.org> >>
 
 =head1 INSTALLATION
 

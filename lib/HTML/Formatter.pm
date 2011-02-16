@@ -1,6 +1,6 @@
 package HTML::Formatter;
 BEGIN {
-  $HTML::Formatter::VERSION = '2.04.01'; # TRIAL
+  $HTML::Formatter::VERSION = '2.04.02'; # TRIAL
 }
 BEGIN {
   $HTML::Formatter::AUTHORITY = 'cpan:NIGELM';
@@ -23,6 +23,7 @@ use vars qw($VERSION @Size_magic_numbers);
 # class.  But it will use some, as best fits the mapping
 # of HTML to the particular output format.
 #
+
 
 sub new
 {
@@ -61,10 +62,9 @@ sub massage_tree {
   return;
 }
 
-# forgiving aliases
-sub format_from_file   { shift->format_file(@_) }
-sub format_from_string { shift->format_string(@_) }
 
+
+sub format_from_file   { shift->format_file(@_) }
 sub format_file {
   my($self, $filename, @params) = @_;
   $self = $self->new(@params) unless ref $self;
@@ -80,6 +80,8 @@ sub format_file {
   return $out;
 }
 
+
+sub format_from_string { shift->format_string(@_) }
 sub format_string {
   my($self, $content, @params) = @_;
   $self = $self->new(@params) unless ref $self;
@@ -106,6 +108,7 @@ sub _default_tree {
 
   return $t;
 }
+
 
 
 sub format
@@ -888,8 +891,9 @@ sub adjust_rm
 
 
 #``````````````````````````````````````````````````````````````````````````
-1;
 
+
+1;
 
 __END__
 =pod
@@ -897,7 +901,7 @@ __END__
 =for test_synopsis 1;
 __END__
 
-=for stopwords accerting formatters
+=for stopwords formatters
 
 =head1 NAME
 
@@ -905,7 +909,7 @@ HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.04.01
+version 2.04.02
 
 =head1 SYNOPSIS
 
@@ -913,8 +917,8 @@ version 2.04.01
   my $infile  = "whatever.html";
   my $outfile = "whatever.file";
   open OUT, ">$outfile"
-   or die "Can't write-open $outfile: $!\nAborting";
-  binmode(OUT);
+   or die "Can't write-open $outfile: $!\n";
+
   print OUT HTML::FormatSomething->format_file(
     $infile,
       'option1' => 'value1',
@@ -938,62 +942,76 @@ formatted output when the format() method is called.  The format()
 method takes a HTML::Element object (usually the HTML::TreeBuilder
 root object) as parameter.
 
-Here are the four main methods that this class provides:
+=head1 METHODS
 
-=over
+=head2 new
 
-=item SomeClass->format_file( $filename, I<< option1 => value1, option2 => value2, ... >> )
+    my $formatter = FormatterClass->new(
+        option1 => value1, option2 => value2, ...
+    );
 
-This returns a string consisting of the result of using the given class
+This creates a new formatter object with the given options.
+
+=head2 format_file
+
+=head2 format_from_file
+
+    $string = FormatterClass->format_file(
+        $html_source,
+        option1 => value1, option2 => value2, ...
+        );
+
+Return a string consisting of the result of using the given class
 to format the given HTML file according to the given (optional) options.
 Internally it calls C<< SomeClass->new( ... )->format( ... ) >> on a new
 HTML::TreeBuilder object based on the given HTML file.
 
-=item SomeClass->format_string( $html_source, I<< option1 => value1, option2 => value2, ... >> )
+=head2 format_string
 
-This returns a string consisting of the result of using the given class
+=head2 format_from_string
+
+    $string = FormatterClass->format_string(
+        $html_source,
+        option1 => value1, option2 => value2, ...
+        );
+
+Return a string consisting of the result of using the given class
 to format the given HTML source according to the given (optional)
 options. Internally it calls C<< SomeClass->new( ... )->format( ... ) >>
 on a new HTML::TreeBuilder object based on the given source.
 
-=item $formatter = SomeClass->new( I<< option1 => value1, option2 => value2, ... >> )
+=head2 format
 
-This creates a new formatter object with the given options.
+    my $render_string = $formatter->format( $html_tree_object );
 
-=item $render_string = $formatter->format( $html_tree_object )
-
-This renders the given HTML object accerting to the options set for
+This renders the given HTML object according to the options set for
 $formatter.
-
-=back
 
 After you've used a particular formatter object to format a particular
 HTML tree object, you probably should not use either again.
 
 =head1 SEE ALSO
 
-L<HTML::FormatText>, L<HTML::FormatPS>,
-L<HTML::FormatRTF>
+The three specific formatters:-
 
-L<HTML::TreeBuilder>, L<HTML::Element>, L<HTML::Tree>
+=over
 
-=head1 COPYRIGHT
+=item L<HTML::FormatText>
 
-Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
-reserved.
+Format HTML into plain text
 
-This library is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
+=item L<HTML::FormatPS>
 
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
-merchantability or fitness for a particular purpose.
+Format HTML into postscript
 
-=head1 AUTHOR
+=item L<HTML::FormatRTF>
 
-Current maintainer: Sean M. Burke <sburke@cpan.org>
+Format HTML into Rich Text Format
 
-Original author: Gisle Aas <gisle@aas.no>
+=back
+
+Also the HTML manipulation libraries used - L<HTML::TreeBuilder>,
+L<HTML::Element> and L<HTML::Tree>
 
 =head1 INSTALLATION
 
