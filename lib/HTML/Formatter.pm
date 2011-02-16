@@ -8,7 +8,7 @@ package HTML::Formatter;
 1;
 __END__
 
-=for stopwords accerting formatters
+=for stopwords formatters
 
 =end :prelude
 
@@ -18,8 +18,8 @@ __END__
   my $infile  = "whatever.html";
   my $outfile = "whatever.file";
   open OUT, ">$outfile"
-   or die "Can't write-open $outfile: $!\nAborting";
-  binmode(OUT);
+   or die "Can't write-open $outfile: $!\n";
+
   print OUT HTML::FormatSomething->format_file(
     $infile,
       'option1' => 'value1',
@@ -43,67 +43,7 @@ formatted output when the format() method is called.  The format()
 method takes a HTML::Element object (usually the HTML::TreeBuilder
 root object) as parameter.
 
-Here are the four main methods that this class provides:
-
-=over
-
-=item SomeClass->format_file( $filename, I<< option1 => value1, option2 => value2, ... >> )
-
-This returns a string consisting of the result of using the given class
-to format the given HTML file according to the given (optional) options.
-Internally it calls C<< SomeClass->new( ... )->format( ... ) >> on a new
-HTML::TreeBuilder object based on the given HTML file.
-
-=item SomeClass->format_string( $html_source, I<< option1 => value1, option2 => value2, ... >> )
-
-This returns a string consisting of the result of using the given class
-to format the given HTML source according to the given (optional)
-options. Internally it calls C<< SomeClass->new( ... )->format( ... ) >>
-on a new HTML::TreeBuilder object based on the given source.
-
-=item $formatter = SomeClass->new( I<< option1 => value1, option2 => value2, ... >> )
-
-This creates a new formatter object with the given options.
-
-=item $render_string = $formatter->format( $html_tree_object )
-
-This renders the given HTML object accerting to the options set for
-$formatter.
-
-=back
-
-
-After you've used a particular formatter object to format a particular
-HTML tree object, you probably should not use either again.
-
-
-=head1 SEE ALSO
-
-L<HTML::FormatText>, L<HTML::FormatPS>,
-L<HTML::FormatRTF>
-
-L<HTML::TreeBuilder>, L<HTML::Element>, L<HTML::Tree>
-
-
-
-=head1 COPYRIGHT
-
-Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
-reserved.
-
-This library is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
-merchantability or fitness for a particular purpose.
-
-
-=head1 AUTHOR
-
-Current maintainer: Sean M. Burke <sburke@cpan.org>
-
-Original author: Gisle Aas <gisle@aas.no>
+=head1 METHODS
 
 =cut
 
@@ -121,6 +61,16 @@ use vars qw($VERSION @Size_magic_numbers);
 # class.  But it will use some, as best fits the mapping
 # of HTML to the particular output format.
 #
+
+=head2 new
+
+    my $formatter = FormatterClass->new(
+        option1 => value1, option2 => value2, ...
+    );
+
+This creates a new formatter object with the given options.
+
+=cut
 
 sub new
 {
@@ -159,10 +109,24 @@ sub massage_tree {
   return;
 }
 
-# forgiving aliases
-sub format_from_file   { shift->format_file(@_) }
-sub format_from_string { shift->format_string(@_) }
 
+=head2 format_file
+
+=head2 format_from_file
+
+    $string = FormatterClass->format_file(
+        $html_source,
+        option1 => value1, option2 => value2, ...
+        );
+
+Return a string consisting of the result of using the given class
+to format the given HTML file according to the given (optional) options.
+Internally it calls C<< SomeClass->new( ... )->format( ... ) >> on a new
+HTML::TreeBuilder object based on the given HTML file.
+
+=cut
+
+sub format_from_file   { shift->format_file(@_) }
 sub format_file {
   my($self, $filename, @params) = @_;
   $self = $self->new(@params) unless ref $self;
@@ -178,6 +142,23 @@ sub format_file {
   return $out;
 }
 
+=head2 format_string
+
+=head2 format_from_string
+
+    $string = FormatterClass->format_string(
+        $html_source,
+        option1 => value1, option2 => value2, ...
+        );
+
+Return a string consisting of the result of using the given class
+to format the given HTML source according to the given (optional)
+options. Internally it calls C<< SomeClass->new( ... )->format( ... ) >>
+on a new HTML::TreeBuilder object based on the given source.
+
+=cut
+
+sub format_from_string { shift->format_string(@_) }
 sub format_string {
   my($self, $content, @params) = @_;
   $self = $self->new(@params) unless ref $self;
@@ -205,6 +186,18 @@ sub _default_tree {
   return $t;
 }
 
+
+=head2 format
+
+    my $render_string = $formatter->format( $html_tree_object );
+
+This renders the given HTML object according to the options set for
+$formatter.
+
+After you've used a particular formatter object to format a particular
+HTML tree object, you probably should not use either again.
+
+=cut
 
 sub format
 {
@@ -986,5 +979,14 @@ sub adjust_rm
 
 
 #``````````````````````````````````````````````````````````````````````````
-1;
 
+=head1 SEE ALSO
+
+L<HTML::FormatText>, L<HTML::FormatPS>,
+L<HTML::FormatRTF>
+
+L<HTML::TreeBuilder>, L<HTML::Element>, L<HTML::Tree>
+
+=cut
+
+1;

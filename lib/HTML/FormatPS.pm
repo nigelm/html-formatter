@@ -41,6 +41,9 @@ Or, for short:
 The HTML::FormatPS is a formatter that outputs PostScript code.
 Formatting of HTML tables and forms is not implemented.
 
+HTML::FormatPS is built on top of L<HTML::Formatter> and so further
+detail may be found in the documentation for L<HTML::Formatter>.
+
 You might specify the following parameters when constructing the formatter
 object (or when calling format_file or format_string):
 
@@ -87,7 +90,6 @@ The bottom margin, in points.
 =item VerticalMargin
 
 Both top and bottom margin at the same time.  The default value is 2 cm,
-
 
 =item PageNo
 
@@ -139,58 +141,7 @@ advanced users.
 
 =back
 
-=head1 SEE ALSO
-
-L<HTML::Formatter>
-
-
-=head1 TO DO
-
-=over
-
-=item *
-
-Support for some more character styles, notably including:
-strike-through, underlining, superscript, and subscript.
-
-=item *
-
-Support for Unicode.
-
-=item *
-
-Support for Win-1252 encoding, since that's what most people
-mean when they use characters in the range 0x80-0x9F in HTML.
-
-=item *
-
-And, if it's ever even reasonably possible, support for tables.
-
-=back
-
-I would welcome email from people who can help me out or advise
-me on the above.
-
-
-
-=head1 COPYRIGHT
-
-Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
-reserved.
-
-This library is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
-merchantability or fitness for a particular purpose.
-
-
-=head1 AUTHOR
-
-Current maintainer: Sean M. Burke <sburke@cpan.org>
-
-Original author: Gisle Aas <gisle@aas.no>
+=head1 METHODS
 
 =cut
 
@@ -270,6 +221,15 @@ sub ITALIC () { 0x02; }
  leading          => 'leading',
 );
 
+=head2 new
+
+    my $formatter = FormatterClass->new(
+        option1 => value1, option2 => value2, ...
+    );
+
+This creates a new formatter object with the given options.
+
+=cut
 
 sub new
 {
@@ -1066,5 +1026,38 @@ sub dump_state {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+=head1 SEE ALSO
+
+L<HTML::Formatter>
+
+
+=head1 TO DO
+
+=over
+
+=item *
+
+Support for some more character styles, notably including:
+strike-through, underlining, superscript, and subscript.
+
+=item *
+
+Support for Unicode.
+
+=item *
+
+Support for Win-1252 encoding, since that's what most people
+mean when they use characters in the range 0x80-0x9F in HTML.
+
+=item *
+
+And, if it's ever even reasonably possible, support for tables.
+
+=back
+
+I would welcome email from people who can help me out or advise
+me on the above.
+
+=cut
 
 1;

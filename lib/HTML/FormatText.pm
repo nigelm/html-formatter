@@ -14,18 +14,31 @@ __END__
 
 =head1 SYNOPSIS
 
- require HTML::TreeBuilder;
- $tree = HTML::TreeBuilder->new->parse_file("test.html");
+    use HTML::TreeBuilder;
+    $tree = HTML::TreeBuilder->new->parse_file("test.html");
 
- require HTML::FormatText;
- $formatter = HTML::FormatText->new(leftmargin => 0, rightmargin => 50);
- print $formatter->format($tree);
+    use HTML::FormatText;
+    $formatter = HTML::FormatText->new(leftmargin => 0, rightmargin => 50);
+    print $formatter->format($tree);
+
+or, more simply:
+
+    use HTML::FormatText;
+    my $string = HTML::FormatText->format_file(
+        'test.html',
+        leftmargin => 0, rightmargin => 50
+        );
 
 =head1 DESCRIPTION
 
-The HTML::FormatText is a formatter that outputs plain latin1 text.
+HTML::FormatText is a formatter that outputs plain latin1 text.
 All character attributes (bold/italic/underline) are ignored.
 Formatting of HTML tables and forms is not implemented.
+
+HTML::FormatText is built on L<HTML::Formatter> and documentation
+for that module applies to this - especially
+L<HTML::Formatter/new>, L<HTML::Formatter/format_file> and
+L<HTML::Formatter/format_string>.
 
 You might specify the following parameters when constructing the
 formatter:
@@ -41,30 +54,6 @@ The column of the left margin. The default is 3.
 The column of the right margin. The default is 72.
 
 =back
-
-=head1 SEE ALSO
-
-L<HTML::Formatter>
-
-=head1 COPYRIGHT
-
-Copyright (c) 1995-2002 Gisle Aas, and 2002- Sean M. Burke. All rights
-reserved.
-
-This library is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
-merchantability or fitness for a particular purpose.
-
-
-=head1 AUTHOR
-
-Current maintainer: Sean M. Burke <sburke@cpan.org>
-
-Original author: Gisle Aas <gisle@aas.no>
-
 
 =cut
 
@@ -260,6 +249,13 @@ sub adjust_rm
 {
     shift->{rm} += $_[0];
 }
+
+
+=head1 SEE ALSO
+
+L<HTML::Formatter>
+
+=cut
 
 1;
 
