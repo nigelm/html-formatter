@@ -982,10 +982,26 @@ sub adjust_rm
 
 =head1 SEE ALSO
 
-L<HTML::FormatText>, L<HTML::FormatPS>,
-L<HTML::FormatRTF>
+The three specific formatters:-
 
-L<HTML::TreeBuilder>, L<HTML::Element>, L<HTML::Tree>
+=over
+
+=item L<HTML::FormatText>
+
+Format HTML into plain text
+
+=item L<HTML::FormatPS>
+
+Format HTML into postscript
+
+=item L<HTML::FormatRTF>
+
+Format HTML into Rich Text Format
+
+=back
+
+Also the HTML manipulation libraries used - L<HTML::TreeBuilder>,
+L<HTML::Element> and L<HTML::Tree>
 
 =cut
 
