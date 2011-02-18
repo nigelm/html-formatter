@@ -16,7 +16,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.31
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200002, CPAN::Meta::Converter version 2.110360'
+generated_by: 'Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110360'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -44,22 +44,22 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format
   homepage: http://search.cpan.org/dist/HTML-Format
-  repository: git://github.com/nigelm/HTML-Format.git
-version: 2.04.02
+  repository: git://github.com/nigelm/html-format.git
+version: 2.05
 x_Dist_Zilla:
   plugins:
     -
       class: Dist::Zilla::Plugin::Git::NextVersion
       name: '@NIGELM/Git::NextVersion'
-      version: 1.110330
+      version: 1.110480
     -
       class: Dist::Zilla::Plugin::Git::Check
       name: '@NIGELM/Git::Check'
-      version: 1.110330
+      version: 1.110480
     -
       class: Dist::Zilla::Plugin::GatherDir
       name: '@NIGELM/GatherDir'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::CompileTests
       name: '@NIGELM/CompileTests'
@@ -71,11 +71,11 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::MetaTests
       name: '@NIGELM/MetaTests'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::PodSyntaxTests
       name: '@NIGELM/PodSyntaxTests'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::PodSpellingTests
       name: '@NIGELM/PodSpellingTests'
@@ -115,7 +115,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::InlineFiles
       name: '@NIGELM/InlineFiles'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::ReportVersions
       name: '@NIGELM/ReportVersions'
@@ -123,27 +123,27 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::PruneCruft
       name: '@NIGELM/PruneCruft'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::PruneFiles
       name: '@NIGELM/PruneFiles'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::ManifestSkip
       name: '@NIGELM/ManifestSkip'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::AutoPrereqs
       name: '@NIGELM/AutoPrereqs'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::MetaConfig
       name: '@NIGELM/MetaConfig'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::MetaResources
       name: '@NIGELM/MetaResources'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::Authority
       name: '@NIGELM/Authority'
@@ -151,15 +151,15 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::ExtraTests
       name: '@NIGELM/ExtraTests'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::NextRelease
       name: '@NIGELM/NextRelease'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::PkgVersion
       name: '@NIGELM/PkgVersion'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::PodWeaver
       name: '@NIGELM/PodWeaver'
@@ -167,23 +167,27 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::License
       name: '@NIGELM/License'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::MakeMaker
       name: '@NIGELM/MakeMaker'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::MetaYAML
       name: '@NIGELM/MetaYAML'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::MetaJSON
       name: '@NIGELM/MetaJSON'
-      version: 4.200002
+      version: 4.200004
     -
-      class: Dist::Zilla::Plugin::ReadmeFromPod
-      name: '@NIGELM/ReadmeFromPod'
-      version: 0.14
+      class: Dist::Zilla::Plugin::ReadmeAnyFromPod
+      name: '@NIGELM/ReadmeAnyFromPod'
+      version: 0.103522
+    -
+      class: Dist::Zilla::Plugin::ReadmeAnyFromPod
+      name: '@NIGELM/ReadmePodInRoot'
+      version: 0.103522
     -
       class: Dist::Zilla::Plugin::InstallGuide
       name: '@NIGELM/InstallGuide'
@@ -191,23 +195,23 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Manifest
       name: '@NIGELM/Manifest'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::Git::Commit
       name: '@NIGELM/Git::Commit'
-      version: 1.110330
+      version: 1.110480
     -
       class: Dist::Zilla::Plugin::Git::Tag
       name: '@NIGELM/Git::Tag'
-      version: 1.110330
+      version: 1.110480
     -
       class: Dist::Zilla::Plugin::Git::CommitBuild
       name: '@NIGELM/Git::CommitBuild'
-      version: 1.110330
+      version: 1.110480
     -
       class: Dist::Zilla::Plugin::Git::Push
       name: '@NIGELM/Git::Push'
-      version: 1.110330
+      version: 1.110480
     -
       class: Dist::Zilla::Plugin::CheckChangeLog
       name: '@NIGELM/CheckChangeLog'
@@ -215,7 +219,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::UploadToCPAN
       name: '@NIGELM/UploadToCPAN'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::Prereqs
       config:
@@ -223,26 +227,26 @@ x_Dist_Zilla:
           phase: runtime
           type: requires
       name: Prereqs
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':InstallModules'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':TestFiles'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':ExecFiles'
-      version: 4.200002
+      version: 4.200004
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':ShareFiles'
-      version: 4.200002
+      version: 4.200004
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
-      is_trial: 1
-    version: 4.200002
+      is_trial: 0
+    version: 4.200004
 x_authority: cpan:NIGELM

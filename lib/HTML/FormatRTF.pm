@@ -1,6 +1,6 @@
 package HTML::FormatRTF;
 BEGIN {
-  $HTML::FormatRTF::VERSION = '2.04.02'; # TRIAL
+  $HTML::FormatRTF::VERSION = '2.05';
 }
 BEGIN {
   $HTML::FormatRTF::AUTHORITY = 'cpan:NIGELM';
@@ -534,7 +534,7 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.04.02
+version 2.05
 
 =head1 SYNOPSIS
 
@@ -675,8 +675,8 @@ The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
 site near you, or see L<http://search.cpan.org/dist/HTML-Format/>.
 
-The development version lives at L<http://github.com/nigelm/HTML-Format>
-and may be cloned from L<git://github.com/nigelm/HTML-Format.git>.
+The development version lives at L<http://github.com/nigelm/html-format>
+and may be cloned from L<git://github.com/nigelm/html-format.git>.
 Instead of sending patches, please fork this project using the standard
 git and github infrastructure.
 

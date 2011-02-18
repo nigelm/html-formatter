@@ -2,7 +2,7 @@ NAME
     HTML::Formatter - Base class for HTML formatters
 
 VERSION
-    version 2.04.02
+    version 2.05
 
 SYNOPSIS
       use HTML::FormatSomething;
@@ -105,8 +105,8 @@ AVAILABILITY
     Perl Archive Network (CPAN). Visit <http://www.perl.com/CPAN/> to find a
     CPAN site near you, or see <http://search.cpan.org/dist/HTML-Format/>.
 
-    The development version lives at <http://github.com/nigelm/HTML-Format>
-    and may be cloned from <git://github.com/nigelm/HTML-Format.git>.
+    The development version lives at <http://github.com/nigelm/html-format>
+    and may be cloned from <git://github.com/nigelm/html-format.git>.
     Instead of sending patches, please fork this project using the standard
     git and github infrastructure.
 
