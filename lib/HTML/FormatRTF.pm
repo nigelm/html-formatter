@@ -144,6 +144,7 @@ use base 'HTML::Formatter';
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
+# ------------------------------------------------------------------------
 my %Escape = (
     map( ( chr($_), chr($_) ),    # things not apparently needing escaping
         0x20 .. 0x7E ),
@@ -174,10 +175,11 @@ my %Escape = (
     # "\cc" => "}",
 );
 
+# ------------------------------------------------------------------------
 sub default_values {
     (   shift->SUPER::default_values(),
-        'lm' => 0,                                 # left margin
-        'rm' => 0,                                 # right margin (actually, maximum text width)
+        'lm' => 0,    # left margin
+        'rm' => 0,    # right margin (actually, maximum text width)
 
         'head1_halfpoint_size'     => 32,
         'head2_halfpoint_size'     => 28,
@@ -191,6 +193,7 @@ sub default_values {
     );
 }
 
+# ------------------------------------------------------------------------
 sub configure {
     my ( $self, $hash ) = shift;
 
@@ -202,6 +205,7 @@ sub configure {
     $self;
 }
 
+# ------------------------------------------------------------------------
 sub begin {
     my $self = shift;
     ### Start document...
@@ -218,6 +222,7 @@ sub begin {
     return;
 }
 
+# ------------------------------------------------------------------------
 sub end {
     my $self = shift;
     $self->vspace(0);
@@ -230,8 +235,7 @@ sub end {
     return;
 }
 
-###########################################################################
-
+# ------------------------------------------------------------------------
 sub vspace {
     my $self = shift;
 
@@ -241,8 +245,7 @@ sub vspace {
     $rv;
 }
 
-###########################################################################
-
+# ------------------------------------------------------------------------
 sub stylesheet {
 
     # TODO: maybe actually /use/ the character styles?
@@ -280,7 +283,7 @@ END
         };
 }
 
-###########################################################################
+# ------------------------------------------------------------------------
 # Override these as necessary for further customization
 
 sub font_table {
@@ -308,6 +311,7 @@ END
         ;
 }
 
+# ------------------------------------------------------------------------
 sub doc_init {
     return <<'END';
 {\rtf1\ansi\deff0
@@ -315,12 +319,14 @@ sub doc_init {
 END
 }
 
+# ------------------------------------------------------------------------
 sub color_table {
     return <<'END';
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 END
 }
 
+# ------------------------------------------------------------------------
 sub doc_info {
     my $self = $_[0];
     return sprintf <<'END', $self->version_tag;
@@ -332,6 +338,7 @@ END
 
 }
 
+# ------------------------------------------------------------------------
 sub doc_really_start {
     my $self = $_[0];
 
@@ -345,7 +352,7 @@ END
         $self->{'document_language'} || 1033, $self->{"header_halfpoint_size"}, $self->{"normal_halfpoint_size"},;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------------------
 sub emit_para {    # rather like showline in FormatPS
     my $self = shift;
 
@@ -405,22 +412,16 @@ sub emit_para {    # rather like showline in FormatPS
     return;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ------------------------------------------------------------------------
 sub new_font_size {
     my $self = $_[0];
     $self->out( \sprintf "{\\fs%u\n", $self->scale_font_for( $self->{'normal_halfpoint_size'} ) );
 }
 
+# ------------------------------------------------------------------------
 sub restore_font_size { shift->out( \'}' ) }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#sub bullet {
-#  my $self = shift;
-#  $self->SUPER::bullet($_[0] . ' ');
-#}
-
+# ------------------------------------------------------------------------
 sub hr_start {
     my $self = shift;
 
@@ -432,12 +433,13 @@ sub hr_start {
     1;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------------------
 
 sub br_start {
     $_[0]->out( \"\\line\n" );
 }
 
+# ------------------------------------------------------------------------
 sub header_start {    # for h1 ... h6's
                       # This really should have been called heading_start, but it's too late
                       #  to change now.
@@ -456,6 +458,7 @@ sub header_start {    # for h1 ... h6's
     return 1;
 }
 
+# ------------------------------------------------------------------------
 sub header_end {
 
     # This really should have been called heading_end but it's too late
@@ -465,18 +468,21 @@ sub header_end {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub bullet {
     my ( $self, $bullet ) = @_;
     $self->{'next_bullet'} = $bullet;
     return;
 }
 
+# ------------------------------------------------------------------------
 sub adjust_lm {
     $_[0]->emit_para();
     $_[0]->{'lm'} += $_[1] * $_[0]->{'normal_halfpoint_size'} * 5;
     1;
 }
 
+# ------------------------------------------------------------------------
 sub adjust_rm {
     $_[0]->emit_para();
     $_[0]->{'rm'} -= $_[1] * $_[0]->{'normal_halfpoint_size'} * 5;
@@ -485,8 +491,7 @@ sub adjust_rm {
 
 # BTW, halfpoints * 10 = twips
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ------------------------------------------------------------------------
 sub pre_start {
     my $self = shift;
     $self->SUPER::pre_start(@_);
@@ -494,40 +499,36 @@ sub pre_start {
     return 1;
 }
 
-###########################################################################
-
-sub b_start { shift->out( \'{\b ' ) }
-sub b_end   { shift->out( \'}' ) }
-sub i_start { shift->out( \'{\i ' ) }
-sub i_end   { shift->out( \'}' ) }
-
-sub tt_start { shift->out( \'{\f1\noproof\lang1024\lang1076 ' ) }
-
-# really really really don't spellcheck this bit!
-sub tt_end { shift->out( \'}' ) }
-
-sub sub_start { shift->out( \'{\sub ' ) }
-sub sub_end   { shift->out( \'}' ) }
-sub sup_start { shift->out( \'{\super ' ) }
-sub sup_end   { shift->out( \'}' ) }
-
+# ------------------------------------------------------------------------
+sub b_start      { shift->out( \'{\b ' ) }
+sub b_end        { shift->out( \'}' ) }
+sub i_start      { shift->out( \'{\i ' ) }
+sub i_end        { shift->out( \'}' ) }
+sub tt_start     { shift->out( \'{\f1\noproof\lang1024\lang1076 ' ) }
+sub tt_end       { shift->out( \'}' ) }
+sub sub_start    { shift->out( \'{\sub ' ) }
+sub sub_end      { shift->out( \'}' ) }
+sub sup_start    { shift->out( \'{\super ' ) }
+sub sup_end      { shift->out( \'}' ) }
 sub strike_start { shift->out( \'{\strike ' ) }
 sub strike_end   { shift->out( \'}' ) }
 
+# ------------------------------------------------------------------------
 sub q_start {
     my $self = $_[0];
     $self->out( ( ( ++$self->{'quotelevel'} ) % 2 ) ? \'\ldblquote ' : \'\lquote ' );
 }
 
+# ------------------------------------------------------------------------
 sub q_end {
     my $self = $_[0];
     $self->out( ( ( --$self->{'quotelevel'} ) % 2 ) ? \'\rquote ' : \'\rdblquote ' );
 }
 
-###########################################################################
-
+# ------------------------------------------------------------------------
 sub pre_out { $_[0]->out( ref( $_[1] ) ? $_[1] : \rtf_esc_codely( $_[1] ) ) }
 
+# ------------------------------------------------------------------------
 sub out {    # output a word (or, if escaped, chunk of RTF)
     my $self = shift;
 
@@ -543,13 +544,12 @@ sub out {    # output a word (or, if escaped, chunk of RTF)
     return 1;
 }
 
-###########################################################################
-
+# ------------------------------------------------------------------------
 use integer;
 
 sub rtf_esc {
-    my $x;    # scratch
-    if ( !defined wantarray ) {    # void context: alter in-place!
+    my $x;                          # scratch
+    if ( !defined wantarray ) {     # void context: alter in-place!
         for (@_) {
             s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;    # ESCAPER
             s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
@@ -576,11 +576,12 @@ sub rtf_esc {
     }
 }
 
+# ------------------------------------------------------------------------
 sub rtf_esc_codely {
 
     # Doesn't change "-" to hard-hyphen, nor apply computerese style
 
-    my $x;        # scratch
+    my $x;    # scratch
     if ( !defined wantarray ) {    # void context: alter in-place!
         for (@_) {
             s/([F\x00-\x1F\\\{\}\x7F-\xFF])/$Escape{$1}/g;

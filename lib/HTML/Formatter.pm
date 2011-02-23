@@ -64,6 +64,8 @@ use HTML::Element 3.15 ();
 # of HTML to the particular output format.
 #
 
+# ------------------------------------------------------------------------
+
 =head2 new
 
     my $formatter = FormatterClass->new(
@@ -81,10 +83,12 @@ sub new {
     $self;
 }
 
+# ------------------------------------------------------------------------
 sub default_values {
     ();
 }
 
+# ------------------------------------------------------------------------
 sub configure {
     my ( $self, $arg ) = @_;
     for ( keys %$arg ) {
@@ -93,6 +97,7 @@ sub configure {
     $self;
 }
 
+# ------------------------------------------------------------------------
 sub massage_tree {
     my ( $self, $html ) = @_;
     return if $html->tag eq 'p';    # sanity
@@ -106,6 +111,8 @@ sub massage_tree {
 
     return;
 }
+
+# ------------------------------------------------------------------------
 
 =head2 format_file
 
@@ -140,6 +147,8 @@ sub format_file {
     return $out;
 }
 
+# ------------------------------------------------------------------------
+
 =head2 format_string
 
 =head2 format_from_string
@@ -156,6 +165,7 @@ on a new HTML::TreeBuilder object based on the given source.
 
 =cut
 
+# ------------------------------------------------------------------------
 sub format_from_string { shift->format_string(@_) }
 
 sub format_string {
@@ -174,6 +184,7 @@ sub format_string {
     return $out;
 }
 
+# ------------------------------------------------------------------------
 sub _default_tree {
     require HTML::TreeBuilder;
     my $t = HTML::TreeBuilder->new;
@@ -184,6 +195,8 @@ sub _default_tree {
 
     return $t;
 }
+
+# ------------------------------------------------------------------------
 
 =head2 format
 
@@ -242,6 +255,7 @@ sub format {
     join( '', @{ $self->{output} } );
 }
 
+# ------------------------------------------------------------------------
 sub begin {
     my $self = shift;
 
@@ -267,10 +281,10 @@ sub begin {
     $self->{output} = [];
 }
 
-sub end {
-}
+# ------------------------------------------------------------------------
+sub end { }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------------------
 sub set_version_tag {
     my ( $self, $html ) = @_;
 
@@ -294,23 +308,20 @@ sub set_version_tag {
     }
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ------------------------------------------------------------------------
 sub version_tag { shift->{'version_tag'} }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-sub html_start { 1; }
-sub html_end   { }
-sub body_start { 1; }
-sub body_end   { }
-
-# some elements that we don't want to render anyway
+# ------------------------------------------------------------------------
+sub html_start     { 1; }
+sub html_end       { }
+sub body_start     { 1; }
+sub body_end       { }
 sub head_start     { 0; }
 sub script_start   { 0; }
 sub style_start    { 0; }
 sub frameset_start { 0; }
 
+# ------------------------------------------------------------------------
 sub header_start {
     my ( $self, undef, $node ) = @_;
     my $align = $node->attr('align');
@@ -320,6 +331,7 @@ sub header_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub header_end {
     my ( $self, undef, $node ) = @_;
     my $align = $node->attr('align');
@@ -328,6 +340,7 @@ sub header_end {
     }
 }
 
+# ------------------------------------------------------------------------
 sub h1_start { shift->header_start( 1, @_ ) }
 sub h2_start { shift->header_start( 2, @_ ) }
 sub h3_start { shift->header_start( 3, @_ ) }
@@ -335,6 +348,7 @@ sub h4_start { shift->header_start( 4, @_ ) }
 sub h5_start { shift->header_start( 5, @_ ) }
 sub h6_start { shift->header_start( 6, @_ ) }
 
+# ------------------------------------------------------------------------
 sub h1_end { shift->header_end( 1, @_ ) }
 sub h2_end { shift->header_end( 2, @_ ) }
 sub h3_end { shift->header_end( 3, @_ ) }
@@ -342,81 +356,31 @@ sub h4_end { shift->header_end( 4, @_ ) }
 sub h5_end { shift->header_end( 5, @_ ) }
 sub h6_end { shift->header_end( 6, @_ ) }
 
-sub br_start {
-    my $self = shift;
-    $self->vspace( 0, 1 );
+sub br_start { my $self = shift; $self->vspace( 0, 1 ); }
+sub hr_start { my $self = shift; $self->vspace(1); 1; }
 
-    # add one formatting newline, regardless of how many are there
-}
-
-sub hr_start {
-    my $self = shift;
-    $self->vspace(1);
-
-    # assert one line's worth of vertical space
-    1;
-}
-
+# ------------------------------------------------------------------------
 sub img_start {
     my ( $self, $node ) = @_;
     my $alt = $node->attr('alt');
     $self->out( defined($alt) ? $alt : "[IMAGE]" );
 }
 
-sub a_start {
-    shift->{anchor}++;
-    1;
-}
+# ------------------------------------------------------------------------
+sub a_start      { shift->{anchor}++;    1; }
+sub a_end        { shift->{anchor}--; }
+sub u_start      { shift->{underline}++; 1; }
+sub u_end        { shift->{underline}--; }
+sub b_start      { shift->{bold}++;      1; }
+sub b_end        { shift->{bold}--; }
+sub tt_start     { shift->{teletype}++;  1; }
+sub tt_end       { shift->{teletype}--; }
+sub i_start      { shift->{italic}++;    1; }
+sub i_end        { shift->{italic}--; }
+sub center_start { shift->{center}++;    1; }
+sub center_end   { shift->{center}--; }
 
-sub a_end {
-    shift->{anchor}--;
-}
-
-sub u_start {
-    shift->{underline}++;
-    1;
-}
-
-sub u_end {
-    shift->{underline}--;
-}
-
-sub b_start {
-    shift->{bold}++;
-    1;
-}
-
-sub b_end {
-    shift->{bold}--;
-}
-
-sub tt_start {
-    shift->{teletype}++;
-    1;
-}
-
-sub tt_end {
-    shift->{teletype}--;
-}
-
-sub i_start {
-    shift->{italic}++;
-    1;
-}
-
-sub i_end {
-    shift->{italic}--;
-}
-
-sub center_start {
-    shift->{center}++;
-    1;
-}
-
-sub center_end {
-    shift->{center}--;
-}
-
+# ------------------------------------------------------------------------
 sub div_start    # interesting only for its 'align' attribute
 {
     my ( $self, $node ) = @_;
@@ -427,6 +391,7 @@ sub div_start    # interesting only for its 'align' attribute
     1;
 }
 
+# ------------------------------------------------------------------------
 sub div_end {
     my ( $self, $node ) = @_;
     my $align = $node->attr('align');
@@ -435,21 +400,12 @@ sub div_end {
     }
 }
 
-sub nobr_start {
-    shift->{nobr}++;
-    1;
-}
+# ------------------------------------------------------------------------
+sub nobr_start { shift->{nobr}++; 1; }
+sub nobr_end   { shift->{nobr}--; }
+sub wbr_start  { 1; }
 
-sub nobr_end {
-    shift->{nobr}--;
-}
-
-sub wbr_start {
-    1;
-}
-
-# ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+# ------------------------------------------------------------------------
 sub font_start {
     my ( $self, $elem ) = @_;
     my $size = $elem->attr('size');
@@ -465,6 +421,7 @@ sub font_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub font_end {
     my ( $self, $elem ) = @_;
     my $size = $elem->attr('size');
@@ -473,6 +430,7 @@ sub font_end {
     $self->restore_font_size( $self->{'font_size'}[-1] );
 }
 
+# ------------------------------------------------------------------------
 sub big_start {
     my $self = $_[0];
     push @{ $self->{'font_size'} }, $self->{basefont_size}[-1] + 1;    # same as font size="+1"
@@ -480,6 +438,7 @@ sub big_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub small_start {
     my $self = $_[0];
     push @{ $self->{'font_size'} }, $self->{basefont_size}[-1] - 1,    # same as font size="-1"
@@ -488,6 +447,7 @@ sub small_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub big_end {
     my $self = $_[0];
     pop @{ $self->{'font_size'} };
@@ -495,6 +455,7 @@ sub big_end {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub small_end {
     my $self = $_[0];
     pop @{ $self->{'font_size'} };
@@ -502,8 +463,7 @@ sub small_end {
     1;
 }
 
-# ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+# ------------------------------------------------------------------------
 sub basefont_start {
     my ( $self, $elem ) = @_;
     my $size = $elem->attr('size');
@@ -512,6 +472,7 @@ sub basefont_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub basefont_end {
     my ( $self, $elem ) = @_;
     my $size = $elem->attr('size');
@@ -519,63 +480,50 @@ sub basefont_end {
     pop( @{ $self->{basefont_size} } );
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------------------
+#
 # Override in subclasses, if you like.
-
-sub new_font_size {
-
-    #my( $self, $font_size_number ) = @_;
+#
+sub new_font_size {    #my( $self, $font_size_number ) = @_;
 }
 
-sub restore_font_size {
-
-    #my( $self, $font_size_number ) = @_;
+sub restore_font_size {    #my( $self, $font_size_number ) = @_;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-sub q_start { shift->out(q<">); 1; }
-sub q_end   { shift->out(q<">); 1; }
-
-sub sup_start { shift->{superscript}++; 1; }
-sub sup_end   { shift->{superscript}--; 1; }
-
-sub sub_start { shift->{subscript}++; 1; }
-sub sub_end   { shift->{subscript}--; 1; }
-
+# ------------------------------------------------------------------------
+sub q_start      { shift->out(q<">);         1; }
+sub q_end        { shift->out(q<">);         1; }
+sub sup_start    { shift->{superscript}++;   1; }
+sub sup_end      { shift->{superscript}--;   1; }
+sub sub_start    { shift->{subscript}++;     1; }
+sub sub_end      { shift->{subscript}--;     1; }
 sub strike_start { shift->{strikethrough}++; 1; }
 sub strike_end   { shift->{strikethrough}--; 1; }
+sub s_start      { shift->strike_start(@_) }
+sub s_end        { shift->strike_end(@_) }
+sub dfn_start    { 1; }
+sub dfn_end      { 1; }
+sub abbr_start   { 1; }
+sub abbr_end     { 1; }
+sub acronym_start { 1; }
+sub acronym_end   { 1; }
+sub span_start    { 1; }
+sub span_end      { 1; }
+sub ins_start     { 1; }
+sub ins_end       { 1; }
+sub del_start     { 0; }    # Don't render the del'd bits
+sub del_end       { 0; }
 
-# Alias:
-sub s_start { shift->strike_start(@_) }
-sub s_end   { shift->strike_end(@_) }
-
-## No actual appearance change, so no point in defining:
-#
-# sub dfn_start { 1; }
-# sub dfn_end   { 1; }
-# sub abbr_start { 1; }
-# sub abbr_end   { 1; }
-# sub acronym_start { 1; }
-# sub acronym_end   { 1; }
-# sub span_start { 1; }
-# sub span_end   { 1; }
-# sub div_start { 1; }
-# sub div_end   { 1; }
-# sub ins_start { 1; }
-# sub ins_end   { 1; }
-
-sub del_start { 0; }    # Don't render the del'd bits
-sub del_end   { 0; }
-
+# ------------------------------------------------------------------------
 my @Size_magic_numbers = (
-    .60, .75, .89, 1, 1.20, 1.50, 2.00, 3.00
+    0.60, 0.75, 0.89, 1, 1.20, 1.50, 2.00, 3.00
 
         # #0    #1    #2   #3     #4     #5     #6     #7
         #________________ - | + _________________________
         # -3    -2    -1    0     +1     +2     +3     +4
 );
 
+# ------------------------------------------------------------------------
 sub scale_font_for {
     my ( $self, $reference_size ) = @_;
 
@@ -604,6 +552,7 @@ sub scale_font_for {
     return $result;
 }
 
+# ------------------------------------------------------------------------
 # Aliases for logical markup:
 sub strong_start { shift->b_start(@_) }
 sub strong_end   { shift->b_end(@_) }
@@ -620,6 +569,7 @@ sub samp_end     { shift->tt_end(@_) }
 sub var_start    { shift->tt_start(@_) }
 sub var_end      { shift->tt_end(@_) }
 
+# ------------------------------------------------------------------------
 sub p_start {
     my $self = shift;
 
@@ -631,12 +581,14 @@ sub p_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub p_end {
     shift->vspace(1);
 
     # assert one line's worth of vertical space at para-end
 }
 
+# ------------------------------------------------------------------------
 sub pre_start {
     my $self = shift;
     $self->{pre}++;
@@ -646,6 +598,7 @@ sub pre_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub pre_end {
     my $self = shift;
     $self->{pre}--;
@@ -654,11 +607,13 @@ sub pre_end {
     $self->vspace(1);
 }
 
+# ------------------------------------------------------------------------
 sub listing_start { shift->pre_start(@_) }
 sub listing_end   { shift->pre_end(@_) }
 sub xmp_start     { shift->pre_start(@_) }
 sub xmp_end       { shift->pre_end(@_) }
 
+# ------------------------------------------------------------------------
 sub blockquote_start {
     my $self = shift;
     $self->vspace(1);
@@ -669,6 +624,7 @@ sub blockquote_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub blockquote_end {
     my $self = shift;
     $self->vspace(1);
@@ -678,6 +634,7 @@ sub blockquote_end {
     $self->adjust_rm(+2);
 }
 
+# ------------------------------------------------------------------------
 sub address_start {
     my $self = shift;
     $self->vspace(1);
@@ -687,6 +644,7 @@ sub address_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub address_end {
     my $self = shift;
     $self->i_end(@_);
@@ -695,8 +653,8 @@ sub address_end {
     $self->vspace(1);
 }
 
+# ------------------------------------------------------------------------
 # Handling of list elements
-
 sub ul_start {
     my $self = shift;
     $self->vspace(1);
@@ -706,6 +664,7 @@ sub ul_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub ul_end {
     my $self = shift;
     $self->adjust_lm(-2);
@@ -714,6 +673,7 @@ sub ul_end {
     $self->vspace(1);
 }
 
+# ------------------------------------------------------------------------
 sub li_start {
     my $self = shift;
     $self->bullet( shift->attr('_bullet') || '' );
@@ -721,21 +681,23 @@ sub li_start {
     1;
 }
 
-sub bullet {
-    shift->out(@_);
-}
+# ------------------------------------------------------------------------
+sub bullet { shift->out(@_); }
 
+# ------------------------------------------------------------------------
 sub li_end {
     my $self = shift;
     $self->vspace(1);
     $self->adjust_lm(-2);
 }
 
+# ------------------------------------------------------------------------
 sub menu_start { shift->ul_start(@_) }
 sub menu_end   { shift->ul_end(@_) }
 sub dir_start  { shift->ul_start(@_) }
 sub dir_end    { shift->ul_end(@_) }
 
+# ------------------------------------------------------------------------
 sub ol_start {
     my $self = shift;
 
@@ -744,12 +706,14 @@ sub ol_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub ol_end {
     my $self = shift;
     $self->adjust_lm(-2);
     $self->vspace(1);
 }
 
+# ------------------------------------------------------------------------
 sub dl_start {
     my $self = shift;
 
@@ -760,6 +724,7 @@ sub dl_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub dl_end {
     my $self = shift;
 
@@ -769,6 +734,7 @@ sub dl_end {
     # assert one line's worth of vertical space at dl-end
 }
 
+# ------------------------------------------------------------------------
 sub dt_start {
     my $self = shift;
     $self->vspace(1);
@@ -777,9 +743,10 @@ sub dt_start {
     1;
 }
 
-sub dt_end {
-}
+# ------------------------------------------------------------------------
+sub dt_end { }
 
+# ------------------------------------------------------------------------
 sub dd_start {
     my $self = shift;
     $self->adjust_lm(+6);
@@ -789,6 +756,7 @@ sub dd_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub dd_end {
     my $self = shift;
     $self->vspace(1);
@@ -797,7 +765,7 @@ sub dd_end {
     $self->adjust_lm(-6);
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------------------
 
 # And now some things that are basically sane fall-throughs for classes
 #  that don't really handle tables or forms specially...
@@ -808,6 +776,7 @@ sub textarea_start { 0; }
 sub select_start   { 0; }
 sub option_start   { 0; }
 
+# ------------------------------------------------------------------------
 sub td_start {
     my $self = shift;
 
@@ -817,12 +786,14 @@ sub td_start {
     $self->p_start(@_);
 }
 
+# ------------------------------------------------------------------------
 sub td_end {
     my $self = shift;
     $self->{'center'} = pop @{ $self->{'center_stack'} };
     $self->p_end(@_);
 }
 
+# ------------------------------------------------------------------------
 sub th_start {
     my $self = shift;
 
@@ -833,6 +804,7 @@ sub th_start {
     $self->b_start(@_);
 }
 
+# ------------------------------------------------------------------------
 sub th_end {
     my $self = shift;
     $self->b_end(@_);
@@ -844,8 +816,7 @@ sub th_end {
 #  sub table_start { shift->out('[TABLE NOT SHOWN]'); 0; }
 #  sub form_start  { shift->out('[FORM NOT SHOWN]');  0; }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ------------------------------------------------------------------------
 sub textflow {
     my $self = shift;
     if ( $self->{pre} ) {
@@ -865,6 +836,7 @@ sub textflow {
     }
 }
 
+# ------------------------------------------------------------------------
 sub vspace {
 
     # This method sets the vspace attribute.  When vspace is
@@ -892,16 +864,16 @@ sub vspace {
     $old;
 }
 
+# ------------------------------------------------------------------------
 sub collect { push( @{ shift->{output} }, @_ ); }
 
-#``````````````````````````````````````````````````````````````````````````
-
+# ------------------------------------------------------------------------
 sub out       { confess "Must be overridden by subclass"; }    # Output a word
 sub pre_out   { confess "Must be overridden by subclass"; }
 sub adjust_lm { confess "Must be overridden by subclass"; }
 sub adjust_rm { confess "Must be overridden by subclass"; }
 
-#``````````````````````````````````````````````````````````````````````````
+# ------------------------------------------------------------------------
 
 =head1 SEE ALSO
 

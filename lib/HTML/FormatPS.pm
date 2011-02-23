@@ -156,10 +156,12 @@ use base 'HTML::Formatter';
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
+# ------------------------------------------------------------------------
 # A few routines that convert lengths into points
 sub mm { $_[0] * 72 / 25.4; }
 sub in { $_[0] * 72; }
 
+# ------------------------------------------------------------------------
 my %PaperSizes = (
     A3        => [ mm(297), mm(420) ],
     A4        => [ mm(210), mm(297) ],
@@ -176,6 +178,7 @@ my %PaperSizes = (
     Quarto    => [ 610,     780 ],
 );
 
+# ------------------------------------------------------------------------
 my %FontFamilies = (
     Courier => [
         qw(Courier
@@ -199,11 +202,12 @@ my %FontFamilies = (
     ],
 );
 
-# size   0   1   2   3   4   5   6   7
+# ------------------------------------------------------------------------
+# size            0  1  2  3   4   5   6   7   8
 my @FontSizes = ( 5, 6, 8, 10, 12, 14, 18, 24, 32 );
 
-sub BOLD ()   { 0x01; }
-sub ITALIC () { 0x02; }
+sub BOLD   { 0x01; }
+sub ITALIC { 0x02; }
 
 my %param = (
     papersize        => 'papersize',
@@ -223,6 +227,8 @@ my %param = (
     fontscale        => 'fontscale',
     leading          => 'leading',
 );
+
+# ------------------------------------------------------------------------
 
 =head2 new
 
@@ -253,6 +259,7 @@ sub new {
     $self;
 }
 
+# ------------------------------------------------------------------------
 sub default_values {
     (   shift->SUPER::default_values(),
 
@@ -269,6 +276,7 @@ sub default_values {
     );
 }
 
+# ------------------------------------------------------------------------
 sub configure {
     my ( $self, $hash ) = @_;
     my ( $key, $val );
@@ -296,6 +304,7 @@ sub configure {
     }
 }
 
+# ------------------------------------------------------------------------
 sub papersize {
     my ( $self, $val ) = @_;
     $val = "\u\L$val";
@@ -307,6 +316,7 @@ sub papersize {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub fontsize {
     my $self = shift;
     my $size = $self->{font_size}[-1];
@@ -320,6 +330,7 @@ sub fontsize {
 # of that size.  Otherwise, use the font specified by the
 # HTML context.  Returns the "font ID" of the current font.
 
+# ------------------------------------------------------------------------
 sub setfont {
     my ( $self, $plain_with_size ) = @_;
     my $index  = 0;
@@ -356,12 +367,13 @@ sub setfont {
     return $font;
 }
 
+# ------------------------------------------------------------------------
 # Construct PostScript code for setting the current font according
 # to $fontid, or an empty string if no font change is needed.
 # Assumes the return string will always be output as PostScript if
 # nonempty, so that our notion of the current PostScript font
 # stays in sync with that of the PostScript interpreter.
-
+#
 sub switchfont {
     my ( $self, $fontid ) = @_;
     if ( $self->{psfontid} eq $fontid ) {
@@ -373,13 +385,14 @@ sub switchfont {
     }
 }
 
+# ------------------------------------------------------------------------
 # Like setfont + switchfont.
-
 sub findfont {
     my ( $self, $plain_with_size ) = @_;
     return $self->switchfont( $self->setfont($plain_with_size) );
 }
 
+# ------------------------------------------------------------------------
 sub width {
     my $self = shift;
     my $w    = 0;
@@ -391,6 +404,7 @@ sub width {
     $w;
 }
 
+# ------------------------------------------------------------------------
 sub begin {
     my $self = shift;
     $self->SUPER::begin;
@@ -425,6 +439,7 @@ sub begin {
     $self->newpage;
 }
 
+# ------------------------------------------------------------------------
 sub end {
     my $self = shift;
 
@@ -545,6 +560,7 @@ EOT
         unless $self->{'no_prolog'};
 }
 
+# ------------------------------------------------------------------------
 sub header_start {
     my ( $self, $level ) = @_;
 
@@ -557,6 +573,7 @@ sub header_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub header_end {
     my ($self) = @_;
     $self->vspace(1);
@@ -565,6 +582,7 @@ sub header_end {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub hr_start {
     my $self = shift;
     ### Making an HR...
@@ -578,6 +596,7 @@ sub hr_start {
     $self->vspace(0.5);
 }
 
+# ------------------------------------------------------------------------
 sub skip_vspace {
     my $self = shift;
     ### Skipping some amount of vspace...
@@ -608,6 +627,7 @@ sub skip_vspace {
     return;
 }
 
+# ------------------------------------------------------------------------
 sub show {
     my $self = shift;
     my $str  = $self->{showstring};
@@ -624,6 +644,7 @@ sub show {
     $self->{showstring} = "";
 }
 
+# ------------------------------------------------------------------------
 sub showline {
     my $self = shift;
     $self->show;
@@ -720,6 +741,7 @@ sub showline {
     return;
 }
 
+# ------------------------------------------------------------------------
 sub endpage {
     my $self = shift;
     ### End page: $self->{pageno}
@@ -729,6 +751,7 @@ sub endpage {
     $self->{pageno}++;
 }
 
+# ------------------------------------------------------------------------
 sub newpage {
     my $self = shift;
 
@@ -775,6 +798,7 @@ sub newpage {
     #### Newpage/end y: $self->{ypos}
 }
 
+# ------------------------------------------------------------------------
 sub out    # Output a word
 {
     my ( $self, $text ) = @_;
@@ -820,6 +844,7 @@ sub out    # Output a word
     $self->show_with_font( $text, $fontid, $w );
 }
 
+# ------------------------------------------------------------------------
 sub show_with_font {
     my ( $self, $text, $fontid, $w ) = @_;
 
@@ -841,6 +866,7 @@ sub show_with_font {
     $self->{'out'}++;
 }
 
+# ------------------------------------------------------------------------
 sub pre_out {
     my ( $self, $text ) = @_;
     $self->skip_vspace;
@@ -860,12 +886,14 @@ sub pre_out {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub bullet {
     my ( $self, $bullet ) = @_;
     $self->{bullet}     = $bullet;
     $self->{bullet_pos} = $self->{lm};
 }
 
+# ------------------------------------------------------------------------
 sub adjust_lm {
     my $self = shift;
     $self->showline;
@@ -874,6 +902,7 @@ sub adjust_lm {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub adjust_rm {
     my $self = shift;
 
@@ -882,13 +911,9 @@ sub adjust_rm {
     $self->{rm} += $_[0] * $self->{en};
 }
 
-sub head_start {
-    1;
-}
-
-sub head_end {
-    1;
-}
+# ------------------------------------------------------------------------
+sub head_start { 1; }
+sub head_end   { 1; }
 
 sub title_start {
     my ($self) = @_;
@@ -902,8 +927,7 @@ sub title_end {
     1;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ------------------------------------------------------------------------
 my ( $counter, $last_state_filename );
 
 # For use in circumstances of total desperation:
@@ -932,7 +956,7 @@ sub dump_state {
     return 1;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------------------
 
 =head1 SEE ALSO
 

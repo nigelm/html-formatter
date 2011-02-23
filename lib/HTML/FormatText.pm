@@ -67,6 +67,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
+# ------------------------------------------------------------------------
 sub default_values {
     (   shift->SUPER::default_values(),
         lm => 3,     # left margin
@@ -74,6 +75,7 @@ sub default_values {
     );
 }
 
+# ------------------------------------------------------------------------
 sub configure {
     my ( $self, $hash ) = @_;
     my $lm = $self->{lm};
@@ -102,6 +104,7 @@ sub configure {
     $self;
 }
 
+# ------------------------------------------------------------------------
 sub begin {
     my $self = shift;
     $self->HTML::Formatter::begin;
@@ -110,10 +113,12 @@ sub begin {
     $self->{hspace} = 0;    # horizontal space pending flag
 }
 
+# ------------------------------------------------------------------------
 sub end {
     shift->collect("\n");
 }
 
+# ------------------------------------------------------------------------
 sub header_start {
     my ( $self, $level ) = @_;
     $self->vspace( 1 + ( 6 - $level ) * 0.4 );
@@ -121,6 +126,7 @@ sub header_start {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub header_end {
     my ( $self, $level ) = @_;
     if ( $level <= 2 ) {
@@ -134,11 +140,13 @@ sub header_end {
     1;
 }
 
+# ------------------------------------------------------------------------
 sub bullet {
     my $self = shift;
     $self->SUPER::bullet( $_[0] . ' ' );
 }
 
+# ------------------------------------------------------------------------
 sub hr_start {
     my $self = shift;
     $self->vspace(1);
@@ -146,6 +154,7 @@ sub hr_start {
     $self->vspace(1);
 }
 
+# ------------------------------------------------------------------------
 sub pre_out {
     my $self = shift;
 
@@ -163,6 +172,7 @@ sub pre_out {
     $self->{out}++;
 }
 
+# ------------------------------------------------------------------------
 sub out {
     my $self = shift;
     my $text = shift;
@@ -205,6 +215,7 @@ sub out {
     $self->{'out'}++;
 }
 
+# ------------------------------------------------------------------------
 sub goto_lm {
     my $self = shift;
     my $pos  = $self->{curpos};
@@ -215,6 +226,7 @@ sub goto_lm {
     }
 }
 
+# ------------------------------------------------------------------------
 sub nl {
     my $self = shift;
     $self->{'out'}++;
@@ -222,12 +234,14 @@ sub nl {
     $self->collect("\n");
 }
 
+# ------------------------------------------------------------------------
 sub adjust_lm {
     my $self = shift;
     $self->{lm} += $_[0];
     $self->goto_lm;
 }
 
+# ------------------------------------------------------------------------
 sub adjust_rm {
     shift->{rm} += $_[0];
 }
