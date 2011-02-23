@@ -57,13 +57,15 @@ The column of the right margin. The default is 72.
 
 =cut
 
+use 5.006_001;
 use strict;
-use vars qw(@ISA $VERSION);
+use warnings;
 
-use HTML::Formatter ();
-BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
+# We now use Smart::Comments in place of the old DEBUG framework.
+# this should be commented out in release versions....
+##use Smart::Comments;
 
-@ISA = qw(HTML::Formatter);
+use base 'HTML::Formatter';
 
 sub default_values {
     (   shift->SUPER::default_values(),

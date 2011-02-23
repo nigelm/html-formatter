@@ -145,22 +145,22 @@ advanced users.
 
 =cut
 
-use Carp;
+use 5.006_001;
 use strict;
-use vars qw(@ISA $VERSION);
+use warnings;
+use Carp;
 
-use HTML::Formatter ();
-BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
+use base 'HTML::Formatter';
 
-@ISA = qw(HTML::Formatter);
-
-use vars qw(%PaperSizes %FontFamilies @FontSizes %param $DEBUG);
+# We now use Smart::Comments in place of the old DEBUG framework.
+# this should be commented out in release versions....
+##use Smart::Comments;
 
 # A few routines that convert lengths into points
 sub mm { $_[0] * 72 / 25.4; }
 sub in { $_[0] * 72; }
 
-%PaperSizes = (
+my %PaperSizes = (
     A3        => [ mm(297), mm(420) ],
     A4        => [ mm(210), mm(297) ],
     A5        => [ mm(148), mm(210) ],
@@ -176,7 +176,7 @@ sub in { $_[0] * 72; }
     Quarto    => [ 610,     780 ],
 );
 
-%FontFamilies = (
+my %FontFamilies = (
     Courier => [
         qw(Courier
             Courier-Bold
@@ -200,12 +200,12 @@ sub in { $_[0] * 72; }
 );
 
 # size   0   1   2   3   4   5   6   7
-@FontSizes = ( 5, 6, 8, 10, 12, 14, 18, 24, 32 );
+my @FontSizes = ( 5, 6, 8, 10, 12, 14, 18, 24, 32 );
 
 sub BOLD ()   { 0x01; }
 sub ITALIC () { 0x02; }
 
-%param = (
+my %param = (
     papersize        => 'papersize',
     paperwidth       => 'paperwidth',
     paperheight      => 'paperheigth',
@@ -550,7 +550,7 @@ sub header_start {
 
     # If we are close enough to be bottom of the page, start a new page
     # instead of this:
-    DEBUG > 1 and print "  Heading of level $level\n";
+    ### Heading of level: $level
     $self->vspace( 1 + ( 6 - $level ) * 0.4 );
     $self->{bold}++;
     push( @{ $self->{font_size} }, 8 - $level );
@@ -567,7 +567,7 @@ sub header_end {
 
 sub hr_start {
     my $self = shift;
-    DEBUG > 1 and print "  Making an HR.\n";
+    ### Making an HR...
     $self->showline;
     $self->vspace(0.5);
     $self->skip_vspace;
@@ -580,43 +580,31 @@ sub hr_start {
 
 sub skip_vspace {
     my $self = shift;
-    DEBUG > 2 and print "   Skipping some amount of vspace.\n";
+    ### Skipping some amount of vspace...
     if ( defined $self->{vspace} ) {
         $self->showline;
         if ( $self->{'out'} ) {
             $self->{ypos} -= $self->{vspace} * 10 * $self->{fontscale};
 
             if ( $self->{ypos} < $self->{bm} ) {
-                DEBUG > 2
-                    and printf
-                    "   Skipping %s bits of vspace meant moving y down by %.1f to %.1f (via fontscale %s), forcing a pagebreak.\n",
-                    $self->{'vspace'},
-                    $self->{'ypos'},
-                    $self->{'vspace'} * 10 * $self->{fontscale},
-                    $self->{'fontscale'},
-                    ;
+                ### vspace skip forced new page...
                 $self->newpage;
             }
             else {
-                DEBUG > 2 and printf "   Skipping %s bits of vspace meant moving y down by %.1f to %.1f up.\n",
-                    $self->{vspace},
-                    $self->{'ypos'},
-                    $self->{vspace} * 10 * $self->{fontscale},
-                    $self->{'fontscale'},
-                    ;
+                ### Skipped vspace making y: $self->{'ypos'},
             }
         }
         else {
-            DEBUG > 2 and printf "   Would skip $$self{vspace} bits of vspace, but 'out' is false.\n", $$self{'ypos'};
+            ### Not skipping vspace as out is false: $self->{ypos}
         }
         $self->{xpos}   = $self->{lm};
         $self->{vspace} = undef;
         $self->{hspace} = undef;
     }
     else {
-        DEBUG > 2 and print "   (But no vspace to skip.)\n";
+        ### No vspace to skip...
     }
-    DEBUG > 3 and print "    Done skipping that vspace.\n";
+
     return;
 }
 
@@ -641,40 +629,23 @@ sub showline {
     $self->show;
     my $line = $self->{line};
     unless ( length $line ) {
-        DEBUG > 2
-            and print "   Showline is a no-op because line buffer is empty\n";
+        ### Showline is a no-op because line buffer is empty...
         return;
     }
 
-    if ( DEBUG > 2 ) {
-        my $l = $line;
-        $l =~ tr/\n/\xB6/;
-        print "   Showline is going to emit <$l>\n";
-    }
+    ### Showline emitting: $line
 
     $self->{ypos} -= $self->{largest_pointsize} || $self->{pointsize};
     if ( $self->{ypos} < $self->{bm} ) {
-        DEBUG > 2
-            and print "   Showline has to start a new page first.\n";
-
-        DEBUG > 2 and print "   vspace value before newpage: ",
-            defined( $self->{vspace} ) ? $self->{vspace} : 'undef', "\n";
-
-        DEBUG > 10 and $self->dump_state;
+        ### Showline forcing new page...
         $self->newpage;
 
         # newpage might alter currentfont!
-
-        DEBUG > 2 and print "  vspace value after newpage: ",
-            defined( $self->{vspace} ) ? $self->{vspace} : 'undef', "\n";
-
-        DEBUG > 2 and printf "   Moving y from %.1f down to %.f because of pointsize %s\n",
-            $self->{ypos}, $self->{ypos} - $self->{pointsize}, $self->{pointsize},
-            ;
+        ### Showline sets vspace: $self->{vspace} || 0
 
         $self->{ypos} -= $self->{pointsize};
-
-        DEBUG > 2 and printf "   Newpage's (x,y) is (%.1f, %.1f).\n", @$self{ 'xpos', 'ypos' };
+        #### Showline/Newpage x: $self->{xpos}
+        #### Showline/Newpage y: $self->{ypos}
 
         # must set current font again
         my $font = $self->{prev_currentfont};
@@ -682,11 +653,8 @@ sub showline {
             $self->collect("$self->{fonts}{$font} SF\n\n");
         }
 
-        DEBUG > 10 and $self->dump_state;
-        DEBUG > 2  and print "   End of doing newpage.\n";
+        ### End of doing newpage...
     }
-
-    #DEBUG > 2 and $self->dump_state;
 
     my $lm = $self->{lm};
     my $x  = $lm;
@@ -703,15 +671,6 @@ sub showline {
     $self->collect($line);
     $self->{'out'}++;
 
-    if ( DEBUG > 3 ) {
-        my $l = $line;
-        $l =~ tr/\n/\xB6/;
-        print "   Showline has just emitted <$l>\n";
-    }
-
-    DEBUG > 3 and print "   vspace value after collection: ",
-        defined( $self->{vspace} ) ? $self->{vspace} : 'undef', "\n";
-
     if ( $self->{bullet} ) {
 
         # Putting this behind the first line of the list item
@@ -723,8 +682,7 @@ sub showline {
             # There is no character that is really suitable.  Let's make
             # a medium-sized filled cirle ourself.
             my $radius = $self->{pointsize} / 8;
-            DEBUG > 2
-                and print "   Adding code for a '*' bullet for that line.\n";
+            ### Adding code for a '*' bullet for that line...
 
             $self->collect(
                 sprintf "newpath %.1f %.1f %.1f 0 360 arc fill\n",
@@ -733,8 +691,7 @@ sub showline {
             );
         }
         else {
-            DEBUG > 2
-                and print "   Adding code for a '$bullet' bullet for that line.\n";
+            ### Adding code for other bullet for that line...
 
             $self->collect(
                 sprintf "%.1f (%s) stringwidth pop sub %.1f add %.1f M\n",    # moveto
@@ -756,20 +713,16 @@ sub showline {
 
     # Additional linespacing
 
-    DEBUG > 2
-        and printf "   Leading makes me move down from (%.1f, %.1f) by (%.1f * %.1f = %.1f).\n",
-        @$self{ 'xpos', 'ypos' }, $self->{leading}, $self->{pointsize}, $self->{leading} * $self->{pointsize};
-
     $self->{ypos} -= $self->{leading} * $self->{pointsize};
-    DEBUG > 2 and printf "   Showline ends by setting (x,y) to (%.1f, %.1f).\n", @$self{ 'xpos', 'ypos' };
+    #### Showline/end x: $self->{xpos}
+    #### Showline/end y: $self->{ypos}
 
     return;
 }
 
 sub endpage {
     my $self = shift;
-    DEBUG > 1 and print "  Ending page $$self{pageno}\n";
-
+    ### End page: $self->{pageno}
     # End previous page
     $self->collect("showpage\n");
     $self->{visible_page_number}++;
@@ -785,7 +738,7 @@ sub newpage {
     #  potential side-effects from from page-numbering code
 
     if ( $self->{'out'} ) {    # whether we've sent anything to the current page so far.
-        DEBUG > 2 and print "   Newpage sees that 'out' is true ($$self{'out'}), so calls endpage.\n";
+        ### Newpage calls endpage...
         $self->endpage;
         $self->collect( sprintf "%% %s has sent %s write-events to the above page.\n", ref($self), $self->{'out'}, );
     }
@@ -795,20 +748,11 @@ sub newpage {
     my $visible_page_number = $self->{visible_page_number};
 
     $self->collect("\n%%Page: $pageno $pageno\n");
-    DEBUG and print " Starting page $pageno\n";
-
-    # Print area marker (just for debugging)
-    if ( $DEBUG or DEBUG > 5 ) {
-        my ( $llx, $lly, $urx, $ury ) = @{ $self->{'orig_margins'} };
-        $self->collect("gsave 0.1 setlinewidth\n");
-        $self->collect("clippath 0.9 setgray fill 1 setgray\n");
-        $self->collect("$llx $lly moveto $urx $lly lineto $urx $ury lineto $llx $ury lineto closepath fill\n");
-        $self->collect("grestore\n");
-    }
+    ### Starting page: $pageno
 
     # Print page number
     if ( $self->{printpageno} ) {
-        DEBUG > 2 and print "   Printing page number $visible_page_number (really page $pageno).\n";
+        ### Printing page number: $visible_page_number
         $self->collect("%% Title and pageno\n");
         my $f = $self->findfont(8);
         $self->collect("$f\n") if $f;
@@ -821,14 +765,14 @@ sub newpage {
         $self->collect( sprintf "%.1f 30.0 M($self->{title})S\n", $x );
     }
     else {
-        DEBUG > 2 and print "   Pointedly not printing page number.\n";
+        ### Pointedly not printing page number...
     }
     $self->collect("\n");
 
-    DEBUG > 2 and printf "  Newpage ends by setting (x,y) to (%.1f across, %.1f up)\n", @$self{ 'lm', 'tm' };
-
     $self->{xpos} = $self->{lm};
     $self->{ypos} = $self->{tm};
+    #### Newpage/end x: $self->{xpos}
+    #### Newpage/end y: $self->{ypos}
 }
 
 sub out    # Output a word
@@ -836,7 +780,7 @@ sub out    # Output a word
     my ( $self, $text ) = @_;
 
     $text =~ tr/\xA0\xAD/ /d;
-    DEBUG > 3 and print "    Trapping new word <$text>\n";
+    ### Trapping new word: $text
 
     if ( $self->{collectingTheTitle} ) {
 
@@ -888,8 +832,9 @@ sub show_with_font {
     $self->{xpos} += $w;
     $self->{showstring} .= $text;
 
-    DEBUG > 4 and print "     Appending to string buffer: \"$text\" with font $fontid\n";
-    DEBUG > 4 and printf "     xpos is now %.1f across.\n", ${$self}{'xpos'};
+    #### Append to string buffer: $text
+    #### with font: $fontid
+    #### with xpos: $self->{xpos}
 
     $self->{largest_pointsize} = $self->{pointsize}
         if $self->{largest_pointsize} < $self->{pointsize};
@@ -923,14 +868,7 @@ sub bullet {
 
 sub adjust_lm {
     my $self = shift;
-    DEBUG > 1 and printf "  Adjusting lm by %s, called by %s line %s\n", $_[0], ( caller(1) )[ 3, 2 ];
     $self->showline;
-
-    DEBUG > 2 and printf "  ^=Changing lm from %.1f to %.1f, because en=%.1f\n",
-        $self->{lm},
-        $self->{lm} + $_[0] * $self->{en},
-        $self->{en},
-        ;
 
     $self->{lm} += $_[0] * $self->{en};
     1;
@@ -938,15 +876,8 @@ sub adjust_lm {
 
 sub adjust_rm {
     my $self = shift;
-    DEBUG > 1 and printf "  Adjusting rm by %s, called by %s line %s\n", $_[0], ( caller(1) )[ 3, 2 ];
 
     $self->showline;
-
-    DEBUG > 2 and printf "  ^ Changing rm from %.1f to %.1f, because en=%.1f\n",
-        $self->{lm},
-        $self->{lm} + $_[0] * $self->{en},
-        $self->{en},
-        ;
 
     $self->{rm} += $_[0] * $self->{en};
 }

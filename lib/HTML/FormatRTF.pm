@@ -130,18 +130,54 @@ users.
 
 =cut
 
+use 5.006_001;
 use strict;
-use vars qw(@ISA $VERSION %Escape);
+use warnings;
 
-use HTML::Formatter ();
-BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
+# We now use Smart::Comments in place of the old DEBUG framework.
+# this should be commented out in release versions....
+##use Smart::Comments;
 
-@ISA = qw(HTML::Formatter);
+use base 'HTML::Formatter';
+
+# We now use Smart::Comments in place of the old DEBUG framework.
+# this should be commented out in release versions....
+##use Smart::Comments;
+
+my %Escape = (
+    map( ( chr($_), chr($_) ),    # things not apparently needing escaping
+        0x20 .. 0x7E ),
+    map( ( chr($_), sprintf( "\\'%02x", $_ ) ),    # apparently escapeworthy things
+        0x00 .. 0x1F, 0x5c, 0x7b, 0x7d, 0x7f .. 0xFF, 0x46 ),
+
+    # We get to escape out 'F' so that we can send RTF files thru the mail
+    # without the slightest worry that paragraphs beginning with "From"
+    # will get munged.
+
+    # And some refinements:
+    #"\n"   => "\n\\line ",
+    #"\cm"  => "\n\\line ",
+    #"\cj"  => "\n\\line ",
+
+    "\t" => "\\tab ",                              # Tabs (altho theoretically raw \t's are okay)
+
+    # "\f"   => "\n\\page\n", # Formfeed
+    "-"    => "\\_",                               # Turn plaintext '-' into a non-breaking hyphen
+    "\xA0" => "\\~",                               # Latin-1 non-breaking space
+    "\xAD" => "\\-",                               # Latin-1 soft (optional) hyphen
+
+    # CRAZY HACKS:
+    "\n" => "\\line\n",
+    "\r" => "\n",
+
+    # "\cb" => "{\n\\cs21\\lang1024\\noproof ",  # \\cf1
+    # "\cc" => "}",
+);
 
 sub default_values {
     (   shift->SUPER::default_values(),
-        'lm' => 0,    # left margin
-        'rm' => 0,    # right margin (actually, maximum text width)
+        'lm' => 0,                                 # left margin
+        'rm' => 0,                                 # right margin (actually, maximum text width)
 
         'head1_halfpoint_size'     => 32,
         'head2_halfpoint_size'     => 28,
@@ -168,7 +204,7 @@ sub configure {
 
 sub begin {
     my $self = shift;
-    DEBUG and print " Start document.\n";
+    ### Start document...
 
     $self->SUPER::begin;
 
@@ -190,7 +226,7 @@ sub end {
     # just to force the previous para to be written out.
 
     $self->collect("}") unless $self->{'no_trailer'};    # ends the document
-    DEBUG and print " End document.\n";
+    ### End document...
     return;
 }
 
@@ -316,27 +352,15 @@ sub emit_para {    # rather like showline in FormatPS
     my $para = $self->{'Para'};
     $self->{'Para'} = undef;
 
-    if ( DEBUG > 4 ) {
-        printf "     &emit_para called by %s\n", ( caller(1) )[3];
-    }
+    #### emit_para called by: (caller(1) )[3];
 
     unless ( defined $para ) {
-
-        #and length $para and $para =~ m/[^ ]/
-        DEBUG > 20
-            and print "   Emit_para is a no-op because para buffer is empty.\n";
+        #### emit_para with empty buffer...
         return;
     }
 
     $para =~ s/^ +//s;
     $para =~ s/ +$//s;
-
-    if ( DEBUG > 2 ) {
-        my $p = $para;
-        $p =~ tr/\n/\xB6/;
-        substr( $p, 60 ) = "..." if length $p > 65;
-        print "   Emit_para emits <$p> with vspace of ", $self->{'vspace'} || 'nil', "\n";
-    }
 
     # And now: a not terribly clever algorithm for inserting newlines
     # at a guaranteed harmless place: after a block of whitespace
@@ -419,7 +443,7 @@ sub header_start {    # for h1 ... h6's
                       #  to change now.
 
     my ( $self, $level ) = @_;
-    DEBUG > 1 and print "  Heading of level $level\n";
+    ### Heading of level: $level
 
     #$self->adjust_lm(0); # assert new paragraph
     $self->vspace(1.5);
@@ -509,21 +533,12 @@ sub out {    # output a word (or, if escaped, chunk of RTF)
 
     #return $self->pre_out(@_) if $self->{pre};
 
-    if ( DEBUG > 4 ) {
-        printf "     &out(%s) called by %s\n", $_[0], ( caller(1) )[3];
-    }
+    #### out called by: $_[0], (caller(1) )[3]
 
     return unless defined $_[0];    # and length $_[0];
 
     $self->{'Para'} = '' unless defined $self->{'Para'};
     $self->{'Para'} .= ref( $_[0] ) ? ${ $_[0] } : rtf_esc( $_[0] );
-
-    if ( DEBUG > 4 ) {
-        my $x = ref( $_[0] ) ? ${ $_[0] } : rtf_esc( $_[0] );
-        $x =~ s/\n/\n\t\xB6/g;
-        substr( $x, 60 ) = "..." if length $x > 65;
-        print "    Queued for output: <$x>\n";
-    }
 
     return 1;
 }
@@ -595,36 +610,6 @@ sub rtf_esc_codely {
         return $x;
     }
 }
-
-%Escape = (
-    map( ( chr($_), chr($_) ),     # things not apparently needing escaping
-        0x20 .. 0x7E ),
-    map( ( chr($_), sprintf( "\\'%02x", $_ ) ),    # apparently escapeworthy things
-        0x00 .. 0x1F, 0x5c, 0x7b, 0x7d, 0x7f .. 0xFF, 0x46 ),
-
-    # We get to escape out 'F' so that we can send RTF files thru the mail
-    # without the slightest worry that paragraphs beginning with "From"
-    # will get munged.
-
-    # And some refinements:
-    #"\n"   => "\n\\line ",
-    #"\cm"  => "\n\\line ",
-    #"\cj"  => "\n\\line ",
-
-    "\t" => "\\tab ",                              # Tabs (altho theoretically raw \t's are okay)
-
-    # "\f"   => "\n\\page\n", # Formfeed
-    "-"    => "\\_",                               # Turn plaintext '-' into a non-breaking hyphen
-    "\xA0" => "\\~",                               # Latin-1 non-breaking space
-    "\xAD" => "\\-",                               # Latin-1 soft (optional) hyphen
-
-    # CRAZY HACKS:
-    "\n" => "\\line\n",
-    "\r" => "\n",
-
-    # "\cb" => "{\n\\cs21\\lang1024\\noproof ",  # \\cf1
-    # "\cc" => "}",
-);
 
 1;
 

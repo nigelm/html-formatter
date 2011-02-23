@@ -47,17 +47,16 @@ root object) as parameter.
 
 =cut
 
-BEGIN {
-    *DEBUG = sub() {0}
-        unless defined &DEBUG;
-}
+use 5.006_001;
+use strict;
+use warnings;
 
+use Carp;
 use HTML::Element 3.15 ();
 
-use strict;
-use Carp;
-
-use vars qw($VERSION @Size_magic_numbers);
+# We now use Smart::Comments in place of the old DEBUG framework.
+# this should be commented out in release versions....
+##use Smart::Comments;
 
 #
 # A typical formatter will not use all of the features of this
@@ -98,13 +97,12 @@ sub massage_tree {
     my ( $self, $html ) = @_;
     return if $html->tag eq 'p';    # sanity
 
-    DEBUG > 4 and print("Before massaging:\n"), $html->dump();
+    ### Before massaging: $html->dump()
 
     $html->simplify_pres();
 
     # Does anything else need doing?
-
-    DEBUG > 4 and print("After massaging:\n"), $html->dump();
+    ### After massaging: $html->dump()
 
     return;
 }
@@ -207,10 +205,7 @@ sub format {
             and ref $html
             and $html->can('tag');
 
-    if ( $self->DEBUG() > 4 ) {
-        print "Tree to format:\n";
-        $html->dump;
-    }
+    #### Tree to format: $html->dump
 
     $self->set_version_tag($html);
     $self->massage_tree($html);
@@ -229,11 +224,11 @@ sub format {
                 # Use ->can so that we can recover if
                 # a handler is not defined for the tag.
                 if ( $self->can($func) ) {
-                    DEBUG > 3 and print '  ' x $depth, "Calling $func\n";
+                    ### Calling : ('  ' x $depth) . $func
                     return $self->$func($node);
                 }
                 else {
-                    DEBUG > 3 and print '  ' x $depth, "Skipping $func: no handler for it.\n";
+                    ### Skipping: ('  ' x $depth) . $func
                     return 1;
                 }
             }
@@ -573,7 +568,7 @@ sub s_end   { shift->strike_end(@_) }
 sub del_start { 0; }    # Don't render the del'd bits
 sub del_end   { 0; }
 
-@Size_magic_numbers = (
+my @Size_magic_numbers = (
     .60, .75, .89, 1, 1.20, 1.50, 2.00, 3.00
 
         # #0    #1    #2   #3     #4     #5     #6     #7
@@ -604,10 +599,7 @@ sub scale_font_for {
 
     my $result = int( .5 + $reference_size * $Size_magic_numbers[$size_number] );
 
-    $self->DEBUG() > 1
-        and printf "  Turning reference size %s and size number %s into %s.\n",
-        $reference_size, $size_number, $result,
-        ;
+    ### Scale Font: sprintf("reference %s, size %s => %s",  $reference_size, $size_number, $result);
 
     return $result;
 }
@@ -895,44 +887,19 @@ sub vspace {
     }
     else {
         $self->{vspace} = $min;
-        DEBUG > 1 and print " vspace not set, so setting to $min\n";
-
-        #my $new = $add || 0;
-        #$new = $min if $new < $min;
-        #$self->{vspace} = $new;
     }
-    DEBUG > 1 and print " vspace now set to $min\n";
+    ### vspace: $self->{vspace}
     $old;
 }
 
-sub collect {
-    push( @{ shift->{output} }, @_ );
-}
+sub collect { push( @{ shift->{output} }, @_ ); }
 
 #``````````````````````````````````````````````````````````````````````````
 
-sub out    # Output a word
-{
-
-    # my($self, $text) = @_;
-    # $text =~ tr/\xA0\xAD/ /d;
-    # The 0xAD-killing is if you don't support anything like a soft hyphen
-    #  in your destination format
-
-    confess "Must be overridden by subclass";
-}
-
-sub pre_out {
-    confess "Must be overridden by subclass";
-}
-
-sub adjust_lm {
-    confess "Must be overridden by subclass";
-}
-
-sub adjust_rm {
-    confess "Must be overridden by subclass";
-}
+sub out       { confess "Must be overridden by subclass"; }    # Output a word
+sub pre_out   { confess "Must be overridden by subclass"; }
+sub adjust_lm { confess "Must be overridden by subclass"; }
+sub adjust_rm { confess "Must be overridden by subclass"; }
 
 #``````````````````````````````````````````````````````````````````````````
 
