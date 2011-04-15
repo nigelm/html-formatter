@@ -67,6 +67,9 @@ use warnings;
 
 use base 'HTML::Formatter';
 
+# VERSION
+# AUTHORITY
+
 # ------------------------------------------------------------------------
 sub default_values {
     (   shift->SUPER::default_values(),

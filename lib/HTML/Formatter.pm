@@ -58,6 +58,9 @@ use HTML::Element 3.15 ();
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
+# VERSION
+# AUTHORITY
+
 #
 # A typical formatter will not use all of the features of this
 # class.  But it will use some, as best fits the mapping

@@ -152,6 +152,9 @@ use Carp;
 
 use base 'HTML::Formatter';
 
+# VERSION
+# AUTHORITY
+
 # We now use Smart::Comments in place of the old DEBUG framework.
 # this should be commented out in release versions....
 ##use Smart::Comments;

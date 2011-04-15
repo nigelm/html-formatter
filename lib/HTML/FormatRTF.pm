@@ -140,9 +140,8 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-# We now use Smart::Comments in place of the old DEBUG framework.
-# this should be commented out in release versions....
-##use Smart::Comments;
+# VERSION
+# AUTHORITY
 
 # ------------------------------------------------------------------------
 my %Escape = (
