@@ -246,7 +246,8 @@ This creates a new formatter object with the given options.
 
 sub new {
     my $class = shift;
-    my $self  = $class->SUPER::new(@_);
+
+    my $self = $class->SUPER::new(@_);
 
     # Obtained from the <title> element
     $self->{title} = "";
@@ -283,6 +284,7 @@ sub default_values {
 # ------------------------------------------------------------------------
 sub configure {
     my ( $self, $hash ) = @_;
+
     my ( $key, $val );
     while ( ( $key, $val ) = each %$hash ) {
         $key = lc $key;
@@ -311,6 +313,7 @@ sub configure {
 # ------------------------------------------------------------------------
 sub papersize {
     my ( $self, $val ) = @_;
+
     $val = "\u\L$val";
     my ( $width, $height ) = @{ $PaperSizes{$val} || return 0 };
     return 0 unless defined $width;
@@ -323,6 +326,7 @@ sub papersize {
 # ------------------------------------------------------------------------
 sub fontsize {
     my $self = shift;
+
     my $size = $self->{font_size}[-1];
     $size = 8 if $size > 8;
     $size = 3 if $size < 0;
@@ -337,6 +341,7 @@ sub fontsize {
 # ------------------------------------------------------------------------
 sub setfont {
     my ( $self, $plain_with_size ) = @_;
+
     my $index  = 0;
     my $family = $self->{family} || 'Times';
     my $size   = $plain_with_size;
@@ -382,6 +387,7 @@ sub setfont {
 #
 sub switchfont {
     my ( $self, $fontid ) = @_;
+
     if ( $self->{psfontid} eq $fontid ) {
         return "";
     }
@@ -395,15 +401,17 @@ sub switchfont {
 # Like setfont + switchfont.
 sub findfont {
     my ( $self, $plain_with_size ) = @_;
+
     return $self->switchfont( $self->setfont($plain_with_size) );
 }
 
 # ------------------------------------------------------------------------
 sub width {
     my $self = shift;
-    my $w    = 0;
-    my $wx   = $self->{wx};
-    my $sz   = $self->{pointsize};
+
+    my $w  = 0;
+    my $wx = $self->{wx};
+    my $sz = $self->{pointsize};
     for ( unpack( "C*", $_[0] ) ) {
         $w += $wx->[$_] * $sz    # unless  $_ eq 0xAD; # optional hyphen
     }
@@ -413,6 +421,7 @@ sub width {
 # ------------------------------------------------------------------------
 sub begin {
     my $self = shift;
+
     $self->SUPER::begin;
 
     # Margins are in points
@@ -582,6 +591,7 @@ sub header_start {
 # ------------------------------------------------------------------------
 sub header_end {
     my ($self) = @_;
+
     $self->vspace(1);
     $self->{bold}--;
     pop( @{ $self->{font_size} } );
@@ -591,6 +601,7 @@ sub header_end {
 # ------------------------------------------------------------------------
 sub hr_start {
     my $self = shift;
+
     ### Making an HR...
     $self->showline;
     $self->vspace(0.5);
@@ -605,6 +616,7 @@ sub hr_start {
 # ------------------------------------------------------------------------
 sub skip_vspace {
     my $self = shift;
+
     ### Skipping some amount of vspace...
     if ( defined $self->{vspace} ) {
         $self->showline;
@@ -636,7 +648,8 @@ sub skip_vspace {
 # ------------------------------------------------------------------------
 sub show {
     my $self = shift;
-    my $str  = $self->{showstring};
+
+    my $str = $self->{showstring};
     $str =~ tr/\x01//d;
     return unless length $str;
 
@@ -653,6 +666,7 @@ sub show {
 # ------------------------------------------------------------------------
 sub showline {
     my $self = shift;
+
     $self->show;
     my $line = $self->{line};
     unless ( length $line ) {
@@ -750,6 +764,7 @@ sub showline {
 # ------------------------------------------------------------------------
 sub endpage {
     my $self = shift;
+
     ### End page: $self->{pageno}
     # End previous page
     $self->collect("showpage\n");
@@ -805,8 +820,7 @@ sub newpage {
 }
 
 # ------------------------------------------------------------------------
-sub out    # Output a word
-{
+sub out {    # Output a word
     my ( $self, $text ) = @_;
 
     $text =~ tr/\xA0\xAD/ /d;
@@ -875,6 +889,7 @@ sub show_with_font {
 # ------------------------------------------------------------------------
 sub pre_out {
     my ( $self, $text ) = @_;
+
     $self->skip_vspace;
     $self->tt_start;
     my $font = $self->findfont();
@@ -895,6 +910,7 @@ sub pre_out {
 # ------------------------------------------------------------------------
 sub bullet {
     my ( $self, $bullet ) = @_;
+
     $self->{bullet}     = $bullet;
     $self->{bullet_pos} = $self->{lm};
 }
@@ -902,6 +918,7 @@ sub bullet {
 # ------------------------------------------------------------------------
 sub adjust_lm {
     my $self = shift;
+
     $self->showline;
 
     $self->{lm} += $_[0] * $self->{en};
@@ -923,12 +940,14 @@ sub head_end   { 1; }
 
 sub title_start {
     my ($self) = @_;
+
     $self->{collectingTheTitle} = 1;
     1;
 }
 
 sub title_end {
     my ($self) = @_;
+
     $self->{collectingTheTitle} = 0;
     1;
 }

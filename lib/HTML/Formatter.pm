@@ -81,9 +81,11 @@ This creates a new formatter object with the given options.
 
 sub new {
     my ( $class, %arg ) = @_;
+
     my $self = bless { $class->default_values }, $class;
     $self->configure( \%arg ) if keys %arg;
-    $self;
+
+    return $self;
 }
 
 # ------------------------------------------------------------------------
@@ -94,15 +96,18 @@ sub default_values {
 # ------------------------------------------------------------------------
 sub configure {
     my ( $self, $arg ) = @_;
+
     for ( keys %$arg ) {
         warn "Unknown configure argument '$_'" if $^W;
     }
-    $self;
+
+    return $self;
 }
 
 # ------------------------------------------------------------------------
 sub massage_tree {
     my ( $self, $html ) = @_;
+
     return if $html->tag eq 'p';    # sanity
 
     ### Before massaging: $html->dump()
@@ -133,20 +138,22 @@ HTML::TreeBuilder object based on the given HTML file.
 
 =cut
 
-sub format_from_file { shift->format_file(@_) }
+sub format_from_file { return shift->format_file(@_); }
 
 sub format_file {
     my ( $self, $filename, @params ) = @_;
+
     $self = $self->new(@params) unless ref $self;
 
     croak "What filename to format from?"
-        unless defined $filename and length $filename;
+        unless ( defined($filename) and length($filename) );
 
     my $tree = $self->_default_tree();
     $tree->parse_file($filename);
 
     my $out = $self->format($tree);
     $tree->delete;
+
     return $out;
 }
 
@@ -173,6 +180,7 @@ sub format_from_string { shift->format_string(@_) }
 
 sub format_string {
     my ( $self, $content, @params ) = @_;
+
     $self = $self->new(@params) unless ref $self;
 
     croak "What string to format?" unless defined $content;
@@ -184,6 +192,7 @@ sub format_string {
 
     my $out = $self->format($tree);
     $tree->delete;
+
     return $out;
 }
 
@@ -216,10 +225,7 @@ HTML tree object, you probably should not use either again.
 sub format {
     my ( $self, $html ) = @_;
 
-    croak "Usage: \$formatter->format(\$tree)"
-        unless defined $html
-            and ref $html
-            and $html->can('tag');
+    croak "Usage: \$formatter->format(\$tree)" unless ( defined($html) and ref($html) and $html->can('tag') );
 
     #### Tree to format: $html->dump
 
@@ -254,8 +260,10 @@ sub format {
             1;
         }
     );
+
     $self->end($html);
-    join( '', @{ $self->{output} } );
+
+    return join( '', @{ $self->{output} } );
 }
 
 # ------------------------------------------------------------------------
@@ -297,9 +305,7 @@ sub set_version_tag {
             ref($self), $self->VERSION || '?',
             ref($html),
             $html->VERSION || '?',
-            $HTML::Parser::VERSION
-            ? ", and HTML::Parser v$HTML::Parser::VERSION"
-            : ''
+            $HTML::Parser::VERSION ? ", and HTML::Parser v$HTML::Parser::VERSION" : ''
         );
     }
     elsif ($HTML::Parser::VERSION) {
@@ -327,6 +333,7 @@ sub frameset_start { 0; }
 # ------------------------------------------------------------------------
 sub header_start {
     my ( $self, undef, $node ) = @_;
+
     my $align = $node->attr('align');
     if ( defined($align) && lc($align) eq 'center' ) {
         $self->{center}++;
@@ -337,6 +344,7 @@ sub header_start {
 # ------------------------------------------------------------------------
 sub header_end {
     my ( $self, undef, $node ) = @_;
+
     my $align = $node->attr('align');
     if ( defined($align) && lc($align) eq 'center' ) {
         $self->{center}--;
@@ -365,6 +373,7 @@ sub hr_start { my $self = shift; $self->vspace(1); 1; }
 # ------------------------------------------------------------------------
 sub img_start {
     my ( $self, $node ) = @_;
+
     my $alt = $node->attr('alt');
     $self->out( defined($alt) ? $alt : "[IMAGE]" );
 }
@@ -384,9 +393,9 @@ sub center_start { shift->{center}++;    1; }
 sub center_end   { shift->{center}--; }
 
 # ------------------------------------------------------------------------
-sub div_start    # interesting only for its 'align' attribute
-{
+sub div_start {    # interesting only for its 'align' attribute
     my ( $self, $node ) = @_;
+
     my $align = $node->attr('align');
     if ( defined($align) && lc($align) eq 'center' ) {
         return $self->center_start;
@@ -397,6 +406,7 @@ sub div_start    # interesting only for its 'align' attribute
 # ------------------------------------------------------------------------
 sub div_end {
     my ( $self, $node ) = @_;
+
     my $align = $node->attr('align');
     if ( defined($align) && lc($align) eq 'center' ) {
         return $self->center_end;
@@ -411,8 +421,9 @@ sub wbr_start  { 1; }
 # ------------------------------------------------------------------------
 sub font_start {
     my ( $self, $elem ) = @_;
+
     my $size = $elem->attr('size');
-    return 1 unless defined $size;
+    return 1 unless ( defined($size) );
     if ( $size =~ /^\s*[+\-]/ ) {
         my $base = $self->{basefont_size}[-1];
 
@@ -487,11 +498,8 @@ sub basefont_end {
 #
 # Override in subclasses, if you like.
 #
-sub new_font_size {    #my( $self, $font_size_number ) = @_;
-}
-
-sub restore_font_size {    #my( $self, $font_size_number ) = @_;
-}
+sub new_font_size     { }    #my( $self, $font_size_number ) = @_;
+sub restore_font_size { }    #my( $self, $font_size_number ) = @_;
 
 # ------------------------------------------------------------------------
 sub q_start      { shift->out(q<">);         1; }
@@ -502,8 +510,8 @@ sub sub_start    { shift->{subscript}++;     1; }
 sub sub_end      { shift->{subscript}--;     1; }
 sub strike_start { shift->{strikethrough}++; 1; }
 sub strike_end   { shift->{strikethrough}--; 1; }
-sub s_start      { shift->strike_start(@_) }
-sub s_end        { shift->strike_end(@_) }
+sub s_start      { shift->strike_start(@_); }
+sub s_end        { shift->strike_end(@_); }
 sub dfn_start    { 1; }
 sub dfn_end      { 1; }
 sub abbr_start   { 1; }
@@ -586,27 +594,23 @@ sub p_start {
 
 # ------------------------------------------------------------------------
 sub p_end {
-    shift->vspace(1);
-
-    # assert one line's worth of vertical space at para-end
+    shift->vspace(1);    # assert one line's worth of vertical space at para-end
 }
 
 # ------------------------------------------------------------------------
 sub pre_start {
     my $self = shift;
-    $self->{pre}++;
-    $self->vspace(1);
 
-    # assert one line's worth of vertical space at pre-start
+    $self->{pre}++;
+    $self->vspace(1);    # assert one line's worth of vertical space at pre-start
     1;
 }
 
 # ------------------------------------------------------------------------
 sub pre_end {
     my $self = shift;
-    $self->{pre}--;
 
-    # assert one line's worth of vertical space at pre-end
+    $self->{pre}--;      # assert one line's worth of vertical space at pre-end
     $self->vspace(1);
 }
 
@@ -619,9 +623,8 @@ sub xmp_end       { shift->pre_end(@_) }
 # ------------------------------------------------------------------------
 sub blockquote_start {
     my $self = shift;
-    $self->vspace(1);
 
-    # assert one line's worth of vertical space at blockquote-start
+    $self->vspace(1);    # assert one line's worth of vertical space at blockquote-start
     $self->adjust_lm(+2);
     $self->adjust_rm(-2);
     1;
@@ -630,9 +633,8 @@ sub blockquote_start {
 # ------------------------------------------------------------------------
 sub blockquote_end {
     my $self = shift;
-    $self->vspace(1);
 
-    # assert one line's worth of vertical space at blockquote-end
+    $self->vspace(1);    # assert one line's worth of vertical space at blockquote-end
     $self->adjust_lm(-2);
     $self->adjust_rm(+2);
 }
@@ -640,9 +642,8 @@ sub blockquote_end {
 # ------------------------------------------------------------------------
 sub address_start {
     my $self = shift;
-    $self->vspace(1);
 
-    # assert one line's worth of vertical space at address-para-start
+    $self->vspace(1);    # assert one line's worth of vertical space at address-para-start
     $self->i_start(@_);
     1;
 }
@@ -650,9 +651,8 @@ sub address_start {
 # ------------------------------------------------------------------------
 sub address_end {
     my $self = shift;
-    $self->i_end(@_);
 
-    # assert one line's worth of vertical space at address-para-end
+    $self->i_end(@_);    # assert one line's worth of vertical space at address-para-end
     $self->vspace(1);
 }
 
@@ -660,9 +660,8 @@ sub address_end {
 # Handling of list elements
 sub ul_start {
     my $self = shift;
-    $self->vspace(1);
 
-    # assert one line's worth of vertical space at ul-start
+    $self->vspace(1);    # assert one line's worth of vertical space at ul-start
     $self->adjust_lm(+2);
     1;
 }
@@ -670,15 +669,15 @@ sub ul_start {
 # ------------------------------------------------------------------------
 sub ul_end {
     my $self = shift;
-    $self->adjust_lm(-2);
 
-    # assert one line's worth of vertical space at ul-end
+    $self->adjust_lm(-2);    # assert one line's worth of vertical space at ul-end
     $self->vspace(1);
 }
 
 # ------------------------------------------------------------------------
 sub li_start {
     my $self = shift;
+
     $self->bullet( shift->attr('_bullet') || '' );
     $self->adjust_lm(+2);
     1;
@@ -690,6 +689,7 @@ sub bullet { shift->out(@_); }
 # ------------------------------------------------------------------------
 sub li_end {
     my $self = shift;
+
     $self->vspace(1);
     $self->adjust_lm(-2);
 }
@@ -712,6 +712,7 @@ sub ol_start {
 # ------------------------------------------------------------------------
 sub ol_end {
     my $self = shift;
+
     $self->adjust_lm(-2);
     $self->vspace(1);
 }
@@ -721,9 +722,7 @@ sub dl_start {
     my $self = shift;
 
     # $self->adjust_lm(+2);
-    $self->vspace(1);
-
-    # assert one line's worth of vertical space at dl-start
+    $self->vspace(1);    # assert one line's worth of vertical space at dl-start
     1;
 }
 
@@ -732,17 +731,14 @@ sub dl_end {
     my $self = shift;
 
     # $self->adjust_lm(-2);
-    $self->vspace(1);
-
-    # assert one line's worth of vertical space at dl-end
+    $self->vspace(1);    # assert one line's worth of vertical space at dl-end
 }
 
 # ------------------------------------------------------------------------
 sub dt_start {
     my $self = shift;
-    $self->vspace(1);
 
-    # assert one line's worth of vertical space at dt-start
+    $self->vspace(1);    # assert one line's worth of vertical space at dt-start
     1;
 }
 
@@ -752,19 +748,17 @@ sub dt_end { }
 # ------------------------------------------------------------------------
 sub dd_start {
     my $self = shift;
-    $self->adjust_lm(+6);
-    $self->vspace(0);
 
-    # hm, what's that do?  nothing?
+    $self->adjust_lm(+6);
+    $self->vspace(0);    # hm, what's that do?  nothing?
     1;
 }
 
 # ------------------------------------------------------------------------
 sub dd_end {
     my $self = shift;
-    $self->vspace(1);
 
-    # assert one line's worth of vertical space at dd-end
+    $self->vspace(1);    # assert one line's worth of vertical space at dd-end
     $self->adjust_lm(-6);
 }
 
@@ -792,6 +786,7 @@ sub td_start {
 # ------------------------------------------------------------------------
 sub td_end {
     my $self = shift;
+
     $self->{'center'} = pop @{ $self->{'center_stack'} };
     $self->p_end(@_);
 }
@@ -810,6 +805,7 @@ sub th_start {
 # ------------------------------------------------------------------------
 sub th_end {
     my $self = shift;
+
     $self->b_end(@_);
     $self->{'center'} = pop @{ $self->{'center_stack'} };
     $self->p_end(@_);
@@ -822,6 +818,7 @@ sub th_end {
 # ------------------------------------------------------------------------
 sub textflow {
     my $self = shift;
+
     if ( $self->{pre} ) {
 
         # Strip one leading and one trailing newline so that a <pre>
@@ -841,6 +838,7 @@ sub textflow {
 
 # ------------------------------------------------------------------------
 sub vspace {
+    my ( $self, $min, $add ) = @_;
 
     # This method sets the vspace attribute.  When vspace is
     # defined, then a new line should be started.  If vspace
@@ -852,7 +850,6 @@ sub vspace {
     # ending this paragraph, and asserting how much space should
     # follow; but it happens to work out pretty well.
 
-    my ( $self, $min, $add ) = @_;
     my $old = $self->{vspace};
     if ( defined $old ) {
         my $new = $old;

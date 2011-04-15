@@ -81,6 +81,7 @@ sub default_values {
 # ------------------------------------------------------------------------
 sub configure {
     my ( $self, $hash ) = @_;
+
     my $lm = $self->{lm};
     my $rm = $self->{rm};
 
@@ -110,7 +111,8 @@ sub configure {
 # ------------------------------------------------------------------------
 sub begin {
     my $self = shift;
-    $self->HTML::Formatter::begin;
+
+    $self->SUPER::begin;
     $self->{curpos} = 0;    # current output position.
     $self->{maxpos} = 0;    # highest value of $pos (used by header underliner)
     $self->{hspace} = 0;    # horizontal space pending flag
@@ -124,6 +126,7 @@ sub end {
 # ------------------------------------------------------------------------
 sub header_start {
     my ( $self, $level ) = @_;
+
     $self->vspace( 1 + ( 6 - $level ) * 0.4 );
     $self->{maxpos} = 0;
     1;
@@ -132,6 +135,7 @@ sub header_start {
 # ------------------------------------------------------------------------
 sub header_end {
     my ( $self, $level ) = @_;
+
     if ( $level <= 2 ) {
         my $line;
         $line = '=' if $level == 1;
@@ -146,12 +150,14 @@ sub header_end {
 # ------------------------------------------------------------------------
 sub bullet {
     my $self = shift;
+
     $self->SUPER::bullet( $_[0] . ' ' );
 }
 
 # ------------------------------------------------------------------------
 sub hr_start {
     my $self = shift;
+
     $self->vspace(1);
     $self->out( '-' x ( $self->{rm} - $self->{lm} ) );
     $self->vspace(1);
@@ -221,8 +227,9 @@ sub out {
 # ------------------------------------------------------------------------
 sub goto_lm {
     my $self = shift;
-    my $pos  = $self->{curpos};
-    my $lm   = $self->{lm};
+
+    my $pos = $self->{curpos};
+    my $lm  = $self->{lm};
     if ( $pos < $lm ) {
         $self->{curpos} = $lm;
         $self->collect( " " x ( $lm - $pos ) );
@@ -232,6 +239,7 @@ sub goto_lm {
 # ------------------------------------------------------------------------
 sub nl {
     my $self = shift;
+
     $self->{'out'}++;
     $self->{curpos} = 0;
     $self->collect("\n");
@@ -240,6 +248,7 @@ sub nl {
 # ------------------------------------------------------------------------
 sub adjust_lm {
     my $self = shift;
+
     $self->{lm} += $_[0];
     $self->goto_lm;
 }
