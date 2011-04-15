@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+2.06      2011-04-15 12:01:33 Europe/London
     - Code gardening - no functionality modifications - includes:-
     - Moved old DEBUG framework to Smart::Comments
     - Ensured variables are declared my as much as possible
