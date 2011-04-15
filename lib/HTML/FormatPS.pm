@@ -149,6 +149,7 @@ use 5.006_001;
 use strict;
 use warnings;
 use Carp;
+use IO::File;
 
 use base 'HTML::Formatter';
 
@@ -358,8 +359,10 @@ sub setfont {
     $fontfile =~ s,::,/,g;
     require $fontfile;
     {
+        ## no critic
         no strict 'refs';
         $self->{wx} = \@{"${fontmod}::wx"};
+        ## use critic
     }
     $font = $self->{fonts}{$font_with_size} || do {
         my $fontID = "F" . ++$self->{fno};
@@ -463,8 +466,8 @@ sub end {
 
     push( @prolog, "%%DocumentMedia: Plain $pw $ph 0 white ()\n" );
     push( @prolog, "%%DocumentNeededResources: \n" );
-    my ( $full, %seenfont );
-    for $full ( sort keys %{ $self->{fonts} } ) {
+    my %seenfont;
+    for my $full ( sort keys %{ $self->{fonts} } ) {
         $full =~ s/-\d+$//;
         next if $seenfont{$full}++;
         push( @prolog, "%%+ font $full\n" );
@@ -547,7 +550,7 @@ systemdict /ISOLatin1Encoding known not {
 EOT
 
     push( @prolog, "\n%%BeginSetup\n" );
-    for $full ( sort keys %{ $self->{fonts} } ) {
+    for my $full ( sort keys %{ $self->{fonts} } ) {
         my $short = $self->{fonts}{$full};
         $full =~ s/-(\d+)$//;
         my $size = $1;
@@ -941,14 +944,14 @@ sub dump_state {
 
     ++$counter;
     my $filename = sprintf( "state%04d.txt", $counter );
-    open( STATE, ">$filename" ) or die "Can't write-open $filename: $!";
-    printf STATE "%s line %s\n", ( caller(1) )[ 3, 2 ];
+    my $state = IO::File->new( $filename, 'w' ) or die "Can't write-open $filename: $!";
+    $state->printf( "%s line %s\n", ( caller(1) )[ 3, 2 ] );
     {
         local ( $self->{'wx'} )     = '<SUPPRESSED>';
         local ( $self->{'output'} ) = '<SUPPRESSED>';
-        print STATE Data::Dumper::Dumper($self);
+        $state->print( Data::Dumper::Dumper($self) );
     }
-    close(STATE);
+    $state->close;
     sleep 0;
 
     if ($last_state_filename) {
