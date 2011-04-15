@@ -6,7 +6,7 @@
       "Gisle Aas <gisle@ActiveState.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110360",
+   "generated_by" : "Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110580",
    "license" : [
       "perl_5"
    ],
@@ -16,9 +16,14 @@
    },
    "name" : "HTML-Format",
    "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.31"
+            "Module::Build" : "0.3601"
          }
       },
       "runtime" : {
@@ -39,8 +44,9 @@
             "Font::Metrics::TimesRoman" : 0,
             "HTML::Element" : "3.15",
             "HTML::TreeBuilder" : 0,
+            "IO::File" : 0,
             "integer" : 0,
-            "vars" : 0
+            "perl" : "5.006_001"
          }
       },
       "test" : {
@@ -51,12 +57,11 @@
             "File::Spec" : 0,
             "File::Temp" : 0,
             "Scalar::Util" : 0,
-            "Test::More" : "0.96",
-            "perl" : "5.004"
+            "Test::More" : "0.96"
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "mailto" : "bug-HTML-Format@rt.cpan.org",
@@ -69,18 +74,18 @@
          "web" : "http://github.com/nigelm/html-format"
       }
    },
-   "version" : "2.05",
+   "version" : "2.06",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
             "class" : "Dist::Zilla::Plugin::Git::NextVersion",
             "name" : "@NIGELM/Git::NextVersion",
-            "version" : "1.110480"
+            "version" : "1.110500"
          },
          {
             "class" : "Dist::Zilla::Plugin::Git::Check",
             "name" : "@NIGELM/Git::Check",
-            "version" : "1.110480"
+            "version" : "1.110500"
          },
          {
             "class" : "Dist::Zilla::Plugin::GatherDir",
@@ -195,7 +200,7 @@
          {
             "class" : "Dist::Zilla::Plugin::Authority",
             "name" : "@NIGELM/Authority",
-            "version" : "1.003"
+            "version" : "1.005"
          },
          {
             "class" : "Dist::Zilla::Plugin::ExtraTests",
@@ -208,9 +213,9 @@
             "version" : "4.200004"
          },
          {
-            "class" : "Dist::Zilla::Plugin::PkgVersion",
-            "name" : "@NIGELM/PkgVersion",
-            "version" : "4.200004"
+            "class" : "Dist::Zilla::Plugin::OurPkgVersion",
+            "name" : "@NIGELM/OurPkgVersion",
+            "version" : "0.1.5"
          },
          {
             "class" : "Dist::Zilla::Plugin::PodWeaver",
@@ -223,8 +228,8 @@
             "version" : "4.200004"
          },
          {
-            "class" : "Dist::Zilla::Plugin::MakeMaker",
-            "name" : "@NIGELM/MakeMaker",
+            "class" : "Dist::Zilla::Plugin::ModuleBuild",
+            "name" : "@NIGELM/ModuleBuild",
             "version" : "4.200004"
          },
          {
@@ -260,22 +265,22 @@
          {
             "class" : "Dist::Zilla::Plugin::Git::Commit",
             "name" : "@NIGELM/Git::Commit",
-            "version" : "1.110480"
+            "version" : "1.110500"
          },
          {
             "class" : "Dist::Zilla::Plugin::Git::Tag",
             "name" : "@NIGELM/Git::Tag",
-            "version" : "1.110480"
+            "version" : "1.110500"
          },
          {
             "class" : "Dist::Zilla::Plugin::Git::CommitBuild",
             "name" : "@NIGELM/Git::CommitBuild",
-            "version" : "1.110480"
+            "version" : "1.110500"
          },
          {
             "class" : "Dist::Zilla::Plugin::Git::Push",
             "name" : "@NIGELM/Git::Push",
-            "version" : "1.110480"
+            "version" : "1.110500"
          },
          {
             "class" : "Dist::Zilla::Plugin::CheckChangeLog",
@@ -322,7 +327,7 @@
       "zilla" : {
          "class" : "Dist::Zilla::Dist::Builder",
          "config" : {
-            "is_trial" : 0
+            "is_trial" : 1
          },
          "version" : "4.200004"
       }

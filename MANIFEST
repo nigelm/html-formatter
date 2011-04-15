@@ -1,10 +1,10 @@
+Build.PL
 Changes
 INSTALL
 LICENSE
 MANIFEST
 META.json
 META.yml
-Makefile.PL
 README
 lib/HTML/FormatPS.pm
 lib/HTML/FormatRTF.pm

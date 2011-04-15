@@ -1,3 +1,15 @@
+2.06      2011-04-15 12:01:33 Europe/London
+    - Code gardening - no functionality modifications - includes:-
+    - Moved old DEBUG framework to Smart::Comments
+    - Ensured variables are declared my as much as possible
+    - Ensure strict/warnings used as far as possible
+    - use base rather than playing games with @ISA
+    - Changes above enforce a requirement of perl 5.6.1
+    - Robo-reformatted by perltidy
+    - Stripped function prototypes where used
+    - Passes standard perl critic with one exclusion
+    - Tweaks for comprehensibility - splitting sections etc
+
 2.05      2011-02-18 11:28:33 Europe/London
     - Smoke tests on windows showed needed make PS tests less strict
     - Changed the github location to be all lowercase

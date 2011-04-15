@@ -1,41 +1,71 @@
 package HTML::FormatRTF;
-BEGIN {
-  $HTML::FormatRTF::VERSION = '2.05';
-}
-BEGIN {
-  $HTML::FormatRTF::AUTHORITY = 'cpan:NIGELM';
-}
 
 # ABSTRACT: Format HTML as RTF
 
 
-
+use 5.006_001;
 use strict;
-use vars qw(@ISA $VERSION %Escape);
+use warnings;
 
-use HTML::Formatter ();
-BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
+# We now use Smart::Comments in place of the old DEBUG framework.
+# this should be commented out in release versions....
+##use Smart::Comments;
 
-@ISA = qw(HTML::Formatter);
+use base 'HTML::Formatter';
 
+our $VERSION = '2.06'; # VERSION
+our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
+
+# ------------------------------------------------------------------------
+my %Escape = (
+    map( ( chr($_), chr($_) ),    # things not apparently needing escaping
+        0x20 .. 0x7E ),
+    map( ( chr($_), sprintf( "\\'%02x", $_ ) ),    # apparently escapeworthy things
+        0x00 .. 0x1F, 0x5c, 0x7b, 0x7d, 0x7f .. 0xFF, 0x46 ),
+
+    # We get to escape out 'F' so that we can send RTF files thru the mail
+    # without the slightest worry that paragraphs beginning with "From"
+    # will get munged.
+
+    # And some refinements:
+    #"\n"   => "\n\\line ",
+    #"\cm"  => "\n\\line ",
+    #"\cj"  => "\n\\line ",
+
+    "\t" => "\\tab ",                              # Tabs (altho theoretically raw \t's are okay)
+
+    # "\f"   => "\n\\page\n", # Formfeed
+    "-"    => "\\_",                               # Turn plaintext '-' into a non-breaking hyphen
+    "\xA0" => "\\~",                               # Latin-1 non-breaking space
+    "\xAD" => "\\-",                               # Latin-1 soft (optional) hyphen
+
+    # CRAZY HACKS:
+    "\n" => "\\line\n",
+    "\r" => "\n",
+
+    # "\cb" => "{\n\\cs21\\lang1024\\noproof ",  # \\cf1
+    # "\cc" => "}",
+);
+
+# ------------------------------------------------------------------------
 sub default_values {
-  (
-     shift->SUPER::default_values(),
-     'lm' =>  0, # left margin
-     'rm' =>  0, # right margin (actually, maximum text width)
+    (   shift->SUPER::default_values(),
+        'lm' => 0,    # left margin
+        'rm' => 0,    # right margin (actually, maximum text width)
 
-     'head1_halfpoint_size' => 32,
-     'head2_halfpoint_size' => 28,
-     'head3_halfpoint_size' => 25,
-     'head4_halfpoint_size' => 22,
-     'head5_halfpoint_size' => 20,
-     'head6_halfpoint_size' => 18,
-     'codeblock_halfpoint_size' => 18,
-     'header_halfpoint_size' => 17,
-     'normal_halfpoint_size' => 22,
-  );
+        'head1_halfpoint_size'     => 32,
+        'head2_halfpoint_size'     => 28,
+        'head3_halfpoint_size'     => 25,
+        'head4_halfpoint_size'     => 22,
+        'head5_halfpoint_size'     => 20,
+        'head6_halfpoint_size'     => 18,
+        'codeblock_halfpoint_size' => 18,
+        'header_halfpoint_size'    => 17,
+        'normal_halfpoint_size'    => 22,
+    );
 }
 
+# ------------------------------------------------------------------------
 sub configure {
     my ( $self, $hash ) = shift;
 
@@ -47,59 +77,53 @@ sub configure {
     $self;
 }
 
-
+# ------------------------------------------------------------------------
 sub begin {
-  my $self = shift;
-  DEBUG and print " Start document.\n";
+    my $self = shift;
 
-  $self->SUPER::begin;
+    ### Start document...
+    $self->SUPER::begin;
 
-  $self->collect(
-      $self->doc_init,
-      $self->font_table,
-      $self->stylesheet,
-      $self->color_table,
-      $self->doc_info,
-      $self->doc_really_start,
-      "\n"
-  )
-   unless $self->{'no_prolog'};
+    $self->collect( $self->doc_init, $self->font_table, $self->stylesheet, $self->color_table, $self->doc_info,
+        $self->doc_really_start, "\n" )
+        unless $self->{'no_prolog'};
 
-  $self->{'Para'} = '';
-  $self->{'quotelevel'} = 0;
+    $self->{'Para'}       = '';
+    $self->{'quotelevel'} = 0;
 
-  return;
+    return;
 }
 
+# ------------------------------------------------------------------------
 sub end {
-  my $self = shift;
-  $self->vspace(0);
-  $self->out('THIS IS NEVER SEEN');
-   # just to force the previous para to be written out.
+    my $self = shift;
 
-  $self->collect("}") unless $self->{'no_trailer'}; # ends the document
-  DEBUG and print " End document.\n";
-  return;
+    $self->vspace(0);
+    $self->out('THIS IS NEVER SEEN');
+
+    # just to force the previous para to be written out.
+    $self->collect("}") unless $self->{'no_trailer'};    # ends the document
+
+    ### End document...
+    return;
 }
 
-
-###########################################################################
-
+# ------------------------------------------------------------------------
 sub vspace {
-  my $self = shift;
-  #$self->emit_para if defined $self->{'vspace'};
-  my $rv = $self->SUPER::vspace(@_);
-  $self->emit_para if defined $self->{'vspace'};
-  $rv;
+    my $self = shift;
+
+    #$self->emit_para if defined $self->{'vspace'};
+    my $rv = $self->SUPER::vspace(@_);
+    $self->emit_para if defined $self->{'vspace'};
+    $rv;
 }
 
-###########################################################################
-
+# ------------------------------------------------------------------------
 sub stylesheet {
 
-  # TODO: maybe actually /use/ the character styles?
+    # TODO: maybe actually /use/ the character styles?
 
-  return sprintf <<'END',     # snazzy styles
+    return sprintf <<'END',    # snazzy styles
 {\stylesheet
 {\snext0 Normal;}
 {\*\cs1 \additive Default Paragraph Font;}
@@ -119,25 +143,26 @@ sub stylesheet {
 
 END
 
-   @{ $_[0] }{qw<
-    codeblock_halfpoint_size
-    head1_halfpoint_size
-    head2_halfpoint_size
-    head3_halfpoint_size
-    head4_halfpoint_size
-    head5_halfpoint_size
-    head6_halfpoint_size
-   >}
-  ;
+        @{ $_[0] }{
+        qw<
+            codeblock_halfpoint_size
+            head1_halfpoint_size
+            head2_halfpoint_size
+            head3_halfpoint_size
+            head4_halfpoint_size
+            head5_halfpoint_size
+            head6_halfpoint_size
+            >
+        };
 }
 
-###########################################################################
+# ------------------------------------------------------------------------
 # Override these as necessary for further customization
 
 sub font_table {
+    my $self = shift;
 
-  my $self = shift;
-  return sprintf <<'END' ,  # text font, code font, heading font
+    return sprintf <<'END' ,    # text font, code font, heading font
 {\fonttbl
 {\f0\froman %s;}
 {\f1\fmodern %s;}
@@ -146,35 +171,39 @@ sub font_table {
 
 END
 
-  map {;       # custom-dumb escaper:
-    my $x = $_;
-    $x =~ s/([\x00-\x1F\\\{\}\x7F-\xFF])/sprintf("\\'%02x", $1)/g;
-    $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
-    $x;
-  }
-    $self->{'fontname_body'} || 'Times',
-    $self->{'fontname_code'} || 'Courier New',
-    $self->{'fontname_headings'} || 'Arial',
-  ;
+        map {
+        ;                       # custom-dumb escaper:
+        my $x = $_;
+        $x =~ s/([\x00-\x1F\\\{\}\x7F-\xFF])/sprintf("\\'%02x", $1)/g;
+        $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+        $x;
+        }
+        $self->{'fontname_body'}     || 'Times',
+        $self->{'fontname_code'}     || 'Courier New',
+        $self->{'fontname_headings'} || 'Arial',
+        ;
 }
 
+# ------------------------------------------------------------------------
 sub doc_init {
-   return <<'END';
+    return <<'END';
 {\rtf1\ansi\deff0
 
 END
 }
 
+# ------------------------------------------------------------------------
 sub color_table {
-   return <<'END';
+    return <<'END';
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 END
 }
 
-
+# ------------------------------------------------------------------------
 sub doc_info {
-   my $self = $_[0];
-   return sprintf <<'END', $self->version_tag;
+    my $self = $_[0];
+
+    return sprintf <<'END', $self->version_tag;
 {\info{\doccomm generated by %s}
 {\author [see doc]}{\company [see doc]}{\operator [see doc]}
 }
@@ -183,339 +212,285 @@ END
 
 }
 
-
+# ------------------------------------------------------------------------
 sub doc_really_start {
-  my $self = $_[0];
+    my $self = $_[0];
 
-  return sprintf <<'END',
+    return sprintf <<'END',
 \deflang%s\widowctrl
 {\header\pard\qr\plain\f2\fs%s
 p.\chpgn\par}
 \fs%s
 
 END
-    $self->{'document_language'} || 1033,
-    $self->{"header_halfpoint_size"},
-    $self->{"normal_halfpoint_size"},
-  ;
+        $self->{'document_language'} || 1033, $self->{"header_halfpoint_size"}, $self->{"normal_halfpoint_size"},;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sub emit_para {      # rather like showline in FormatPS
-  my $self = shift;
+# ------------------------------------------------------------------------
+sub emit_para {    # rather like showline in FormatPS
+    my $self = shift;
 
-  my $para = $self->{'Para'};
-  $self->{'Para'} = undef;
+    my $para = $self->{'Para'};
+    $self->{'Para'} = undef;
 
-  if(DEBUG > 4) {
-    printf "     &emit_para called by %s\n", (caller(1) )[3];
-  }
+    #### emit_para called by: (caller(1) )[3];
 
-  unless( defined $para ) {
-   #and length $para and $para =~ m/[^ ]/
-    DEBUG > 20
-     and print "   Emit_para is a no-op because para buffer is empty.\n";
-    return;
-  }
+    unless ( defined $para ) {
+        #### emit_para with empty buffer...
+        return;
+    }
 
-  $para =~ s/^ +//s;
-  $para =~ s/ +$//s;
+    $para =~ s/^ +//s;
+    $para =~ s/ +$//s;
 
-  if( DEBUG > 2 ) {
-    my $p = $para;
-    $p =~ tr/\n/\xB6/;
-    substr($p,60) = "..." if length $p > 65;
-    print "   Emit_para emits <$p> with vspace of ",
-      $self->{'vspace'} || 'nil', "\n";
-  }
-
-
-  # And now: a not terribly clever algorithm for inserting newlines
-  # at a guaranteed harmless place: after a block of whitespace
-  # after the 65th column.  This was copied from RTF::Writer.
-  $para =~
-    s/(
+    # And now: a not terribly clever algorithm for inserting newlines
+    # at a guaranteed harmless place: after a block of whitespace
+    # after the 65th column.  This was copied from RTF::Writer.
+    $para =~ s/(
        [^\cm\cj\n]{65}        # Snare 65 characters from a line
        [^\cm\cj\n\x20]{0,50}  #  and finish any current word
       )
       (\x20{1,10})(?![\cm\cj\n]) # capture some spaces not at line-end
-     /$1$2\n/gx     # and put a NL before those spaces
-  ;
+     /$1$2\n/gx    # and put a NL before those spaces
+        ;
 
-  $self->collect(
-    sprintf( '{\pard\sa%d\li%d\ri%d%s\plain'."\n",
-      #100 +
-      10 * $self->{'normal_halfpoint_size'} * ($self->{'vspace'} || 0),
+    $self->collect(
+        sprintf(
+            '{\pard\sa%d\li%d\ri%d%s\plain' . "\n",
 
-      $self->{'lm'},
-      $self->{'rm'},
+            #100 +
+            10 * $self->{'normal_halfpoint_size'} * ( $self->{'vspace'} || 0 ),
 
-      $self->{'center'} ? '\qc' : '\ql',
-    ),
+            $self->{'lm'},
+            $self->{'rm'},
 
-    defined($self->{'next_bullet'}) ? do {
-      my $bullet = $self->{'next_bullet'};
-      $self->{'next_bullet'} = undef;
-      sprintf "\\fi-%d\n%s",
-        4.5 * $self->{'normal_halfpoint_size'},
-        ($bullet eq '*') ? "\\'95 " : (rtf_esc($bullet). ". ")
-    } : (),
+            $self->{'center'} ? '\qc' : '\ql',
+        ),
 
-    $para,
-    "\n\\par}\n\n",
-  );
+        defined( $self->{'next_bullet'} )
+        ? do {
+            my $bullet = $self->{'next_bullet'};
+            $self->{'next_bullet'} = undef;
+            sprintf "\\fi-%d\n%s",
+                4.5 * $self->{'normal_halfpoint_size'},
+                ( $bullet eq '*' ) ? "\\'95 " : ( rtf_esc($bullet) . ". " );
+            }
+        : (),
 
-  $self->{'vspace'} = undef; # we finally get to clear it here!
+        $para,
+        "\n\\par}\n\n",
+    );
 
-  return;
+    $self->{'vspace'} = undef;    # we finally get to clear it here!
+
+    return;
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ------------------------------------------------------------------------
 sub new_font_size {
-  my $self = $_[0];
-  $self->out(
-    \ sprintf "{\\fs%u\n",
-    $self->scale_font_for(
-      $self->{'normal_halfpoint_size'}
-    )
-  );
+    my $self = $_[0];
+
+    $self->out( \sprintf "{\\fs%u\n", $self->scale_font_for( $self->{'normal_halfpoint_size'} ) );
 }
 
-sub restore_font_size { shift->out(  \ '}'  ) }
+# ------------------------------------------------------------------------
+sub restore_font_size { shift->out( \'}' ) }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#sub bullet {
-#  my $self = shift;
-#  $self->SUPER::bullet($_[0] . ' ');
-#}
-
+# ------------------------------------------------------------------------
 sub hr_start {
-  my $self = shift;
-  # A bit of a hack:
+    my $self = shift;
 
-  $self->vspace(.3);
-  $self->out( \ ( '\qc\ul\f1\fs20\nocheck\lang1024 ' . ('\~' x (
-    $self->{'hr_width'} || 50
-  ) ) ) );
-  $self->vspace(.7);
-  1;
+    # A bit of a hack:
+
+    $self->vspace(.3);
+    $self->out( \( '\qc\ul\f1\fs20\nocheck\lang1024 ' . ( '\~' x ( $self->{'hr_width'} || 50 ) ) ) );
+    $self->vspace(.7);
+    1;
 }
 
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------------------
 
 sub br_start {
-  $_[0]->out( \"\\line\n" );
+    $_[0]->out( \"\\line\n" );
 }
 
-sub header_start { # for h1 ... h6's
-  # This really should have been called heading_start, but it's too late
-  #  to change now.
+# ------------------------------------------------------------------------
+sub header_start {
+    my ( $self, $level ) = @_;
 
-  my($self, $level) = @_;
-  DEBUG > 1 and print "  Heading of level $level\n";
+    # for h1 ... h6's
+    # This really should have been called heading_start, but it's too late
+    #  to change now.
 
-  #$self->adjust_lm(0); # assert new paragraph
-  $self->vspace(1.5);
+    ### Heading of level: $level
+    #$self->adjust_lm(0); # assert new paragraph
+    $self->vspace(1.5);
 
-  $self->out( \( sprintf '\s3%s\ql\keepn\f2\fs%s\ul'."\n",
-    $level,
-    $self->{'head' . $level .'_halfpoint_size'},
-    $level,
-  ));
+    $self->out(
+        \(  sprintf '\s3%s\ql\keepn\f2\fs%s\ul' . "\n", $level, $self->{ 'head' . $level . '_halfpoint_size' }, $level,
+        )
+    );
 
-  return 1;
+    return 1;
 }
 
+# ------------------------------------------------------------------------
 sub header_end {
-  # This really should have been called heading_end but it's too late
-  #  to change now.
 
-  $_[0]->vspace(1);
-  1;
+    # This really should have been called heading_end but it's too late
+    #  to change now.
+
+    $_[0]->vspace(1);
+    1;
 }
 
+# ------------------------------------------------------------------------
 sub bullet {
-  my($self, $bullet) = @_;
-  $self->{'next_bullet'} = $bullet;
-  return;
+    my ( $self, $bullet ) = @_;
+
+    $self->{'next_bullet'} = $bullet;
+    return;
 }
 
+# ------------------------------------------------------------------------
 sub adjust_lm {
-  $_[0]->emit_para();
-  $_[0]->{'lm'} += $_[1] * $_[0]->{'normal_halfpoint_size'} * 5;
-  1;
+    $_[0]->emit_para();
+    $_[0]->{'lm'} += $_[1] * $_[0]->{'normal_halfpoint_size'} * 5;
+    1;
 }
+
+# ------------------------------------------------------------------------
 sub adjust_rm {
-  $_[0]->emit_para();
-  $_[0]->{'rm'} -= $_[1] * $_[0]->{'normal_halfpoint_size'} * 5;
-  1;
-}   # Yes, flip the sign on the right margin!
+    $_[0]->emit_para();
+    $_[0]->{'rm'} -= $_[1] * $_[0]->{'normal_halfpoint_size'} * 5;
+    1;
+}    # Yes, flip the sign on the right margin!
 
-    # BTW, halfpoints * 10 = twips
+# BTW, halfpoints * 10 = twips
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ------------------------------------------------------------------------
 sub pre_start {
-  my $self = shift;
-  $self->SUPER::pre_start(@_);
-  $self->out( \ sprintf
-    '\s20\f1\fs%s\noproof\lang1024\lang1076 ',
-    $self->{'codeblock_halfpoint_size'},
-  );
-  return 1;
+    my $self = shift;
+
+    $self->SUPER::pre_start(@_);
+    $self->out( \sprintf '\s20\f1\fs%s\noproof\lang1024\lang1076 ', $self->{'codeblock_halfpoint_size'}, );
+    return 1;
 }
 
-###########################################################################
+# ------------------------------------------------------------------------
+sub b_start      { shift->out( \'{\b ' ) }
+sub b_end        { shift->out( \'}' ) }
+sub i_start      { shift->out( \'{\i ' ) }
+sub i_end        { shift->out( \'}' ) }
+sub tt_start     { shift->out( \'{\f1\noproof\lang1024\lang1076 ' ) }
+sub tt_end       { shift->out( \'}' ) }
+sub sub_start    { shift->out( \'{\sub ' ) }
+sub sub_end      { shift->out( \'}' ) }
+sub sup_start    { shift->out( \'{\super ' ) }
+sub sup_end      { shift->out( \'}' ) }
+sub strike_start { shift->out( \'{\strike ' ) }
+sub strike_end   { shift->out( \'}' ) }
 
-sub  b_start  { shift->out( \'{\b ' ) }
-sub  b_end    { shift->out( \'}'    ) }
-sub  i_start  { shift->out( \'{\i ' ) }
-sub  i_end    { shift->out( \'}'    ) }
+# ------------------------------------------------------------------------
+sub q_start {
+    my $self = $_[0];
 
-sub tt_start  { shift->out( \'{\f1\noproof\lang1024\lang1076 ' ) }
-                 # really really really don't spellcheck this bit!
-sub tt_end    { shift->out( \'}'    ) }
-
-
-sub sub_start     { shift->out( \'{\sub '   ) }
-sub sub_end       { shift->out( \'}'        ) }
-sub sup_start     { shift->out( \'{\super ' ) }
-sub sup_end       { shift->out( \'}'        ) }
-
-sub strike_start  { shift->out( \'{\strike ') }
-sub strike_end    { shift->out( \'}'        ) }
-
-sub q_start  {
-  my $self = $_[0];
-  $self->out(
-    ( ( ++ $self->{'quotelevel'} ) % 2)  ?  \'\ldblquote '  :  \'\lquote '
-  );
+    $self->out( ( ( ++$self->{'quotelevel'} ) % 2 ) ? \'\ldblquote ' : \'\lquote ' );
 }
 
-sub q_end    {
-  my $self = $_[0];
-  $self->out(
-    ( ( -- $self->{'quotelevel'} ) % 2)  ?  \'\rquote '  :  \'\rdblquote '
-  );
+# ------------------------------------------------------------------------
+sub q_end {
+    my $self = $_[0];
+
+    $self->out( ( ( --$self->{'quotelevel'} ) % 2 ) ? \'\rquote ' : \'\rdblquote ' );
 }
 
-###########################################################################
+# ------------------------------------------------------------------------
+sub pre_out { $_[0]->out( ref( $_[1] ) ? $_[1] : \rtf_esc_codely( $_[1] ) ) }
 
-sub pre_out { $_[0]->out(  ref($_[1]) ? $_[1] : \ rtf_esc_codely($_[1])  ) }
+# ------------------------------------------------------------------------
+sub out {    # output a word (or, if escaped, chunk of RTF)
+    my $self = shift;
 
+    #return $self->pre_out(@_) if $self->{pre};
 
-sub out { # output a word (or, if escaped, chunk of RTF)
-  my $self = shift;
-  #return $self->pre_out(@_) if $self->{pre};
+    #### out called by: $_[0], (caller(1) )[3]
 
-  if(DEBUG > 4) {
-    printf "     &out(%s) called by %s\n", $_[0], (caller(1) )[3];
-  }
+    return unless defined $_[0];    # and length $_[0];
 
-  return unless defined $_[0]; # and length $_[0];
+    $self->{'Para'} = '' unless defined $self->{'Para'};
+    $self->{'Para'} .= ref( $_[0] ) ? ${ $_[0] } : rtf_esc( $_[0] );
 
-  $self->{'Para'} = '' unless defined $self->{'Para'};
-  $self->{'Para'} .= ref($_[0]) ? ${$_[0]} : rtf_esc($_[0]);
-
-  if( DEBUG > 4 ) {
-    my $x = ref($_[0]) ? ${$_[0]} : rtf_esc($_[0]);
-    $x =~ s/\n/\n\t\xB6/g;
-    substr($x,60) = "..." if length $x > 65;
-    print "    Queued for output: <$x>\n";
-  }
-
-  return 1;
+    return 1;
 }
 
-
-###########################################################################
-
+# ------------------------------------------------------------------------
 use integer;
+
 sub rtf_esc {
-  my $x; # scratch
-  if(!defined wantarray) { # void context: alter in-place!
-    for(@_) {
-      s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;  # ESCAPER
-      s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+    my $x;                          # scratch
+    if ( !defined wantarray ) {     # void context: alter in-place!
+        for (@_) {
+            s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;    # ESCAPER
+            s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+        }
+        return;
     }
-    return;
-  } elsif(wantarray) {  # return an array
-    return map {; ($x = $_) =~
-      s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;  # ESCAPER
-      $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
-             # Hyper-escape all Unicode characters.
-      $x;
-    } @_;
-  } else { # return a single scalar
-    ($x = ((@_ == 1) ? $_[0] : join '', @_)
-    ) =~ s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;  # ESCAPER
-             # Escape \, {, }, -, control chars, and 7f-ff.
-    $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
-             # Hyper-escape all Unicode characters.
-    return $x;
-  }
+    elsif (wantarray) {                                         # return an array
+        return map {
+            ;
+            ( $x = $_ ) =~ s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;                       # ESCAPER
+            $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+
+            # Hyper-escape all Unicode characters.
+            $x;
+        } @_;
+    }
+    else {    # return a single scalar
+        ( $x = ( ( @_ == 1 ) ? $_[0] : join '', @_ ) ) =~ s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;    # ESCAPER
+                  # Escape \, {, }, -, control chars, and 7f-ff.
+        $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+
+        # Hyper-escape all Unicode characters.
+        return $x;
+    }
 }
 
+# ------------------------------------------------------------------------
 sub rtf_esc_codely {
-  # Doesn't change "-" to hard-hyphen, nor apply computerese style
 
-  my $x; # scratch
-  if(!defined wantarray) { # void context: alter in-place!
-    for(@_) {
-      s/([F\x00-\x1F\\\{\}\x7F-\xFF])/$Escape{$1}/g;
-      s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
-             # Hyper-escape all Unicode characters.
+    # Doesn't change "-" to hard-hyphen, nor apply computerese style
+
+    my $x;    # scratch
+    if ( !defined wantarray ) {    # void context: alter in-place!
+        for (@_) {
+            s/([F\x00-\x1F\\\{\}\x7F-\xFF])/$Escape{$1}/g;
+            s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+
+            # Hyper-escape all Unicode characters.
+        }
+        return;
     }
-    return;
-  } elsif(wantarray) {  # return an array
-    return map {; ($x = $_) =~
-      s/([F\x00-\x1F\\\{\}\x7F-\xFF])/$Escape{$1}/g;
-      $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
-             # Hyper-escape all Unicode characters.
-      $x;
-    } @_;
-  } else { # return a single scalar
-    ($x = ((@_ == 1) ? $_[0] : join '', @_)
-    ) =~ s/([F\x00-\x1F\\\{\}\x7F-\xFF])/$Escape{$1}/g;
-             # Escape \, {, }, -, control chars, and 7f-ff.
-    $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
-             # Hyper-escape all Unicode characters.
-    return $x;
-  }
+    elsif (wantarray) {            # return an array
+        return map {
+            ;
+            ( $x = $_ ) =~ s/([F\x00-\x1F\\\{\}\x7F-\xFF])/$Escape{$1}/g;
+            $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+
+            # Hyper-escape all Unicode characters.
+            $x;
+        } @_;
+    }
+    else {                         # return a single scalar
+        ( $x = ( ( @_ == 1 ) ? $_[0] : join '', @_ ) ) =~ s/([F\x00-\x1F\\\{\}\x7F-\xFF])/$Escape{$1}/g;
+
+        # Escape \, {, }, -, control chars, and 7f-ff.
+        $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
+
+        # Hyper-escape all Unicode characters.
+        return $x;
+    }
 }
-
-%Escape = (
-  map( (chr($_),chr($_)),       # things not apparently needing escaping
-       0x20 .. 0x7E ),
-  map( (chr($_),sprintf("\\'%02x", $_)),    # apparently escapeworthy things
-       0x00 .. 0x1F, 0x5c, 0x7b, 0x7d, 0x7f .. 0xFF, 0x46),
-
-  # We get to escape out 'F' so that we can send RTF files thru the mail
-  # without the slightest worry that paragraphs beginning with "From"
-  # will get munged.
-
-  # And some refinements:
-  #"\n"   => "\n\\line ",
-  #"\cm"  => "\n\\line ",
-  #"\cj"  => "\n\\line ",
-
-  "\t"   => "\\tab ",     # Tabs (altho theoretically raw \t's are okay)
-# "\f"   => "\n\\page\n", # Formfeed
-  "-"    => "\\_",        # Turn plaintext '-' into a non-breaking hyphen
-  "\xA0" => "\\~",        # Latin-1 non-breaking space
-  "\xAD" => "\\-",        # Latin-1 soft (optional) hyphen
-
-  # CRAZY HACKS:
-  "\n" => "\\line\n",
-  "\r" => "\n",
-# "\cb" => "{\n\\cs21\\lang1024\\noproof ",  # \\cf1
-# "\cc" => "}",
-);
-
-
 
 1;
 
@@ -534,7 +509,7 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.05
+version 2.06
 
 =head1 SYNOPSIS
 
@@ -709,6 +684,4 @@ the same terms as the Perl 5 programming language system itself.
 
 
 __END__
-
-
 

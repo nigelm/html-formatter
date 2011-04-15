@@ -1,53 +1,52 @@
 package HTML::FormatText;
-BEGIN {
-  $HTML::FormatText::VERSION = '2.05';
-}
-BEGIN {
-  $HTML::FormatText::AUTHORITY = 'cpan:NIGELM';
-}
 
 # ABSTRACT: Format HTML as plaintext
 
 
+use 5.006_001;
 use strict;
-use vars qw(@ISA $VERSION);
+use warnings;
 
-use HTML::Formatter ();
-BEGIN { *DEBUG = \&HTML::Formatter::DEBUG unless defined &DEBUG }
+# We now use Smart::Comments in place of the old DEBUG framework.
+# this should be commented out in release versions....
+##use Smart::Comments;
 
-@ISA = qw(HTML::Formatter);
+use base 'HTML::Formatter';
 
-sub default_values
-{
-    (
-     shift->SUPER::default_values(),
-     lm =>  3, # left margin
-     rm => 72, # right margin (actually, maximum text width)
+our $VERSION = '2.06'; # VERSION
+our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
+
+# ------------------------------------------------------------------------
+sub default_values {
+    (   shift->SUPER::default_values(),
+        lm => 3,     # left margin
+        rm => 72,    # right margin (actually, maximum text width)
     );
 }
 
-sub configure
-{
-    my($self,$hash) = @_;
+# ------------------------------------------------------------------------
+sub configure {
+    my ( $self, $hash ) = @_;
+
     my $lm = $self->{lm};
     my $rm = $self->{rm};
 
-    $lm = delete $hash->{lm} if exists $hash->{lm};
-    $lm = delete $hash->{leftmargin} if exists $hash->{leftmargin};
-    $rm = delete $hash->{rm} if exists $hash->{rm};
+    $lm = delete $hash->{lm}          if exists $hash->{lm};
+    $lm = delete $hash->{leftmargin}  if exists $hash->{leftmargin};
+    $rm = delete $hash->{rm}          if exists $hash->{rm};
     $rm = delete $hash->{rightmargin} if exists $hash->{rightmargin};
 
     my $width = $rm - $lm;
-    if ($width < 1) {
-    warn "Bad margins, ignored" if $^W;
-    return;
+    if ( $width < 1 ) {
+        warn "Bad margins, ignored" if $^W;
+        return;
     }
-    if ($width < 20) {
-    warn "Page probably too narrow" if $^W;
+    if ( $width < 20 ) {
+        warn "Page probably too narrow" if $^W;
     }
 
-    for (keys %$hash) {
-    warn "Unknown configure option '$_'" if $^W;
+    for ( keys %$hash ) {
+        warn "Unknown configure option '$_'" if $^W;
     }
 
     $self->{lm} = $lm;
@@ -55,110 +54,114 @@ sub configure
     $self;
 }
 
-
-sub begin
-{
+# ------------------------------------------------------------------------
+sub begin {
     my $self = shift;
-    $self->HTML::Formatter::begin;
-    $self->{curpos} = 0;  # current output position.
-    $self->{maxpos} = 0;  # highest value of $pos (used by header underliner)
-    $self->{hspace} = 0;  # horizontal space pending flag
+
+    $self->SUPER::begin;
+    $self->{curpos} = 0;    # current output position.
+    $self->{maxpos} = 0;    # highest value of $pos (used by header underliner)
+    $self->{hspace} = 0;    # horizontal space pending flag
 }
 
-
-sub end
-{
+# ------------------------------------------------------------------------
+sub end {
     shift->collect("\n");
 }
 
+# ------------------------------------------------------------------------
+sub header_start {
+    my ( $self, $level ) = @_;
 
-sub header_start
-{
-    my($self, $level) = @_;
-    $self->vspace(1 + (6-$level) * 0.4);
+    $self->vspace( 1 + ( 6 - $level ) * 0.4 );
     $self->{maxpos} = 0;
     1;
 }
 
-sub header_end
-{
-    my($self, $level) = @_;
-    if ($level <= 2) {
-    my $line;
-    $line = '=' if $level == 1;
-    $line = '-' if $level == 2;
-    $self->vspace(0);
-    $self->out($line x ($self->{maxpos} - $self->{lm}));
+# ------------------------------------------------------------------------
+sub header_end {
+    my ( $self, $level ) = @_;
+
+    if ( $level <= 2 ) {
+        my $line;
+        $line = '=' if $level == 1;
+        $line = '-' if $level == 2;
+        $self->vspace(0);
+        $self->out( $line x ( $self->{maxpos} - $self->{lm} ) );
     }
     $self->vspace(1);
     1;
 }
 
+# ------------------------------------------------------------------------
 sub bullet {
-  my $self = shift;
-  $self->SUPER::bullet($_[0] . ' ');
+    my $self = shift;
+
+    $self->SUPER::bullet( $_[0] . ' ' );
 }
 
-
-sub hr_start
-{
+# ------------------------------------------------------------------------
+sub hr_start {
     my $self = shift;
+
     $self->vspace(1);
-    $self->out('-' x ($self->{rm} - $self->{lm}));
+    $self->out( '-' x ( $self->{rm} - $self->{lm} ) );
     $self->vspace(1);
 }
 
-
-sub pre_out
-{
+# ------------------------------------------------------------------------
+sub pre_out {
     my $self = shift;
+
     # should really handle bold/italic etc.
-    if (defined $self->{vspace}) {
-    if ($self->{out}) {
-        $self->nl() while $self->{vspace}-- >= 0;
-        $self->{vspace} = undef;
-    }
+    if ( defined $self->{vspace} ) {
+        if ( $self->{out} ) {
+            $self->nl() while $self->{vspace}-- >= 0;
+            $self->{vspace} = undef;
+        }
     }
     my $indent = ' ' x $self->{lm};
-    my $pre = shift;
+    my $pre    = shift;
     $pre =~ s/^/$indent/mg;
     $self->collect($pre);
     $self->{out}++;
 }
 
-
-sub out
-{
+# ------------------------------------------------------------------------
+sub out {
     my $self = shift;
     my $text = shift;
 
     $text =~ tr/\xA0\xAD/ /d;
 
-    if ($text =~ /^\s*$/) {
-    $self->{hspace} = 1;
-    return;
+    if ( $text =~ /^\s*$/ ) {
+        $self->{hspace} = 1;
+        return;
     }
 
-    if (defined $self->{vspace}) {
-    if ($self->{out}) {
-        $self->nl while $self->{vspace}-- >= 0;
+    if ( defined $self->{vspace} ) {
+        if ( $self->{out} ) {
+            $self->nl while $self->{vspace}-- >= 0;
         }
-    $self->goto_lm;
-    $self->{vspace} = undef;
-    $self->{hspace} = 0;
+        $self->goto_lm;
+        $self->{vspace} = undef;
+        $self->{hspace} = 0;
     }
 
-    if ($self->{hspace}) {
-    if ($self->{curpos} + length($text) > $self->{rm}) {
-        # word will not fit on line; do a line break
-        $self->nl;
-        $self->goto_lm;
-    } else {
-        # word fits on line; use a space
-        $self->collect(' ');
-        ++$self->{curpos};
-    }
-    $self->{hspace} = 0;
+    if ( $self->{hspace} ) {
+        if ( $self->{curpos} + length($text) > $self->{rm} ) {
+
+            # word will not fit on line; do a line break
+            $self->nl;
+            $self->goto_lm;
+        }
+        else {
+
+            # word fits on line; use a space
+            $self->collect(' ');
+            ++$self->{curpos};
+        }
+        $self->{hspace} = 0;
     }
 
     $self->collect($text);
@@ -167,45 +170,42 @@ sub out
     $self->{'out'}++;
 }
 
-
-sub goto_lm
-{
+# ------------------------------------------------------------------------
+sub goto_lm {
     my $self = shift;
+
     my $pos = $self->{curpos};
     my $lm  = $self->{lm};
-    if ($pos < $lm) {
-    $self->{curpos} = $lm;
-    $self->collect(" " x ($lm - $pos));
+    if ( $pos < $lm ) {
+        $self->{curpos} = $lm;
+        $self->collect( " " x ( $lm - $pos ) );
     }
 }
 
-
-sub nl
-{
+# ------------------------------------------------------------------------
+sub nl {
     my $self = shift;
+
     $self->{'out'}++;
     $self->{curpos} = 0;
     $self->collect("\n");
 }
 
-
-sub adjust_lm
-{
+# ------------------------------------------------------------------------
+sub adjust_lm {
     my $self = shift;
+
     $self->{lm} += $_[0];
     $self->goto_lm;
 }
 
-
-sub adjust_rm
-{
+# ------------------------------------------------------------------------
+sub adjust_rm {
     shift->{rm} += $_[0];
 }
 
 
-
 1;
-
 
 __END__
 =pod
@@ -221,7 +221,7 @@ HTML::FormatText - Format HTML as plaintext
 
 =head1 VERSION
 
-version 2.05
+version 2.06
 
 =head1 SYNOPSIS
 

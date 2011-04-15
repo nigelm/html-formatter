@@ -10,13 +10,13 @@ build_requires:
   File::Slurp: 0
   File::Spec: 0
   File::Temp: 0
+  Module::Build: 0.3601
   Scalar::Util: 0
   Test::More: 0.96
-  perl: 5.004
 configure_requires:
-  ExtUtils::MakeMaker: 6.31
+  Module::Build: 0.3601
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110360'
+generated_by: 'Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110580'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -39,23 +39,24 @@ requires:
   Font::Metrics::TimesRoman: 0
   HTML::Element: 3.15
   HTML::TreeBuilder: 0
+  IO::File: 0
   integer: 0
-  vars: 0
+  perl: 5.006_001
 resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format
   homepage: http://search.cpan.org/dist/HTML-Format
   repository: git://github.com/nigelm/html-format.git
-version: 2.05
+version: 2.06
 x_Dist_Zilla:
   plugins:
     -
       class: Dist::Zilla::Plugin::Git::NextVersion
       name: '@NIGELM/Git::NextVersion'
-      version: 1.110480
+      version: 1.110500
     -
       class: Dist::Zilla::Plugin::Git::Check
       name: '@NIGELM/Git::Check'
-      version: 1.110480
+      version: 1.110500
     -
       class: Dist::Zilla::Plugin::GatherDir
       name: '@NIGELM/GatherDir'
@@ -147,7 +148,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Authority
       name: '@NIGELM/Authority'
-      version: 1.003
+      version: 1.005
     -
       class: Dist::Zilla::Plugin::ExtraTests
       name: '@NIGELM/ExtraTests'
@@ -157,9 +158,9 @@ x_Dist_Zilla:
       name: '@NIGELM/NextRelease'
       version: 4.200004
     -
-      class: Dist::Zilla::Plugin::PkgVersion
-      name: '@NIGELM/PkgVersion'
-      version: 4.200004
+      class: Dist::Zilla::Plugin::OurPkgVersion
+      name: '@NIGELM/OurPkgVersion'
+      version: 0.1.5
     -
       class: Dist::Zilla::Plugin::PodWeaver
       name: '@NIGELM/PodWeaver'
@@ -169,8 +170,8 @@ x_Dist_Zilla:
       name: '@NIGELM/License'
       version: 4.200004
     -
-      class: Dist::Zilla::Plugin::MakeMaker
-      name: '@NIGELM/MakeMaker'
+      class: Dist::Zilla::Plugin::ModuleBuild
+      name: '@NIGELM/ModuleBuild'
       version: 4.200004
     -
       class: Dist::Zilla::Plugin::MetaYAML
@@ -199,19 +200,19 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Git::Commit
       name: '@NIGELM/Git::Commit'
-      version: 1.110480
+      version: 1.110500
     -
       class: Dist::Zilla::Plugin::Git::Tag
       name: '@NIGELM/Git::Tag'
-      version: 1.110480
+      version: 1.110500
     -
       class: Dist::Zilla::Plugin::Git::CommitBuild
       name: '@NIGELM/Git::CommitBuild'
-      version: 1.110480
+      version: 1.110500
     -
       class: Dist::Zilla::Plugin::Git::Push
       name: '@NIGELM/Git::Push'
-      version: 1.110480
+      version: 1.110500
     -
       class: Dist::Zilla::Plugin::CheckChangeLog
       name: '@NIGELM/CheckChangeLog'
@@ -247,6 +248,6 @@ x_Dist_Zilla:
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
-      is_trial: 0
+      is_trial: 1
     version: 4.200004
 x_authority: cpan:NIGELM
