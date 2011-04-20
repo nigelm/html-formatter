@@ -6,7 +6,7 @@
       "Gisle Aas <gisle@ActiveState.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110580",
+   "generated_by" : "Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110930",
    "license" : [
       "perl_5"
    ],
@@ -61,7 +61,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "mailto" : "bug-HTML-Format@rt.cpan.org",
@@ -74,7 +74,7 @@
          "web" : "http://github.com/nigelm/html-format"
       }
    },
-   "version" : "2.06",
+   "version" : "2.07",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -95,7 +95,7 @@
          {
             "class" : "Dist::Zilla::Plugin::CompileTests",
             "name" : "@NIGELM/CompileTests",
-            "version" : "1.103030"
+            "version" : "1.110930"
          },
          {
             "class" : "Dist::Zilla::Plugin::CriticTests",
@@ -165,7 +165,7 @@
          {
             "class" : "Dist::Zilla::Plugin::ReportVersions",
             "name" : "@NIGELM/ReportVersions",
-            "version" : "1.102460"
+            "version" : "1.110730"
          },
          {
             "class" : "Dist::Zilla::Plugin::PruneCruft",
@@ -327,7 +327,7 @@
       "zilla" : {
          "class" : "Dist::Zilla::Dist::Builder",
          "config" : {
-            "is_trial" : 1
+            "is_trial" : 0
          },
          "version" : "4.200004"
       }

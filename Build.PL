@@ -26,7 +26,7 @@ my %module_build_args = (
     'Gisle Aas <gisle@ActiveState.com>'
   ],
   'dist_name' => 'HTML-Format',
-  'dist_version' => '2.06',
+  'dist_version' => '2.07',
   'license' => 'perl',
   'module_name' => 'HTML::Format',
   'recommends' => {},

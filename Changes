@@ -1,3 +1,7 @@
+2.07      2011-04-20 16:08:15 Europe/London
+    - Release unchanged except for version number after a period
+      to see if test release threw up any issues...
+
 2.06      2011-04-15 12:01:33 Europe/London
     - Code gardening - no functionality modifications - includes:-
     - Moved old DEBUG framework to Smart::Comments

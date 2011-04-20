@@ -11,7 +11,7 @@ use IO::File;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.06'; # VERSION
+our $VERSION = '2.07'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # We now use Smart::Comments in place of the old DEBUG framework.
@@ -852,7 +852,7 @@ HTML::FormatPS - Format HTML as PostScript
 
 =head1 VERSION
 
-version 2.06
+version 2.07
 
 =head1 SYNOPSIS
 
