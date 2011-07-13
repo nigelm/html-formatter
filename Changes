@@ -1,4 +1,5 @@
 {{$NEXT}}
+    - RT#69426 - issues with HTML quotes
 
 2.07      2011-04-20 16:08:15 Europe/London
     - Release unchanged except for version number after a period

@@ -149,7 +149,9 @@ use 5.006_001;
 use strict;
 use warnings;
 use Carp;
+use Encode;
 use IO::File;
+use utf8;    # for the is_utf8 function
 
 use base 'HTML::Formatter';
 
@@ -260,6 +262,9 @@ sub new {
     # Pending horizontal space.  A list [ " ", $fontid, $width ],
     # or undef if no space is pending.
     $self->{hspace} = undef;
+
+    # add an encoder object for perl native to Latin1 output
+    $self->{encoder} = find_encoding('iso-8859-1');
 
     $self;
 }
@@ -413,7 +418,9 @@ sub width {
     my $wx = $self->{wx};
     my $sz = $self->{pointsize};
     for ( unpack( "C*", $_[0] ) ) {
-        $w += $wx->[$_] * $sz    # unless  $_ eq 0xAD; # optional hyphen
+
+        # if the character is outside the table, assume its m sized
+        $w += ( ( $_ > $#{$wx} ) ? $wx->[ ord('m') ] : $wx->[$_] ) * $sz    # unless  $_ eq 0xAD; # optional hyphen
     }
     $w;
 }
@@ -653,13 +660,19 @@ sub show {
     $str =~ tr/\x01//d;
     return unless length $str;
 
-    $str =~ s/[^\x00-\xff]/\xA4/g;
+    # the string from the parser is normally unicode, and may contain
+    # some punctuation characters in the 'General Punctuation' block
+    # which can be expressed in latin1, but Encode module fails on them
+    # so we will manually hack these...
+    if ( utf8::is_utf8($str) ) {
+        $str =~ tr/\x{2018}\x{2019}\x{201A}/`',/;
+    }
 
-    # replace any Unicode characters with the otherwise useless
-    #  International Communist Conspiracy money logo!
+    # must escape parentheses and backslash
+    $str =~ s/([\(\)\\])/\\$1/g;
 
-    $str =~ s/([\(\)\\])/\\$1/g;    # must escape parentheses and backslash
-    $self->{line} .= "($str)S\n";
+    # encode output to latin1 when pushing it out
+    $self->{line} .= "(" . $self->{encoder}->encode($str) . ")S\n";
     $self->{showstring} = "";
 }
 
@@ -986,6 +999,19 @@ sub dump_state {
 =head1 SEE ALSO
 
 L<HTML::Formatter>
+
+=over
+
+=item *
+
+Output is in ISO Latin1 format. The underlying HTML parsers tend to
+now work in Unicode (perl native) code points. There is an impedence
+match between these, which may give issues with complex characters
+within HTML.
+
+=back
+
+=head1 ISSUES
 
 
 =head1 TO DO
