@@ -1,5 +1,6 @@
 {{$NEXT}}
     - RT#69426 - issues with HTML quotes
+    - UTF8 handling requires perl 5.8, so minimum requirement bumped
 
 2.07      2011-04-20 16:08:15 Europe/London
     - Release unchanged except for version number after a period

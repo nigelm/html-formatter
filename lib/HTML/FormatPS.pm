@@ -145,7 +145,7 @@ advanced users.
 
 =cut
 
-use 5.006_001;
+use 5.008;
 use strict;
 use warnings;
 use Carp;
