@@ -7,6 +7,7 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   'build_requires' => {
+    'Data::Dump' => '0',
     'English' => '0',
     'File::Find' => '0',
     'File::Slurp' => '0',
@@ -14,7 +15,8 @@ my %module_build_args = (
     'File::Temp' => '0',
     'Module::Build' => '0.3601',
     'Scalar::Util' => '0',
-    'Test::More' => '0.96'
+    'Test::More' => '0.96',
+    'bytes' => '0'
   },
   'configure_requires' => {
     'Module::Build' => '0.3601'
@@ -26,7 +28,7 @@ my %module_build_args = (
     'Gisle Aas <gisle@ActiveState.com>'
   ],
   'dist_name' => 'HTML-Format',
-  'dist_version' => '2.07',
+  'dist_version' => '2.08',
   'license' => 'perl',
   'module_name' => 'HTML::Format',
   'recommends' => {},
@@ -34,6 +36,7 @@ my %module_build_args = (
   'requires' => {
     'Carp' => '0',
     'Data::Dumper' => '0',
+    'Encode' => '0',
     'Font::Metrics::Courier' => '0',
     'Font::Metrics::CourierBold' => '0',
     'Font::Metrics::CourierBoldOblique' => '0',
@@ -50,7 +53,8 @@ my %module_build_args = (
     'HTML::TreeBuilder' => '0',
     'IO::File' => '0',
     'integer' => '0',
-    'perl' => '5.006_001'
+    'perl' => '5.008',
+    'utf8' => '0'
   },
   'script_files' => []
 );
