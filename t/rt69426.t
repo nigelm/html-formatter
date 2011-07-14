@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 use Test::More 0.96;
-use Data::Dump qw[dump];
-use File::Slurp;
+##use Data::Dump qw[dump];    # uncomment if needed for debugging
+##use File::Slurp;            # uncomment if needed for debugging
 
 # Bug was that a right single quote character - &rsquo;
 # caused a garbage character to go into the output.  This was due to
@@ -16,42 +16,56 @@ use File::Slurp;
 
 BEGIN { use_ok("HTML::FormatPS"); use_ok("HTML::TreeBuilder"); }
 
-my $obj   = new_ok("HTML::FormatPS");
-my $htree = new_ok("HTML::TreeBuilder");
+my $table = {
+    '&rsquo;' => 'apostrophe/right single quote',
+    '&lsquo;' => 'left single quote',
+    '&rdquo;' => 'right double quote',
+    '&ldquo;' => 'left double quote',
+    '&pound;' => 'pound symbol',
+};
 
-my $html = '<html><body>it&rsquo;s an apostrophe.</body></html>';
-ok( $html, 'HTML string containing an apostrophe' );
+foreach my $quoted ( sort { $a cmp $b } keys %{$table} ) {
+    my $desc = $table->{$quoted};
+    subtest "Checking $quoted -> $desc", sub {
+        my $obj   = new_ok("HTML::FormatPS");
+        my $htree = new_ok("HTML::TreeBuilder");
+        my $html  = '<html><body>The ' . $desc . ' is a ' . $quoted . ' character</body></html>';
+        ok( $html, "HTML string containing an $desc" );
 
-ok( $htree->parse_content($html), 'Parse HTML content' );
+        ok( $htree->parse_content($html), 'Parse HTML content' );
 
-my $result = $obj->format_string($html);
-ok( $result, 'Converted HTML object' );
+        my $result = $obj->format_string($html);
+        ok( $result, 'Converted HTML object' );
 
-# count high bit characters
-my $count;
-{
-    use bytes;
-    $count = $result =~ tr/\177-\377//;
+        # count high bit characters
+        my $count;
+        {
+            use bytes;
+            if ( $quoted eq '&pound;' ) {
+
+                # we must exclude latin1 pound - char \243
+                $count = $result =~ tr/\177-\242\244-\377//;
+            }
+            else {
+                $count = $result =~ tr/\177-\377//;
+            }
+        }
+
+        ok( ( $count == 0 ), 'No unexpected high-bit characters found' );
+
+        ## # stuff postscript out into file - uncomment if you need for debugging
+        ## my $fn = $quoted;
+        ## $fn =~ tr/a-z//cd;
+        ## $fn .= '.ps';
+        ## write_file( $fn, { binmode => ':raw' }, $result );
+
+        ## # tell details about errors - uncomment if needed
+        ## diag( dump( { orig => $html, dump => $htree->dump, result => $result } ) ) if ($count);
+
+        done_testing();
+    };
+
 }
-
-ok( ( $count == 0 ), 'No unexpected high-bit characters found' );
-
-# same test, this time using a pound symbol (which exists in latin1)
-$html = '<html><body>A &pound; symbol</body></html>';
-ok( $html, 'HTML string containing a British pound symbol' );
-
-ok( $htree->parse_content($html), 'Parse HTML content' );
-
-$result = $obj->format_string($html);
-ok( $result, 'Converted HTML object' );
-
-# count high bit characters - excluding latin1 pound \243
-{
-    use bytes;
-    $count = $result =~ tr/\177-\242\244-\377//;
-}
-
-ok( ( $count == 0 ), 'No unexpected high-bit characters found' );
 
 # finish up
 done_testing();
