@@ -1011,18 +1011,18 @@ sub dump_state {
 
 L<HTML::Formatter>
 
+=head1 ISSUES
+
 =over
 
 =item *
 
 Output is in ISO Latin1 format. The underlying HTML parsers tend to
-now work in Unicode (perl native) code points. There is an impedence
-match between these, which may give issues with complex characters
+now work in Unicode (perl native) code points. There is an impedance
+mismatch between these, which may give issues with complex characters
 within HTML.
 
 =back
-
-=head1 ISSUES
 
 
 =head1 TO DO

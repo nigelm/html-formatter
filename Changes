@@ -1,5 +1,7 @@
 {{$NEXT}}
     - Reworking of HTML quote issue in FormatPS
+    - Now remap all double quotes to " in FormatPS (which is not
+      really right, but the best I can do with latin1 output)
 
 2.08      2011-07-13 16:20:54 Europe/London
     - RT#69426 - issues with HTML quotes
