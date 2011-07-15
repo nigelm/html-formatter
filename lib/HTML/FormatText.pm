@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.08'; # VERSION
+our $VERSION = '2.09'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -221,7 +221,7 @@ HTML::FormatText - Format HTML as plaintext
 
 =head1 VERSION
 
-version 2.08
+version 2.09
 
 =head1 SYNOPSIS
 

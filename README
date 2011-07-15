@@ -2,7 +2,7 @@ NAME
     HTML::Formatter - Base class for HTML formatters
 
 VERSION
-    version 2.08
+    version 2.09
 
 SYNOPSIS
       use HTML::FormatSomething;

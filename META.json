@@ -53,7 +53,6 @@
       },
       "test" : {
          "requires" : {
-            "Data::Dump" : 0,
             "English" : 0,
             "File::Find" : 0,
             "File::Slurp" : 0,
@@ -68,19 +67,19 @@
    "provides" : {
       "HTML::FormatPS" : {
          "file" : "lib/HTML/FormatPS.pm",
-         "version" : "2.08"
+         "version" : "2.09"
       },
       "HTML::FormatRTF" : {
          "file" : "lib/HTML/FormatRTF.pm",
-         "version" : "2.08"
+         "version" : "2.09"
       },
       "HTML::FormatText" : {
          "file" : "lib/HTML/FormatText.pm",
-         "version" : "2.08"
+         "version" : "2.09"
       },
       "HTML::Formatter" : {
          "file" : "lib/HTML/Formatter.pm",
-         "version" : "2.08"
+         "version" : "2.09"
       }
    },
    "release_status" : "stable",
@@ -96,7 +95,7 @@
          "web" : "http://github.com/nigelm/html-format"
       }
    },
-   "version" : "2.08",
+   "version" : "2.09",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

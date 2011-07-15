@@ -7,7 +7,6 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   'build_requires' => {
-    'Data::Dump' => '0',
     'English' => '0',
     'File::Find' => '0',
     'File::Slurp' => '0',
@@ -28,7 +27,7 @@ my %module_build_args = (
     'Gisle Aas <gisle@ActiveState.com>'
   ],
   'dist_name' => 'HTML-Format',
-  'dist_version' => '2.08',
+  'dist_version' => '2.09',
   'license' => 'perl',
   'module_name' => 'HTML::Format',
   'recommends' => {},

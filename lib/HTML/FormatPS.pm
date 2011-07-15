@@ -13,7 +13,7 @@ use utf8;    # for the is_utf8 function
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.08'; # VERSION
+our $VERSION = '2.09'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # We now use Smart::Comments in place of the old DEBUG framework.
@@ -262,11 +262,14 @@ sub findfont {
 # ------------------------------------------------------------------------
 sub width {
     my $self = shift;
+    my $str  = shift;
 
     my $w  = 0;
     my $wx = $self->{wx};
     my $sz = $self->{pointsize};
-    for ( unpack( "C*", $_[0] ) ) {
+
+    # need to encode to same encoding as font before getting width
+    for ( unpack( "C*", $self->encode_string($str) ) ) {
 
         # if the character is outside the table, assume its m sized
         $w += ( ( $_ > $#{$wx} ) ? $wx->[ ord('m') ] : $wx->[$_] ) * $sz    # unless  $_ eq 0xAD; # optional hyphen
@@ -509,19 +512,11 @@ sub show {
     $str =~ tr/\x01//d;
     return unless length $str;
 
-    # the string from the parser is normally unicode, and may contain
-    # some punctuation characters in the 'General Punctuation' block
-    # which can be expressed in latin1, but Encode module fails on them
-    # so we will manually hack these...
-    if ( utf8::is_utf8($str) ) {
-        $str =~ tr/\x{2018}\x{2019}\x{201A}/`',/;
-    }
-
     # must escape parentheses and backslash
     $str =~ s/([\(\)\\])/\\$1/g;
 
     # encode output to latin1 when pushing it out
-    $self->{line} .= "(" . $self->{encoder}->encode($str) . ")S\n";
+    $self->{line} .= "(" . $self->encode_string($str) . ")S\n";
     $self->{showstring} = "";
 }
 
@@ -679,6 +674,22 @@ sub newpage {
     $self->{ypos} = $self->{tm};
     #### Newpage/end x: $self->{xpos}
     #### Newpage/end y: $self->{ypos}
+}
+
+# ------------------------------------------------------------------------
+sub encode_string {    # converts string into latin1 charset
+    my ( $self, $str ) = @_;
+
+    # the string from the parser is normally unicode, and may contain
+    # some punctuation characters in the 'General Punctuation' block
+    # which can be expressed in latin1, but Encode module fails on them
+    # so we will manually hack these...
+    # Theres no usable latin1 for the double quote chars so map to "
+    if ( utf8::is_utf8($str) ) {
+        $str =~ tr/\x{2018}\x{2019}\x{201A}\x{201C}\x{201D}\x{201F}\x{2033}\x{2036}/`',"""""/;
+    }
+
+    return $self->{encoder}->encode($str);
 }
 
 # ------------------------------------------------------------------------
@@ -865,7 +876,7 @@ HTML::FormatPS - Format HTML as PostScript
 
 =head1 VERSION
 
-version 2.08
+version 2.09
 
 =head1 SYNOPSIS
 
@@ -1007,18 +1018,18 @@ This creates a new formatter object with the given options.
 
 L<HTML::Formatter>
 
+=head1 ISSUES
+
 =over
 
 =item *
 
 Output is in ISO Latin1 format. The underlying HTML parsers tend to
-now work in Unicode (perl native) code points. There is an impedence
-match between these, which may give issues with complex characters
+now work in Unicode (perl native) code points. There is an impedance
+mismatch between these, which may give issues with complex characters
 within HTML.
 
 =back
-
-=head1 ISSUES
 
 =head1 TO DO
 
