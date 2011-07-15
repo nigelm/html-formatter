@@ -9,7 +9,7 @@ HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.08
+version 2.09
 
 =head1 SYNOPSIS
 
