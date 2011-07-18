@@ -13,7 +13,7 @@ use utf8;    # for the is_utf8 function
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.09'; # VERSION
+our $VERSION = '2.10'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # We now use Smart::Comments in place of the old DEBUG framework.
@@ -876,7 +876,7 @@ HTML::FormatPS - Format HTML as PostScript
 
 =head1 VERSION
 
-version 2.09
+version 2.10
 
 =head1 SYNOPSIS
 

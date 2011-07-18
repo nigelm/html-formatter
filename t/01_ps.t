@@ -4,14 +4,15 @@ use File::Spec;    # try to keep pathnames neutral
 use Test::More 0.96;
 
 BEGIN { use_ok("HTML::FormatPS"); }
-my $obj = new_ok("HTML::FormatPS");
 
 foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) ) {
-    subtest "Testing file handling for $infile" => sub {
-        my $expfilename = ( File::Spec->splitpath($infile) )[2];
-        $expfilename =~ s/\.html$/.ps/i;
-        my $expfile = File::Spec->catfile( 't', 'data', 'expected', $expfilename );
-        plan 'skip_all' unless ( -f $infile and -f $expfile );
+    my $obj = new_ok("HTML::FormatPS");
+    ok( -f $infile, "Testing file handling for $infile" );
+    my $expfilename = ( File::Spec->splitpath($infile) )[2];
+    $expfilename =~ s/\.html$/.ps/i;
+    my $expfile = File::Spec->catfile( 't', 'data', 'expected', $expfilename );
+    ok( -f $expfile, '  Expected result file exists' );
+    if ( -f $expfile ) {
 
         # read file content - split into lines, but we exclude the
         # structured comment lines starting with %% since they include
@@ -25,7 +26,7 @@ foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) 
         my $text = HTML::FormatPS->format_file( $infile, leftmargin => 5, rightmargin => 50 );
         my $got_lines = [ grep !/^\%\%/, ( split( /\n/, $text ) ) ];
 
-        ok( length($text), "Returned a string" );
+        ok( length($text), '  Returned a string from conversion' );
 
         # It appears minor maths differences mean a few lines fail to match
         # because a glyth is misplaced by a fraction of a point....
@@ -41,15 +42,15 @@ foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) 
 
         # test how good the match is
         if ( scalar( @{$got_lines} ) == $ok_count ) {
-            pass('Perfect match of postcript output');
+            pass('  Perfect match of postcript output');
         }
         else {
 
             # we test for a 90% or better match
             ok( ( ( scalar( @{$got_lines} ) - $ok_count ) <= ( scalar( @{$got_lines} ) / 10 ) ),
-                'Better than 90% output lines match' );
+                '  Better than 90% output lines match' );
         }
-    };
+    }
 }
 
 # finish up

@@ -26,16 +26,16 @@ my $table = {
 
 foreach my $quoted ( sort { $a cmp $b } keys %{$table} ) {
     my $desc = $table->{$quoted};
-    subtest "Checking $quoted -> $desc", sub {
         my $obj   = new_ok("HTML::FormatPS");
         my $htree = new_ok("HTML::TreeBuilder");
+        
         my $html  = '<html><body>The ' . $desc . ' is a ' . $quoted . ' character</body></html>';
-        ok( $html, "HTML string containing an $desc" );
+        ok( $html, "HTML string containing an $desc should map to $desc" );
 
-        ok( $htree->parse_content($html), 'Parse HTML content' );
+        ok( $htree->parse_content($html), '  Parse HTML content' );
 
         my $result = $obj->format_string($html);
-        ok( $result, 'Converted HTML object' );
+        ok( $result, '  Converted HTML object' );
 
         # count high bit characters
         my $count;
@@ -51,7 +51,7 @@ foreach my $quoted ( sort { $a cmp $b } keys %{$table} ) {
             }
         }
 
-        ok( ( $count == 0 ), 'No unexpected high-bit characters found' );
+        ok( ( $count == 0 ), '  No unexpected high-bit characters found' );
 
         ## # stuff postscript out into file - uncomment if you need for debugging
         ## my $fn = $quoted;
@@ -61,10 +61,6 @@ foreach my $quoted ( sort { $a cmp $b } keys %{$table} ) {
 
         ## # tell details about errors - uncomment if needed
         ## diag( dump( { orig => $html, dump => $htree->dump, result => $result } ) ) if ($count);
-
-        done_testing();
-    };
-
 }
 
 # finish up

@@ -67,19 +67,19 @@
    "provides" : {
       "HTML::FormatPS" : {
          "file" : "lib/HTML/FormatPS.pm",
-         "version" : "2.09"
+         "version" : "2.10"
       },
       "HTML::FormatRTF" : {
          "file" : "lib/HTML/FormatRTF.pm",
-         "version" : "2.09"
+         "version" : "2.10"
       },
       "HTML::FormatText" : {
          "file" : "lib/HTML/FormatText.pm",
-         "version" : "2.09"
+         "version" : "2.10"
       },
       "HTML::Formatter" : {
          "file" : "lib/HTML/Formatter.pm",
-         "version" : "2.09"
+         "version" : "2.10"
       }
    },
    "release_status" : "stable",
@@ -95,7 +95,7 @@
          "web" : "http://github.com/nigelm/html-format"
       }
    },
-   "version" : "2.09",
+   "version" : "2.10",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

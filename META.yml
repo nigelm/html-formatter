@@ -26,16 +26,16 @@ name: HTML-Format
 provides:
   HTML::FormatPS:
     file: lib/HTML/FormatPS.pm
-    version: 2.09
+    version: 2.10
   HTML::FormatRTF:
     file: lib/HTML/FormatRTF.pm
-    version: 2.09
+    version: 2.10
   HTML::FormatText:
     file: lib/HTML/FormatText.pm
-    version: 2.09
+    version: 2.10
   HTML::Formatter:
     file: lib/HTML/Formatter.pm
-    version: 2.09
+    version: 2.10
 requires:
   Carp: 0
   Data::Dumper: 0
@@ -62,7 +62,7 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format
   homepage: http://search.cpan.org/dist/HTML-Format
   repository: git://github.com/nigelm/html-format.git
-version: 2.09
+version: 2.10
 x_Dist_Zilla:
   plugins:
     -

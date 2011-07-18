@@ -1,3 +1,9 @@
+2.10      2011-07-18 17:07:35 Europe/London
+    - Tests reworked to not use subtests.  Development versions
+      of Test::More do not support subtests, and the smokers
+      that are running with these dev versions then send me
+      confusing test failures.  This is a pain.
+
 2.09      2011-07-15 14:20:12 Europe/London
     - Reworking of HTML quote issue in FormatPS
     - Now remap all double quotes to " in FormatPS (which is not

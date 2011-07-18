@@ -14,7 +14,7 @@ use HTML::Element 3.15 ();
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
-our $VERSION = '2.09'; # VERSION
+our $VERSION = '2.10'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 #
@@ -798,7 +798,7 @@ HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.09
+version 2.10
 
 =head1 SYNOPSIS
 
