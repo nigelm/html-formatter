@@ -131,27 +131,61 @@ sub img_start {
 }
 
 sub a_start {
-    my $self = shift; 
+    my ($self, $node) = @_; 
 
-    $self->out("[");
+    # ignore named anchors
+    if ( $node->attr('name') ) {
+        1;
+    }
+    elsif ( $node->attr('href') =~ /^#/ ) {
+        1;
+    }
+    else {
+        $self->out("[");
+    }
 
 }
 
 sub a_end {
     my ( $self, $node ) = @_;
 
-    my $href = $node->attr('href');
-
-    $self->out("]($href)");
-
+    if ( $node->attr('name') ) {
+        return;
+    }
+    elsif ( my $href = $node->attr('href') ) {
+        if ($href =~ /^#/) {
+            return;
+        }
+        $self->out("]($href)");
+    }
 }
 
 sub b_start  { shift->out( "**" ) }
 sub b_end    { shift->out( "**" ) }
 sub i_start  { shift->out( "*"  ) }
 sub i_end    { shift->out( "*"  ) }
-sub tt_start { shift->out( "`"  ) }
-sub tt_end   { shift->out( "`"  ) }
+
+sub tt_start { 
+    my $self = shift;
+
+    if ( $self->{pre} ) {
+        return;
+    }
+    else {
+        $self->out( "`"  ) 
+    }
+}
+
+sub tt_end { 
+    my $self = shift;
+
+    if ( $self->{pre} ) {
+        return;
+    }
+    else {
+        $self->out( "`"  ) 
+    }
+}
 
 sub blockquote_start {
     my $self = shift;
