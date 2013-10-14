@@ -729,7 +729,7 @@ sub showline {
         if ( $bullet eq '*' ) {
 
             # There is no character that is really suitable.  Let's make
-            # a medium-sized filled cirle ourself.
+            # a medium-sized filled circle ourself.
             my $radius = $self->{pointsize} / 8;
             ### Adding code for a '*' bullet for that line...
 
@@ -787,7 +787,7 @@ sub newpage {
     local $self->{'pointsize'} = $self->{'pointsize'};
 
     # That's needed for protecting against one bit of the
-    #  potential side-effects from from page-numbering code
+    # potential side-effects from page-numbering code
 
     if ( $self->{'out'} ) {    # whether we've sent anything to the current page so far.
         ### Newpage calls endpage...
