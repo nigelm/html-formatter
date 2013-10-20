@@ -169,7 +169,7 @@ sub tt_start {
     my $self = shift;
 
     if ( $self->{pre} ) {
-        return;
+        return 1;
     }
     else {
         $self->out( "`"  ) 
