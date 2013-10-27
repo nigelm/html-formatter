@@ -2,7 +2,7 @@ NAME
     HTML::Formatter - Base class for HTML formatters
 
 VERSION
-    version 2.10
+    version 2.11
 
 SYNOPSIS
       use HTML::FormatSomething;
@@ -22,8 +22,9 @@ SYNOPSIS
 DESCRIPTION
     HTML::Formatter is a base class for classes that take HTML and format it
     to some output format. When you take an object of such a base class and
-    call "$formatter->format( $tree )" with an HTML::TreeBuilder (or
-    HTML::Element) object, they return the
+    call "$formatter-"format( $tree )> with an HTML::TreeBuilder (or
+    HTML::Element) object, they return the appropriately formatted string
+    for the input HTML.
 
     HTML formatters are able to format a HTML syntax tree into various
     printable formats. Different formatters produce output for different
@@ -93,22 +94,16 @@ INSTALLATION
     modules.
 
 BUGS AND LIMITATIONS
-    No bugs have been reported.
-
-    Please report any bugs or feature requests through the web interface at
+    You can make new bug reports, and view existing ones, through the web
+    interface at
     <http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
 
 AVAILABILITY
-    The project homepage is <http://search.cpan.org/dist/HTML-Format>.
+    The project homepage is <https://metacpan.org/release/HTML-Format>.
 
     The latest version of this module is available from the Comprehensive
     Perl Archive Network (CPAN). Visit <http://www.perl.com/CPAN/> to find a
-    CPAN site near you, or see <http://search.cpan.org/dist/HTML-Format/>.
-
-    The development version lives at <http://github.com/nigelm/html-format>
-    and may be cloned from <git://github.com/nigelm/html-format.git>.
-    Instead of sending patches, please fork this project using the standard
-    git and github infrastructure.
+    CPAN site near you, or see <https://metacpan.org/module/HTML::Format/>.
 
 AUTHORS
     *   Nigel Metheringham <nigelm@cpan.org>
@@ -118,7 +113,7 @@ AUTHORS
     *   Gisle Aas <gisle@ActiveState.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2011 by Nigel Metheringham, 2002-2005
+    This software is copyright (c) 2013 by Nigel Metheringham, 2002-2005
     Sean M Burke, 1999-2002 Gisle Aas.
 
     This is free software; you can redistribute it and/or modify it under

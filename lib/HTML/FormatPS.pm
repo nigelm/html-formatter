@@ -13,7 +13,7 @@ use utf8;    # for the is_utf8 function
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.10'; # VERSION
+our $VERSION = '2.11'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # We now use Smart::Comments in place of the old DEBUG framework.
@@ -578,7 +578,7 @@ sub showline {
         if ( $bullet eq '*' ) {
 
             # There is no character that is really suitable.  Let's make
-            # a medium-sized filled cirle ourself.
+            # a medium-sized filled circle ourself.
             my $radius = $self->{pointsize} / 8;
             ### Adding code for a '*' bullet for that line...
 
@@ -636,7 +636,7 @@ sub newpage {
     local $self->{'pointsize'} = $self->{'pointsize'};
 
     # That's needed for protecting against one bit of the
-    #  potential side-effects from from page-numbering code
+    # potential side-effects from page-numbering code
 
     if ( $self->{'out'} ) {    # whether we've sent anything to the current page so far.
         ### Newpage calls endpage...
@@ -860,6 +860,7 @@ sub dump_state {
 1;
 
 __END__
+
 =pod
 
 =for test_synopsis 1;
@@ -869,6 +870,7 @@ __END__
     horizontalmargin leftmargin noprolog notrailer pageno
     paperheight papersize paperwidth postscript rightmargin
     startpage topmargin verticalmargin ledding leeding prolog
+    CPAN Quarto Tabloid Unicode homepage
 
 =head1 NAME
 
@@ -876,7 +878,7 @@ HTML::FormatPS - Format HTML as PostScript
 
 =head1 VERSION
 
-version 2.10
+version 2.11
 
 =head1 SYNOPSIS
 
@@ -901,11 +903,11 @@ Or, for short:
 
 =head1 DESCRIPTION
 
-The HTML::FormatPS is a formatter that outputs PostScript code.
-Formatting of HTML tables and forms is not implemented.
+The HTML::FormatPS is a formatter that outputs PostScript code. Formatting of
+HTML tables and forms is not implemented.
 
-HTML::FormatPS is built on top of L<HTML::Formatter> and so further
-detail may be found in the documentation for L<HTML::Formatter>.
+HTML::FormatPS is built on top of L<HTML::Formatter> and so further detail may
+be found in the documentation for L<HTML::Formatter>.
 
 You might specify the following parameters when constructing the formatter
 object (or when calling format_file or format_string):
@@ -914,21 +916,19 @@ object (or when calling format_file or format_string):
 
 =item PaperSize
 
-What kind of paper should we format for.  The value can be one of
-these: A3, A4, A5, B4, B5, Letter, Legal, Executive, Tabloid,
-Statement, Folio, 10x14, Quarto.
+What kind of paper should we format for.  The value can be one of these: A3,
+A4, A5, B4, B5, Letter, Legal, Executive, Tabloid, Statement, Folio, 10x14,
+Quarto.
 
 The default is "A4".
 
 =item PaperWidth
 
-The width of the paper, in points.  Setting PaperSize also defines this
-value.
+The width of the paper, in points.  Setting PaperSize also defines this value.
 
 =item PaperHeight
 
-The height of the paper, in points.  Setting PaperSize also defines
-this value.
+The height of the paper, in points.  Setting PaperSize also defines this value.
 
 =item LeftMargin
 
@@ -956,51 +956,48 @@ Both top and bottom margin at the same time.  The default value is 2 cm,
 
 =item PageNo
 
-This parameter determines if we should put page numbers on the pages.
-The default value is true; so you have to set this value to 0 in order to
-suppress page numbers.  (The "No" in "PageNo" means number/numero!)
+This parameter determines if we should put page numbers on the pages. The
+default value is true; so you have to set this value to 0 in order to suppress
+page numbers.  (The "No" in "PageNo" means number/numero!)
 
 =item FontFamily
 
-This parameter specifies which family of fonts to use for the formatting.
-Legal values are "Courier", "Helvetica" and "Times".  The default is
-"Times".
+This parameter specifies which family of fonts to use for the formatting. Legal
+values are "Courier", "Helvetica" and "Times".  The default is "Times".
 
 =item FontScale
 
 This is a scaling factor for all the font sizes.  The default value is 1.
 
-For example, if you want everything to be almost three times as large,
-you could set this to 2.7.  If you wanted things just a bit smaller than
-normal, you could set it to .92.
+For example, if you want everything to be almost three times as large, you
+could set this to 2.7.  If you wanted things just a bit smaller than normal,
+you could set it to .92.
 
 =item Leading
 
-This option (pronounced "ledding", not "leeding") controls how much is
-space between lines. This is a factor of the font size used for that
-line.  Default is 0.1 -- so between two 12-point lines, there will be
-1.2 points of space.
+This option (pronounced "ledding", not "leeding") controls how much is space
+between lines. This is a factor of the font size used for that line.  Default
+is 0.1 -- so between two 12-point lines, there will be 1.2 points of space.
 
 =item StartPage
 
-Assuming you have PageNo on, StartPage controls what the page number of
-the first page will be. By default, it is 1. So if you set this to 87,
-the first page would say "87" on it, the next "88", and so on.
+Assuming you have PageNo on, StartPage controls what the page number of the
+first page will be. By default, it is 1. So if you set this to 87, the first
+page would say "87" on it, the next "88", and so on.
 
 =item NoProlog
 
 If this option is set to a true value, HTML::FormatPS will make a point of
-I<not> emitting the PostScript prolog before the document. By default,
-this is off, meaning that HTML::FormatPS I<will> emit the prolog. This
-option is of interest only to advanced users.
+I<not> emitting the PostScript prolog before the document. By default, this is
+off, meaning that HTML::FormatPS I<will> emit the prolog. This option is of
+interest only to advanced users.
 
 =item NoTrailer
 
 If this option is set to a true value, HTML::FormatPS will make a point of
-I<not> emitting the PostScript trailer at the end of the document. By
-default, this is off, meaning that HTML::FormatPS I<will> emit the bit
-of PostScript that ends the document. This option is of interest only to
-advanced users.
+I<not> emitting the PostScript trailer at the end of the document. By default,
+this is off, meaning that HTML::FormatPS I<will> emit the bit of PostScript
+that ends the document. This option is of interest only to advanced users.
 
 =back
 
@@ -1024,10 +1021,9 @@ L<HTML::Formatter>
 
 =item *
 
-Output is in ISO Latin1 format. The underlying HTML parsers tend to
-now work in Unicode (perl native) code points. There is an impedance
-mismatch between these, which may give issues with complex characters
-within HTML.
+Output is in ISO Latin1 format. The underlying HTML parsers tend to now work in
+Unicode (perl native) code points. There is an impedance mismatch between
+these, which may give issues with complex characters within HTML.
 
 =back
 
@@ -1037,8 +1033,8 @@ within HTML.
 
 =item *
 
-Support for some more character styles, notably including:
-strike-through, underlining, superscript, and subscript.
+Support for some more character styles, notably including: strike-through,
+underlining, superscript, and subscript.
 
 =item *
 
@@ -1046,8 +1042,8 @@ Support for Unicode.
 
 =item *
 
-Support for Win-1252 encoding, since that's what most people
-mean when they use characters in the range 0x80-0x9F in HTML.
+Support for Win-1252 encoding, since that's what most people mean when they use
+characters in the range 0x80-0x9F in HTML.
 
 =item *
 
@@ -1055,8 +1051,8 @@ And, if it's ever even reasonably possible, support for tables.
 
 =back
 
-I would welcome email from people who can help me out or advise
-me on the above.
+I would welcome email from people who can help me out or advise me on the
+above.
 
 =head1 INSTALLATION
 
@@ -1064,23 +1060,16 @@ See perlmodinstall for information and options on installing Perl modules.
 
 =head1 BUGS AND LIMITATIONS
 
-No bugs have been reported.
-
-Please report any bugs or feature requests through the web interface at
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
+You can make new bug reports, and view existing ones, through the
+web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
 
 =head1 AVAILABILITY
 
-The project homepage is L<http://search.cpan.org/dist/HTML-Format>.
+The project homepage is L<https://metacpan.org/release/HTML-Format>.
 
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<http://search.cpan.org/dist/HTML-Format/>.
-
-The development version lives at L<http://github.com/nigelm/html-format>
-and may be cloned from L<git://github.com/nigelm/html-format.git>.
-Instead of sending patches, please fork this project using the standard
-git and github infrastructure.
+site near you, or see L<https://metacpan.org/module/HTML::Format/>.
 
 =head1 AUTHORS
 
@@ -1102,10 +1091,9 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2013 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

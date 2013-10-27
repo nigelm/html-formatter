@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.10'; # VERSION
+our $VERSION = '2.11'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -32,12 +32,12 @@ my %Escape = (
     #"\cm"  => "\n\\line ",
     #"\cj"  => "\n\\line ",
 
-    "\t" => "\\tab ",                              # Tabs (altho theoretically raw \t's are okay)
+    "\t" => "\\tab ",    # Tabs (altho theoretically raw \t's are okay)
 
     # "\f"   => "\n\\page\n", # Formfeed
-    "-"    => "\\_",                               # Turn plaintext '-' into a non-breaking hyphen
-    "\xA0" => "\\~",                               # Latin-1 non-breaking space
-    "\xAD" => "\\-",                               # Latin-1 soft (optional) hyphen
+    "-"    => "\\_",     # Turn plaintext '-' into a non-breaking hyphen
+    "\xA0" => "\\~",     # Latin-1 non-breaking space
+    "\xAD" => "\\-",     # Latin-1 soft (optional) hyphen
 
     # CRAZY HACKS:
     "\n" => "\\line\n",
@@ -439,16 +439,16 @@ sub rtf_esc {
     elsif (wantarray) {                                         # return an array
         return map {
             ;
-            ( $x = $_ ) =~ s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;                       # ESCAPER
+            ( $x = $_ ) =~ s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;    # ESCAPER
             $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
 
             # Hyper-escape all Unicode characters.
             $x;
         } @_;
     }
-    else {    # return a single scalar
+    else {                                                                     # return a single scalar
         ( $x = ( ( @_ == 1 ) ? $_[0] : join '', @_ ) ) =~ s/([F\x00-\x1F\-\\\{\}\x7F-\xFF])/$Escape{$1}/g;    # ESCAPER
-                  # Escape \, {, }, -, control chars, and 7f-ff.
+                 # Escape \, {, }, -, control chars, and 7f-ff.
         $x =~ s/([^\x00-\xFF])/'\\uc1\\u'.((ord($1)<32768)?ord($1):(ord($1)-65536)).'?'/eg;
 
         # Hyper-escape all Unicode characters.
@@ -494,7 +494,7 @@ sub rtf_esc_codely {
 
 1;
 
-
+__END__
 
 =pod
 
@@ -502,6 +502,7 @@ sub rtf_esc_codely {
 __END__
 
 =for stopwords arial bookman lm pagenumber p.pagenumber prolog rtf tahoma verdana
+    CPAN homepage rm sans serif twentieths
 
 =head1 NAME
 
@@ -509,7 +510,7 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.10
+version 2.11
 
 =head1 SYNOPSIS
 
@@ -527,12 +528,12 @@ version 2.10
 
 =head1 DESCRIPTION
 
-HTML::FormatRTF is a class for objects that you use to convert HTML to
-RTF.  There is currently no proper support for tables or forms.
+HTML::FormatRTF is a class for objects that you use to convert HTML to RTF.
+There is currently no proper support for tables or forms.
 
-This is a subclass of L<HTML::Formatter>, whose documentation you
-should consult for more information on underlying methods such as
-C<new>, C<format>, C<format_file> etc
+This is a subclass of L<HTML::Formatter>, whose documentation you should
+consult for more information on underlying methods such as C<new>, C<format>,
+C<format_file> etc
 
 You can specify any of the following parameters in the call to C<new>,
 C<format_file>, or C<format_string>:
@@ -544,10 +545,10 @@ C<format_file>, or C<format_string>:
 Amount of I<extra> indenting to apply to the left margin, in twips
 (I<tw>entI<i>eths of a I<p>oint). Default is 0.
 
-So if you wanted the left margin to be an additional half inch larger,
-you'd set C<< lm => 720 >> (since there's 1440 twips in an inch).
-If you wanted it to be about 1.5cm larger, you'd set
-C<< lw => 850 >> (since there's about 567 twips in a centimeter).
+So if you wanted the left margin to be an additional half inch larger, you'd
+set C<< lm => 720 >> (since there's 1440 twips in an inch). If you wanted it to
+be about 1.5cm larger, you'd set C<< lw => 850 >> (since there's about 567
+twips in a centimeter).
 
 =item rm
 
@@ -556,74 +557,72 @@ Amount of I<extra> indenting to apply to the left margin, in twips
 
 =item normal_halfpoint_size
 
-This is the size of normal text in the document, in I<half>-points.
-The default value is 22, meaning that normal text is in 11 point.
+This is the size of normal text in the document, in I<half>-points. The default
+value is 22, meaning that normal text is in 11 point.
 
 =item header_halfpoint_size
 
-This is the size of text used in the document's page-header, in
-I<half>-points. The default value is 17, meaning that normal text is in
-7.5 point.  Currently, the header consists just of "p.I<pagenumber>"
-in the upper-right-hand corner, and cannot be disabled.
+This is the size of text used in the document's page-header, in I<half>-points.
+The default value is 17, meaning that normal text is in 7.5 point.  Currently,
+the header consists just of "p.I<pagenumber>" in the upper-right-hand corner,
+and cannot be disabled.
 
 =item head1_halfpoint_size ... head6_halfpoint_size
 
-These control the font size of each heading level, in half-twips.  For
-example, the default for head3_halfpoint_size is 25, meaning that HTML
-C<< <h3>...</h3> >> text will be in 12.5 point text (in addition to being
-underlined and in the heading font).
+These control the font size of each heading level, in half-twips.  For example,
+the default for head3_halfpoint_size is 25, meaning that HTML C<< <h3>...</h3>
+>> text will be in 12.5 point text (in addition to being underlined and in the
+heading font).
 
 =item codeblock_halfpoint_size
 
-This controls the font size (in half-points) of the text used for
-C<< <pre>...</pre> >> text.  By default, it is 18, meaning 9 point.
+This controls the font size (in half-points) of the text used for C<<
+<pre>...</pre> >> text.  By default, it is 18, meaning 9 point.
 
 =item fontname_body
 
-This option controls what font is to be used for the body of the
-text -- that is, everything other than heading text and text in
-pre/code/tt elements. The default value is currently "Times".  Other
-handy values I can suggest using are "Georgia" or "Bookman Old Style".
+This option controls what font is to be used for the body of the text -- that
+is, everything other than heading text and text in pre/code/tt elements. The
+default value is currently "Times".  Other handy values I can suggest using are
+"Georgia" or "Bookman Old Style".
 
 =item fontname_code
 
-This option controls what font is to be used for text in pre/code/tt
-elements. The default value is currently "Courier New".
+This option controls what font is to be used for text in pre/code/tt elements.
+The default value is currently "Courier New".
 
 =item fontname_headings
 
-This option controls what font name is to be used for headings.  You can
-use the same font as fontname_body, but I prefer a sans-serif font, so
-the default value is currently "Arial".  Also consider
-"Tahoma" and "Verdana".
+This option controls what font name is to be used for headings.  You can use
+the same font as fontname_body, but I prefer a sans-serif font, so the default
+value is currently "Arial".  Also consider "Tahoma" and "Verdana".
 
 =item document_language
 
-This option controls what Microsoft language number will be specified as
-the language for this document. The current default value is 1033, for
-US English. Consult an RTF reference for other language numbers.
+This option controls what Microsoft language number will be specified as the
+language for this document. The current default value is 1033, for US English.
+Consult an RTF reference for other language numbers.
 
 =item hr_width
 
-This option controls how many underline characters will be used for
-rendering a "<hr>" tag. Its default value is currently 50. You can
-usually leave this alone, but under some circumstances you might want to
-use a smaller or larger number.
+This option controls how many underline characters will be used for rendering a
+"<hr>" tag. Its default value is currently 50. You can usually leave this
+alone, but under some circumstances you might want to use a smaller or larger
+number.
 
 =item no_prolog
 
 If this option is set to a true value, HTML::FormatRTF will make a point of
-I<not> emitting the RTF prolog before the document.  By default, this is
-off, meaning that HTML::FormatRTF I<will> emit the prolog.  This option
-is of interest only to advanced users.
+I<not> emitting the RTF prolog before the document.  By default, this is off,
+meaning that HTML::FormatRTF I<will> emit the prolog.  This option is of
+interest only to advanced users.
 
 =item no_trailer
 
 If this option is set to a true value, HTML::FormatRTF will make a point of
-I<not> emitting the RTF trailer at the end of the document.  By default,
-this is off, meaning that HTML::FormatRTF I<will> emit the bit of RTF
-that ends the document.  This option is of interest only to advanced
-users.
+I<not> emitting the RTF trailer at the end of the document.  By default, this
+is off, meaning that HTML::FormatRTF I<will> emit the bit of RTF that ends the
+document.  This option is of interest only to advanced users.
 
 =back
 
@@ -637,23 +636,16 @@ See perlmodinstall for information and options on installing Perl modules.
 
 =head1 BUGS AND LIMITATIONS
 
-No bugs have been reported.
-
-Please report any bugs or feature requests through the web interface at
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
+You can make new bug reports, and view existing ones, through the
+web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
 
 =head1 AVAILABILITY
 
-The project homepage is L<http://search.cpan.org/dist/HTML-Format>.
+The project homepage is L<https://metacpan.org/release/HTML-Format>.
 
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<http://search.cpan.org/dist/HTML-Format/>.
-
-The development version lives at L<http://github.com/nigelm/html-format>
-and may be cloned from L<git://github.com/nigelm/html-format.git>.
-Instead of sending patches, please fork this project using the standard
-git and github infrastructure.
+site near you, or see L<https://metacpan.org/module/HTML::Format/>.
 
 =head1 AUTHORS
 
@@ -675,13 +667,9 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2013 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

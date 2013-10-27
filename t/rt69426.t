@@ -25,42 +25,42 @@ my $table = {
 };
 
 foreach my $quoted ( sort { $a cmp $b } keys %{$table} ) {
-    my $desc = $table->{$quoted};
-        my $obj   = new_ok("HTML::FormatPS");
-        my $htree = new_ok("HTML::TreeBuilder");
-        
-        my $html  = '<html><body>The ' . $desc . ' is a ' . $quoted . ' character</body></html>';
-        ok( $html, "HTML string containing an $desc should map to $desc" );
+    my $desc  = $table->{$quoted};
+    my $obj   = new_ok("HTML::FormatPS");
+    my $htree = new_ok("HTML::TreeBuilder");
 
-        ok( $htree->parse_content($html), '  Parse HTML content' );
+    my $html = '<html><body>The ' . $desc . ' is a ' . $quoted . ' character</body></html>';
+    ok( $html, "HTML string containing an $desc should map to $desc" );
 
-        my $result = $obj->format_string($html);
-        ok( $result, '  Converted HTML object' );
+    ok( $htree->parse_content($html), '  Parse HTML content' );
 
-        # count high bit characters
-        my $count;
-        {
-            use bytes;
-            if ( $quoted eq '&pound;' ) {
+    my $result = $obj->format_string($html);
+    ok( $result, '  Converted HTML object' );
 
-                # we must exclude latin1 pound - char \243
-                $count = $result =~ tr/\177-\242\244-\377//;
-            }
-            else {
-                $count = $result =~ tr/\177-\377//;
-            }
+    # count high bit characters
+    my $count;
+    {
+        use bytes;
+        if ( $quoted eq '&pound;' ) {
+
+            # we must exclude latin1 pound - char \243
+            $count = $result =~ tr/\177-\242\244-\377//;
         }
+        else {
+            $count = $result =~ tr/\177-\377//;
+        }
+    }
 
-        ok( ( $count == 0 ), '  No unexpected high-bit characters found' );
+    ok( ( $count == 0 ), '  No unexpected high-bit characters found' );
 
-        ## # stuff postscript out into file - uncomment if you need for debugging
-        ## my $fn = $quoted;
-        ## $fn =~ tr/a-z//cd;
-        ## $fn .= '.ps';
-        ## write_file( $fn, { binmode => ':raw' }, $result );
+    ## # stuff postscript out into file - uncomment if you need for debugging
+    ## my $fn = $quoted;
+    ## $fn =~ tr/a-z//cd;
+    ## $fn .= '.ps';
+    ## write_file( $fn, { binmode => ':raw' }, $result );
 
-        ## # tell details about errors - uncomment if needed
-        ## diag( dump( { orig => $html, dump => $htree->dump, result => $result } ) ) if ($count);
+    ## # tell details about errors - uncomment if needed
+    ## diag( dump( { orig => $html, dump => $htree->dump, result => $result } ) ) if ($count);
 }
 
 # finish up

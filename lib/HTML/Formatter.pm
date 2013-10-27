@@ -14,7 +14,7 @@ use HTML::Element 3.15 ();
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
-our $VERSION = '2.10'; # VERSION
+our $VERSION = '2.11'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 #
@@ -734,6 +734,10 @@ sub textflow {
         $_[0] =~ s/^\n//;
         $self->pre_out( $_[0] );
     }
+    elsif ( $self->{blockquote} ) {
+        $_[0] =~ s/\A\s//;
+        $self->blockquote_out( $_[0] );
+    }
     else {
         for ( split( /(\s+)/, $_[0] ) ) {
             next unless length $_;
@@ -785,12 +789,13 @@ sub adjust_rm { confess "Must be overridden by subclass"; }
 1;
 
 __END__
+
 =pod
 
 =for test_synopsis 1;
 __END__
 
-=for stopwords formatters
+=for stopwords formatters CPAN homepage
 
 =head1 NAME
 
@@ -798,7 +803,7 @@ HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.10
+version 2.11
 
 =head1 SYNOPSIS
 
@@ -818,18 +823,17 @@ version 2.10
 
 =head1 DESCRIPTION
 
-HTML::Formatter is a base class for classes that take HTML
-and format it to some output format.  When you take an object
-of such a base class and call C<< $formatter->format( $tree ) >>
-with an HTML::TreeBuilder (or HTML::Element) object, they return
-the
+HTML::Formatter is a base class for classes that take HTML and format it to
+some output format.  When you take an object of such a base class and call
+C<$formatter->format( $tree )> with an L<HTML::TreeBuilder> (or
+L<HTML::Element>) object, they return the appropriately formatted string for
+the input HTML.
 
-HTML formatters are able to format a HTML syntax tree into various
-printable formats.  Different formatters produce output for different
-output media.  Common for all formatters are that they will return the
-formatted output when the format() method is called.  The format()
-method takes a HTML::Element object (usually the HTML::TreeBuilder
-root object) as parameter.
+HTML formatters are able to format a HTML syntax tree into various printable
+formats.  Different formatters produce output for different output media.
+Common for all formatters are that they will return the formatted output when
+the format() method is called.  The format() method takes a HTML::Element
+object (usually the HTML::TreeBuilder root object) as parameter.
 
 =head1 METHODS
 
@@ -850,10 +854,10 @@ This creates a new formatter object with the given options.
         option1 => value1, option2 => value2, ...
         );
 
-Return a string consisting of the result of using the given class
-to format the given HTML file according to the given (optional) options.
-Internally it calls C<< SomeClass->new( ... )->format( ... ) >> on a new
-HTML::TreeBuilder object based on the given HTML file.
+Return a string consisting of the result of using the given class to format the
+given HTML file according to the given (optional) options. Internally it calls
+C<< SomeClass->new( ... )->format( ... ) >> on a new HTML::TreeBuilder object
+based on the given HTML file.
 
 =head2 format_string
 
@@ -864,20 +868,19 @@ HTML::TreeBuilder object based on the given HTML file.
         option1 => value1, option2 => value2, ...
         );
 
-Return a string consisting of the result of using the given class
-to format the given HTML source according to the given (optional)
-options. Internally it calls C<< SomeClass->new( ... )->format( ... ) >>
-on a new HTML::TreeBuilder object based on the given source.
+Return a string consisting of the result of using the given class to format the
+given HTML source according to the given (optional) options. Internally it
+calls C<< SomeClass->new( ... )->format( ... ) >> on a new HTML::TreeBuilder
+object based on the given source.
 
 =head2 format
 
     my $render_string = $formatter->format( $html_tree_object );
 
-This renders the given HTML object according to the options set for
-$formatter.
+This renders the given HTML object according to the options set for $formatter.
 
-After you've used a particular formatter object to format a particular
-HTML tree object, you probably should not use either again.
+After you've used a particular formatter object to format a particular HTML
+tree object, you probably should not use either again.
 
 =head1 SEE ALSO
 
@@ -908,23 +911,16 @@ See perlmodinstall for information and options on installing Perl modules.
 
 =head1 BUGS AND LIMITATIONS
 
-No bugs have been reported.
-
-Please report any bugs or feature requests through the web interface at
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
+You can make new bug reports, and view existing ones, through the
+web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
 
 =head1 AVAILABILITY
 
-The project homepage is L<http://search.cpan.org/dist/HTML-Format>.
+The project homepage is L<https://metacpan.org/release/HTML-Format>.
 
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<http://search.cpan.org/dist/HTML-Format/>.
-
-The development version lives at L<http://github.com/nigelm/html-format>
-and may be cloned from L<git://github.com/nigelm/html-format.git>.
-Instead of sending patches, please fork this project using the standard
-git and github infrastructure.
+site near you, or see L<https://metacpan.org/module/HTML::Format/>.
 
 =head1 AUTHORS
 
@@ -946,10 +942,9 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2013 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

@@ -1,3 +1,9 @@
+2.11      2013-10-27 20:57:23 Europe/London
+    - Typo fixes from dsteinbrunner
+      https://github.com/nigelm/html-format/pull/2
+    - Markdown support from mrallen1
+      https://github.com/nigelm/html-format/pull/1
+
 2.10      2011-07-18 17:07:35 Europe/London
     - Tests reworked to not use subtests.  Development versions
       of Test::More do not support subtests, and the smokers
