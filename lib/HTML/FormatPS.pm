@@ -12,6 +12,7 @@ __END__
     horizontalmargin leftmargin noprolog notrailer pageno
     paperheight papersize paperwidth postscript rightmargin
     startpage topmargin verticalmargin ledding leeding prolog
+    CPAN Quarto Tabloid Unicode homepage
 
 =end :prelude
 

@@ -8,7 +8,7 @@ package HTML::FormatText;
 1;
 __END__
 
-=for stopwords latin1 leftmargin lm plaintext rightmargin
+=for stopwords latin1 leftmargin lm plaintext rightmargin rm CPAN homepage
 
 =end :prelude
 

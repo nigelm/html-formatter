@@ -4,6 +4,8 @@ package HTML::FormatMarkdown;
 
 =begin :prelude
 
+=for stopwords CPAN Markdown homepage
+
 =for test_synopsis
 1;
 __END__

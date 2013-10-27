@@ -9,6 +9,7 @@ package HTML::FormatRTF;
 __END__
 
 =for stopwords arial bookman lm pagenumber p.pagenumber prolog rtf tahoma verdana
+    CPAN homepage rm sans serif twentieths
 
 =end :prelude
 

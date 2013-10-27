@@ -8,7 +8,7 @@ package HTML::Formatter;
 1;
 __END__
 
-=for stopwords formatters
+=for stopwords formatters CPAN homepage
 
 =end :prelude
 
