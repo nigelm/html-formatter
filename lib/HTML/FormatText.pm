@@ -31,17 +31,15 @@ or, more simply:
 
 =head1 DESCRIPTION
 
-HTML::FormatText is a formatter that outputs plain latin1 text.
-All character attributes (bold/italic/underline) are ignored.
-Formatting of HTML tables and forms is not implemented.
+HTML::FormatText is a formatter that outputs plain latin1 text. All character
+attributes (bold/italic/underline) are ignored. Formatting of HTML tables and
+forms is not implemented.
 
-HTML::FormatText is built on L<HTML::Formatter> and documentation
-for that module applies to this - especially
-L<HTML::Formatter/new>, L<HTML::Formatter/format_file> and
-L<HTML::Formatter/format_string>.
+HTML::FormatText is built on L<HTML::Formatter> and documentation for that
+module applies to this - especially L<HTML::Formatter/new>,
+L<HTML::Formatter/format_file> and L<HTML::Formatter/format_string>.
 
-You might specify the following parameters when constructing the
-formatter:
+You might specify the following parameters when constructing the formatter:
 
 =over 4
 

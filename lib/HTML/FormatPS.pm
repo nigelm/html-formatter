@@ -39,11 +39,11 @@ Or, for short:
 
 =head1 DESCRIPTION
 
-The HTML::FormatPS is a formatter that outputs PostScript code.
-Formatting of HTML tables and forms is not implemented.
+The HTML::FormatPS is a formatter that outputs PostScript code. Formatting of
+HTML tables and forms is not implemented.
 
-HTML::FormatPS is built on top of L<HTML::Formatter> and so further
-detail may be found in the documentation for L<HTML::Formatter>.
+HTML::FormatPS is built on top of L<HTML::Formatter> and so further detail may
+be found in the documentation for L<HTML::Formatter>.
 
 You might specify the following parameters when constructing the formatter
 object (or when calling format_file or format_string):
@@ -52,21 +52,19 @@ object (or when calling format_file or format_string):
 
 =item PaperSize
 
-What kind of paper should we format for.  The value can be one of
-these: A3, A4, A5, B4, B5, Letter, Legal, Executive, Tabloid,
-Statement, Folio, 10x14, Quarto.
+What kind of paper should we format for.  The value can be one of these: A3,
+A4, A5, B4, B5, Letter, Legal, Executive, Tabloid, Statement, Folio, 10x14,
+Quarto.
 
 The default is "A4".
 
 =item PaperWidth
 
-The width of the paper, in points.  Setting PaperSize also defines this
-value.
+The width of the paper, in points.  Setting PaperSize also defines this value.
 
 =item PaperHeight
 
-The height of the paper, in points.  Setting PaperSize also defines
-this value.
+The height of the paper, in points.  Setting PaperSize also defines this value.
 
 =item LeftMargin
 
@@ -94,51 +92,48 @@ Both top and bottom margin at the same time.  The default value is 2 cm,
 
 =item PageNo
 
-This parameter determines if we should put page numbers on the pages.
-The default value is true; so you have to set this value to 0 in order to
-suppress page numbers.  (The "No" in "PageNo" means number/numero!)
+This parameter determines if we should put page numbers on the pages. The
+default value is true; so you have to set this value to 0 in order to suppress
+page numbers.  (The "No" in "PageNo" means number/numero!)
 
 =item FontFamily
 
-This parameter specifies which family of fonts to use for the formatting.
-Legal values are "Courier", "Helvetica" and "Times".  The default is
-"Times".
+This parameter specifies which family of fonts to use for the formatting. Legal
+values are "Courier", "Helvetica" and "Times".  The default is "Times".
 
 =item FontScale
 
 This is a scaling factor for all the font sizes.  The default value is 1.
 
-For example, if you want everything to be almost three times as large,
-you could set this to 2.7.  If you wanted things just a bit smaller than
-normal, you could set it to .92.
+For example, if you want everything to be almost three times as large, you
+could set this to 2.7.  If you wanted things just a bit smaller than normal,
+you could set it to .92.
 
 =item Leading
 
-This option (pronounced "ledding", not "leeding") controls how much is
-space between lines. This is a factor of the font size used for that
-line.  Default is 0.1 -- so between two 12-point lines, there will be
-1.2 points of space.
+This option (pronounced "ledding", not "leeding") controls how much is space
+between lines. This is a factor of the font size used for that line.  Default
+is 0.1 -- so between two 12-point lines, there will be 1.2 points of space.
 
 =item StartPage
 
-Assuming you have PageNo on, StartPage controls what the page number of
-the first page will be. By default, it is 1. So if you set this to 87,
-the first page would say "87" on it, the next "88", and so on.
+Assuming you have PageNo on, StartPage controls what the page number of the
+first page will be. By default, it is 1. So if you set this to 87, the first
+page would say "87" on it, the next "88", and so on.
 
 =item NoProlog
 
 If this option is set to a true value, HTML::FormatPS will make a point of
-I<not> emitting the PostScript prolog before the document. By default,
-this is off, meaning that HTML::FormatPS I<will> emit the prolog. This
-option is of interest only to advanced users.
+I<not> emitting the PostScript prolog before the document. By default, this is
+off, meaning that HTML::FormatPS I<will> emit the prolog. This option is of
+interest only to advanced users.
 
 =item NoTrailer
 
 If this option is set to a true value, HTML::FormatPS will make a point of
-I<not> emitting the PostScript trailer at the end of the document. By
-default, this is off, meaning that HTML::FormatPS I<will> emit the bit
-of PostScript that ends the document. This option is of interest only to
-advanced users.
+I<not> emitting the PostScript trailer at the end of the document. By default,
+this is off, meaning that HTML::FormatPS I<will> emit the bit of PostScript
+that ends the document. This option is of interest only to advanced users.
 
 =back
 
@@ -1018,10 +1013,9 @@ L<HTML::Formatter>
 
 =item *
 
-Output is in ISO Latin1 format. The underlying HTML parsers tend to
-now work in Unicode (perl native) code points. There is an impedance
-mismatch between these, which may give issues with complex characters
-within HTML.
+Output is in ISO Latin1 format. The underlying HTML parsers tend to now work in
+Unicode (perl native) code points. There is an impedance mismatch between
+these, which may give issues with complex characters within HTML.
 
 =back
 
@@ -1032,8 +1026,8 @@ within HTML.
 
 =item *
 
-Support for some more character styles, notably including:
-strike-through, underlining, superscript, and subscript.
+Support for some more character styles, notably including: strike-through,
+underlining, superscript, and subscript.
 
 =item *
 
@@ -1041,8 +1035,8 @@ Support for Unicode.
 
 =item *
 
-Support for Win-1252 encoding, since that's what most people
-mean when they use characters in the range 0x80-0x9F in HTML.
+Support for Win-1252 encoding, since that's what most people mean when they use
+characters in the range 0x80-0x9F in HTML.
 
 =item *
 
@@ -1050,8 +1044,8 @@ And, if it's ever even reasonably possible, support for tables.
 
 =back
 
-I would welcome email from people who can help me out or advise
-me on the above.
+I would welcome email from people who can help me out or advise me on the
+above.
 
 =cut
 

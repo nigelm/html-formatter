@@ -1,0 +1,14 @@
+[PerlTidy]
+argv =  --profile=$ROOT/.perltidyrc
+select = {lib,t}/**/*.{pl,pm,t}
+
+[PodTidy]
+select = {lib,t}/**/*.{pl,pm,pod}
+ignore = README.pod
+
+[PerlCritic]
+select = {lib,t}/**/*.{pl,pm}
+except_modes = editor
+
+[Perl::AlignMooseAttributes]
+select = {lib,t}/**/*.{pl,pm,t}

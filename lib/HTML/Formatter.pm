@@ -30,18 +30,17 @@ __END__
 
 =head1 DESCRIPTION
 
-HTML::Formatter is a base class for classes that take HTML
-and format it to some output format.  When you take an object
-of such a base class and call C<< $formatter->format( $tree ) >>
-with an HTML::TreeBuilder (or HTML::Element) object, they return
-the
+HTML::Formatter is a base class for classes that take HTML and format it to
+some output format.  When you take an object of such a base class and call
+C<$formatter->format( $tree )> with an L<HTML::TreeBuilder> (or
+L<HTML::Element>) object, they return the appropriately formatted string for
+the input HTML.
 
-HTML formatters are able to format a HTML syntax tree into various
-printable formats.  Different formatters produce output for different
-output media.  Common for all formatters are that they will return the
-formatted output when the format() method is called.  The format()
-method takes a HTML::Element object (usually the HTML::TreeBuilder
-root object) as parameter.
+HTML formatters are able to format a HTML syntax tree into various printable
+formats.  Different formatters produce output for different output media.
+Common for all formatters are that they will return the formatted output when
+the format() method is called.  The format() method takes a HTML::Element
+object (usually the HTML::TreeBuilder root object) as parameter.
 
 =head1 METHODS
 
@@ -131,10 +130,10 @@ sub massage_tree {
         option1 => value1, option2 => value2, ...
         );
 
-Return a string consisting of the result of using the given class
-to format the given HTML file according to the given (optional) options.
-Internally it calls C<< SomeClass->new( ... )->format( ... ) >> on a new
-HTML::TreeBuilder object based on the given HTML file.
+Return a string consisting of the result of using the given class to format the
+given HTML file according to the given (optional) options. Internally it calls
+C<< SomeClass->new( ... )->format( ... ) >> on a new HTML::TreeBuilder object
+based on the given HTML file.
 
 =cut
 
@@ -168,10 +167,10 @@ sub format_file {
         option1 => value1, option2 => value2, ...
         );
 
-Return a string consisting of the result of using the given class
-to format the given HTML source according to the given (optional)
-options. Internally it calls C<< SomeClass->new( ... )->format( ... ) >>
-on a new HTML::TreeBuilder object based on the given source.
+Return a string consisting of the result of using the given class to format the
+given HTML source according to the given (optional) options. Internally it
+calls C<< SomeClass->new( ... )->format( ... ) >> on a new HTML::TreeBuilder
+object based on the given source.
 
 =cut
 
@@ -214,11 +213,10 @@ sub _default_tree {
 
     my $render_string = $formatter->format( $html_tree_object );
 
-This renders the given HTML object according to the options set for
-$formatter.
+This renders the given HTML object according to the options set for $formatter.
 
-After you've used a particular formatter object to format a particular
-HTML tree object, you probably should not use either again.
+After you've used a particular formatter object to format a particular HTML
+tree object, you probably should not use either again.
 
 =cut
 

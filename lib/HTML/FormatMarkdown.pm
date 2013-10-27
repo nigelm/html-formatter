@@ -28,10 +28,9 @@ __END__
 
 HTML::FormatMarkdown is a formatter that outputs Markdown.
 
-HTML::FormatMarkdown is built on L<HTML::Formatter> and
-documentation for that module applies to this - especially
-L<HTML::Formatter/new>, L<HTML::Formatter/format_file> and
-L<HTML::Formatter/format_string>.
+HTML::FormatMarkdown is built on L<HTML::Formatter> and documentation for that
+module applies to this - especially L<HTML::Formatter/new>,
+L<HTML::Formatter/format_file> and L<HTML::Formatter/format_string>.
 
 =cut
 
@@ -45,8 +44,7 @@ use parent 'HTML::Formatter';
 # AUTHORITY
 
 sub default_values {
-    ( 
-        shift->SUPER::default_values(), 
+    (   shift->SUPER::default_values(),
         lm => 0,
         rm => 70,
     );
@@ -85,7 +83,7 @@ sub begin {
     my $self = shift;
 
     $self->SUPER::begin();
-    $self->{maxpos} = 0; 
+    $self->{maxpos} = 0;
     $self->{curpos} = 0;    # current output position.
 }
 
@@ -111,7 +109,7 @@ sub header_end {
 sub bullet {
     my $self = shift;
 
-    $self->SUPER::bullet( $_[0] . ' ');
+    $self->SUPER::bullet( $_[0] . ' ' );
 
 }
 
@@ -133,7 +131,7 @@ sub img_start {
 }
 
 sub a_start {
-    my ($self, $node) = @_; 
+    my ( $self, $node ) = @_;
 
     # ignore named anchors
     if ( $node->attr('name') ) {
@@ -155,37 +153,37 @@ sub a_end {
         return;
     }
     elsif ( my $href = $node->attr('href') ) {
-        if ($href =~ /^#/) {
+        if ( $href =~ /^#/ ) {
             return;
         }
         $self->out("]($href)");
     }
 }
 
-sub b_start  { shift->out( "**" ) }
-sub b_end    { shift->out( "**" ) }
-sub i_start  { shift->out( "*"  ) }
-sub i_end    { shift->out( "*"  ) }
+sub b_start { shift->out("**") }
+sub b_end   { shift->out("**") }
+sub i_start { shift->out("*") }
+sub i_end   { shift->out("*") }
 
-sub tt_start { 
+sub tt_start {
     my $self = shift;
 
     if ( $self->{pre} ) {
         return 1;
     }
     else {
-        $self->out( "`"  ) 
+        $self->out("`");
     }
 }
 
-sub tt_end { 
+sub tt_end {
     my $self = shift;
 
     if ( $self->{pre} ) {
         return;
     }
     else {
-        $self->out( "`"  ) 
+        $self->out("`");
     }
 }
 
@@ -219,7 +217,7 @@ sub blockquote_out {
 
     foreach my $word ( split /\s/, $text ) {
         $line .= "$word ";
-        if ( ($self->{curpos} + length($line)) > $self->{rm} ) {
+        if ( ( $self->{curpos} + length($line) ) > $self->{rm} ) {
             $self->collect($line);
             $self->nl;
             $self->goto_lm;
@@ -227,7 +225,7 @@ sub blockquote_out {
             $self->{curpos} += 2;
         }
     }
-    
+
     $self->collect($line);
     $self->nl;
 
@@ -323,7 +321,5 @@ sub adjust_lm {
 sub adjust_rm {
     shift->{rm} += $_[0];
 }
-
-
 
 1;
