@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+2.11      2013-10-27 20:57:23 Europe/London
     - Typo fixes from dsteinbrunner
       https://github.com/nigelm/html-format/pull/2
     - Markdown support from mrallen1
