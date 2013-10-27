@@ -828,6 +828,10 @@ sub textflow {
         $_[0] =~ s/^\n//;
         $self->pre_out( $_[0] );
     }
+    elsif ( $self->{blockquote} ) {
+        $_[0] =~ s/\A\s//;
+        $self->blockquote_out( $_[0] );
+    }
     else {
         for ( split( /(\s+)/, $_[0] ) ) {
             next unless length $_;
