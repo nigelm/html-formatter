@@ -1,25 +1,24 @@
-     This is a test
-     ==============
+     # This is a test #
 
-     This is bold
+     **This is bold**
 
-     This is italic
+     *This is italic*
 
-     This is teletype
+     `This is teletype`
 
-     ---------------------------------------------
+     - - -
 
        1.  One
 
        2.  Two
 
      This is a quote from Abraham Lincoln:
+     > Four score and seven years ago our fathers 
+     > brought forth on this continent, a new 
+     > nation, conceived in Liberty, and dedicated 
+     > to the proposition that all men are created 
+     > equal. 
 
-       Four score and seven years ago our fathers
-       brought forth on this continent, a new
-       nation, conceived in Liberty, and
-       dedicated to the proposition that all men
-       are created equal.
 
      In order to install and use this package you
      will need Perl version 5.004 or better. You
@@ -64,16 +63,14 @@
      formatter you need the Font-AFM distribution.
      All of these should be available from CPAN.
 
-
-     Installation
-     ------------
+     ## Installation ##
 
      Just follow the usual procedure:
 
-     perl Makefile.PL
-     make
-     make test
-     make install
+         perl Makefile.PL
+         make
+         make test
+         make install
 
      In order to install and use this package you
      will need Perl version 5.004 or better. You
@@ -83,4 +80,4 @@
      formatter you need the Font-AFM distribution.
      All of these should be available from CPAN.
 
-     Byte me dot org
+     [Byte me dot org](http://byte-me.org)
