@@ -14,3 +14,12 @@
      else could you throw a pile of poo at a
      snowman?
      í ½í²© â†’ â˜ƒ
+
+     This sentence is full of non-breaking spaces
+     but it'll be broken anyway.
+
+     I put a hyphen in
+     llanfairpwllgwyngyllgogerychwyrndrob
+     wllllantysiliogogogoch and it ended up as a
+     space.
+
