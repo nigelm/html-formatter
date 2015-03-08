@@ -31,7 +31,7 @@ or, more simply:
 
 =head1 DESCRIPTION
 
-HTML::FormatText is a formatter that outputs plain latin1 text. All character
+HTML::FormatText is a formatter that outputs plain text. All character
 attributes (bold/italic/underline) are ignored. Formatting of HTML tables and
 forms is not implemented.
 
