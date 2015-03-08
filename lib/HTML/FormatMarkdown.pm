@@ -254,7 +254,7 @@ sub out {
     my $self = shift;
     my $text = shift;
 
-    $text =~ tr/\xA0\xAD/ /d;
+    $text = $self->_convert_spacelike_characters_to_space($text);
 
     if ( $text =~ /^\s*$/ ) {
         $self->{hspace} = 1;
