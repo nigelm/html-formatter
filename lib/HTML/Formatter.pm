@@ -831,6 +831,7 @@ sub textflow {
         $self->blockquote_out( $_[0] );
     }
     else {
+        $_[0] = $self->_convert_spacelike_characters_to_space($_[0]);
         for ( split( /(\s+)/, $_[0] ) ) {
             next unless length $_;
             $self->out($_);
@@ -886,11 +887,14 @@ sub adjust_rm { confess "Must be overridden by subclass"; }
 sub _convert_spacelike_characters_to_space {
     my ($self, $text) = @_;
 
+    return if !defined $text;
+
     eval {
         require Encode;
-        $text = decode('UTF-8', $text);
-        $text =~ s/ ( \xA0 | \xAD ) / /gx;
-        $text = encode('UTF-8', $text);
+        my $unicode_text = Encode::decode('UTF-8', $text);
+        if ($unicode_text =~ s/ ( \xA0 | \xAD ) / /gx) {
+            $text = Encode::encode('UTF-8', $unicode_text);
+        }
     };
     return $text;
 }
