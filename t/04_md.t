@@ -1,18 +1,17 @@
 use strict;
 use warnings;
+use FindBin;
 use File::Spec;    # try to keep pathnames neutral
 use Test::More 0.96;
 
-BEGIN { use_ok("HTML::FormatMarkdown"); }
+use lib "$FindBin::Bin/lib";
+use Test::HTML::Formatter;
 
-foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) ) {
-    my $obj = new_ok("HTML::FormatMarkdown");
-    ok( -f $infile, "Testing file handling for $infile" );
-    my $expfilename = ( File::Spec->splitpath($infile) )[2];
-    $expfilename =~ s/\.html$/.md/i;
-    my $expfile = File::Spec->catfile( 't', 'data', 'expected', $expfilename );
-    ok( -f $expfile, '  Expected result file exists' );
-    if ( -f $expfile ) {
+Test::HTML::Formatter->test_files(
+    class_suffix       => 'FormatMarkdown',
+    filename_extension => 'md',
+    callback_test_file => sub {
+        my ($self, $infile, $expfile) = @_;
 
         # read file content - split into lines, but we exclude the
         # doccomm line since it includes a timestamp and version information
@@ -27,7 +26,7 @@ foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) 
         ok( length($text), '  Returned a string from conversion' );
         is_deeply( $got_lines, $exp_lines, '  Correct text string returned' );
     }
-}
+);
 
 # finish up
 done_testing();
