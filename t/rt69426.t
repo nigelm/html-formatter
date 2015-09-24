@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.96;
 ##use Data::Dump qw[dump];    # uncomment if needed for debugging
-##use File::Slurp;            # uncomment if needed for debugging
+##use File::Slurper 'write_binary'; # uncomment if needed for debugging
 
 # Bug was that a right single quote character - &rsquo;
 # caused a garbage character to go into the output.  This was due to
@@ -57,7 +57,7 @@ foreach my $quoted ( sort { $a cmp $b } keys %{$table} ) {
     ## my $fn = $quoted;
     ## $fn =~ tr/a-z//cd;
     ## $fn .= '.ps';
-    ## write_file( $fn, { binmode => ':raw' }, $result );
+    ## write_binary( $fn, $result );
 
     ## # tell details about errors - uncomment if needed
     ## diag( dump( { orig => $html, dump => $htree->dump, result => $result } ) ) if ($count);
