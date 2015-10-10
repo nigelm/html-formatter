@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.11'; # VERSION
+our $VERSION = '2.12'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -501,8 +501,8 @@ __END__
 =for test_synopsis 1;
 __END__
 
-=for stopwords arial bookman lm pagenumber p.pagenumber prolog rtf tahoma verdana
-    CPAN homepage rm sans serif twentieths
+=for stopwords arial bookman lm pagenumber prolog rtf tahoma verdana CPAN
+    homepage rm sans serif twentieths
 
 =head1 NAME
 
@@ -510,7 +510,7 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.11
+version 2.12
 
 =head1 SYNOPSIS
 
@@ -564,7 +564,7 @@ value is 22, meaning that normal text is in 11 point.
 
 This is the size of text used in the document's page-header, in I<half>-points.
 The default value is 17, meaning that normal text is in 7.5 point.  Currently,
-the header consists just of "p.I<pagenumber>" in the upper-right-hand corner,
+the header consists just of "p. I<pagenumber>" in the upper-right-hand corner,
 and cannot be disabled.
 
 =item head1_halfpoint_size ... head6_halfpoint_size
@@ -667,7 +667,7 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
