@@ -1,4 +1,8 @@
 {{$NEXT}}
+    - Minor test related fixes
+    - Transition to using File::Slurper in place of File::Slurp
+      Thanks to Karen Etheridge for the patch
+    - Add Travis CI integration
 
 2.11      2013-10-27 20:57:23 Europe/London
     - Typo fixes from dsteinbrunner
