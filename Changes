@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+2.12      2015-10-10 17:49:45+01:00 Europe/London
     - Minor test related fixes
     - Transition to using File::Slurper in place of File::Slurp
       Thanks to Karen Etheridge for the patch
