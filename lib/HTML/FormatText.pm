@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.12'; # VERSION
+our $VERSION = '2.13'; # TRIAL VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -222,7 +222,7 @@ HTML::FormatText - Format HTML as plaintext
 
 =head1 VERSION
 
-version 2.12
+version 2.13
 
 =head1 SYNOPSIS
 
@@ -276,15 +276,15 @@ See perlmodinstall for information and options on installing Perl modules.
 =head1 BUGS AND LIMITATIONS
 
 You can make new bug reports, and view existing ones, through the
-web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
+web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter>.
 
 =head1 AVAILABILITY
 
-The project homepage is L<https://metacpan.org/release/HTML-Format>.
+The project homepage is L<https://metacpan.org/release/HTML-Formatter>.
 
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<https://metacpan.org/module/HTML::Format/>.
+site near you, or see L<https://metacpan.org/module/HTML::Formatter/>.
 
 =head1 AUTHORS
 

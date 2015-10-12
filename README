@@ -4,7 +4,7 @@ NAME
 
 VERSION
 
-    version 2.12
+    version 2.13
 
 SYNOPSIS
 
@@ -36,6 +36,9 @@ DESCRIPTION
     formatted output when the format() method is called. The format()
     method takes a HTML::Element object (usually the HTML::TreeBuilder root
     object) as parameter.
+
+    The distribution name has been changed to HTML-Formatter as detailed in
+    "DISTRIBUTION NAME"
 
 METHODS
 
@@ -85,6 +88,23 @@ METHODS
     After you've used a particular formatter object to format a particular
     HTML tree object, you probably should not use either again.
 
+DISTRIBUTION NAME
+
+    This module was originally named HTML-Format despite not containing a
+    HTML::Format module within it. As rules on naming have been taken more
+    seriously, and the PAUSE <https://pause.perl.org/> toolchain adapted so
+    that getting the distribution indexed was more difficult, it became
+    obvious that I should rename the distribution to HTML-Formatter
+    matching the base HTML::Formatter module.
+
+    As of release 2.13 this is released as the HTML-Formatter distribution
+    with corresponding changes to the git repository name and associated
+    items.
+
+    Due to the way that the module is put together this should have no
+    effect on code using the module. The only issues will be where the
+    distribution name was used within dependancies.
+
 SEE ALSO
 
     The three specific formatters:-
@@ -113,15 +133,16 @@ BUGS AND LIMITATIONS
 
     You can make new bug reports, and view existing ones, through the web
     interface at
-    http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format.
+    http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter.
 
 AVAILABILITY
 
-    The project homepage is https://metacpan.org/release/HTML-Format.
+    The project homepage is https://metacpan.org/release/HTML-Formatter.
 
     The latest version of this module is available from the Comprehensive
     Perl Archive Network (CPAN). Visit http://www.perl.com/CPAN/ to find a
-    CPAN site near you, or see https://metacpan.org/module/HTML::Format/.
+    CPAN site near you, or see
+    https://metacpan.org/module/HTML::Formatter/.
 
 AUTHORS
 

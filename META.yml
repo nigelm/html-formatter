@@ -25,23 +25,23 @@ license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
-name: HTML-Format
+name: HTML-Formatter
 provides:
   HTML::FormatMarkdown:
     file: lib/HTML/FormatMarkdown.pm
-    version: '2.12'
+    version: '2.13'
   HTML::FormatPS:
     file: lib/HTML/FormatPS.pm
-    version: '2.12'
+    version: '2.13'
   HTML::FormatRTF:
     file: lib/HTML/FormatRTF.pm
-    version: '2.12'
+    version: '2.13'
   HTML::FormatText:
     file: lib/HTML/FormatText.pm
-    version: '2.12'
+    version: '2.13'
   HTML::Formatter:
     file: lib/HTML/Formatter.pm
-    version: '2.12'
+    version: '2.13'
 requires:
   Carp: '0'
   Data::Dumper: '0'
@@ -69,10 +69,10 @@ requires:
   utf8: '0'
   warnings: '0'
 resources:
-  bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format
-  homepage: https://metacpan.org/release/HTML-Format
-  repository: https://github.com/nigelm/html-format.git
-version: '2.12'
+  bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter
+  homepage: https://metacpan.org/release/HTML-Formatter
+  repository: https://github.com/nigelm/html-formatter.git
+version: '2.13'
 x_Dist_Zilla:
   perl:
     version: '5.022000'
@@ -444,7 +444,7 @@ x_Dist_Zilla:
           branch: ~
           changelog: Changes
           signed: 0
-          tag: release/2.12
+          tag: release/2.13-TRIAL
           tag_format: release/%v%t
           tag_message: 'Release of %v%t'
         Dist::Zilla::Role::Git::Repo:
@@ -541,6 +541,6 @@ x_Dist_Zilla:
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
-      is_trial: '0'
+      is_trial: '1'
     version: '5.039'
 x_authority: cpan:NIGELM

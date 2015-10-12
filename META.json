@@ -14,7 +14,7 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : 2
    },
-   "name" : "HTML-Format",
+   "name" : "HTML-Formatter",
    "prereqs" : {
       "build" : {
          "requires" : {
@@ -85,39 +85,39 @@
    "provides" : {
       "HTML::FormatMarkdown" : {
          "file" : "lib/HTML/FormatMarkdown.pm",
-         "version" : "2.12"
+         "version" : "2.13"
       },
       "HTML::FormatPS" : {
          "file" : "lib/HTML/FormatPS.pm",
-         "version" : "2.12"
+         "version" : "2.13"
       },
       "HTML::FormatRTF" : {
          "file" : "lib/HTML/FormatRTF.pm",
-         "version" : "2.12"
+         "version" : "2.13"
       },
       "HTML::FormatText" : {
          "file" : "lib/HTML/FormatText.pm",
-         "version" : "2.12"
+         "version" : "2.13"
       },
       "HTML::Formatter" : {
          "file" : "lib/HTML/Formatter.pm",
-         "version" : "2.12"
+         "version" : "2.13"
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
-         "mailto" : "bug-HTML-Format@rt.cpan.org",
-         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format"
+         "mailto" : "bug-HTML-Formatter@rt.cpan.org",
+         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter"
       },
-      "homepage" : "https://metacpan.org/release/HTML-Format",
+      "homepage" : "https://metacpan.org/release/HTML-Formatter",
       "repository" : {
          "type" : "git",
-         "url" : "https://github.com/nigelm/html-format.git",
-         "web" : "https://github.com/nigelm/html-format"
+         "url" : "https://github.com/nigelm/html-formatter.git",
+         "web" : "https://github.com/nigelm/html-formatter"
       }
    },
-   "version" : "2.12",
+   "version" : "2.13",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.022000"
@@ -601,7 +601,7 @@
                   "branch" : null,
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "release/2.12",
+                  "tag" : "release/2.13-TRIAL",
                   "tag_format" : "release/%v%t",
                   "tag_message" : "Release of %v%t"
                },
@@ -729,7 +729,7 @@
       "zilla" : {
          "class" : "Dist::Zilla::Dist::Builder",
          "config" : {
-            "is_trial" : "0"
+            "is_trial" : "1"
          },
          "version" : "5.039"
       }

@@ -22,10 +22,10 @@ my %module_build_args = (
     "Sean M Burke <sburke\@cpan.org>",
     "Gisle Aas <gisle\@ActiveState.com>"
   ],
-  "dist_name" => "HTML-Format",
-  "dist_version" => "2.12",
+  "dist_name" => "HTML-Formatter",
+  "dist_version" => "2.13",
   "license" => "perl",
-  "module_name" => "HTML::Format",
+  "module_name" => "HTML::Formatter",
   "recursive_test_files" => 1,
   "requires" => {
     "Carp" => 0,
