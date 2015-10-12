@@ -1,4 +1,7 @@
 {{$NEXT}}
+    - Renamed distribution from HTML-Format -> HTML-Formatter
+    - Documentation update within the main POD to reflect name change
+    - No functional changes
 
 2.12      2015-10-10 17:49:45+01:00 Europe/London
     - Minor test related fixes

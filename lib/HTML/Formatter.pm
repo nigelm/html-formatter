@@ -42,6 +42,9 @@ Common for all formatters are that they will return the formatted output when
 the format() method is called.  The format() method takes a HTML::Element
 object (usually the HTML::TreeBuilder root object) as parameter.
 
+The distribution name has been changed to C<HTML-Formatter> as detailed in
+L<DISTRIBUTION NAME>
+
 =head1 METHODS
 
 =cut
@@ -876,6 +879,22 @@ sub adjust_lm { confess "Must be overridden by subclass"; }
 sub adjust_rm { confess "Must be overridden by subclass"; }
 
 # ------------------------------------------------------------------------
+
+=head1 DISTRIBUTION NAME
+
+This module was originally named C<HTML-Format> despite not containing a
+C<HTML::Format> module within it.  As rules on naming have been taken more
+seriously, and the L<PAUSE|https://pause.perl.org/> toolchain adapted so that
+getting the distribution indexed was more difficult, it became obvious that I
+should rename the distribution to C<HTML-Formatter> matching the base
+L<HTML::Formatter> module.
+
+As of release 2.13 this is released as the C<HTML-Formatter> distribution with
+corresponding changes to the git repository name and associated items.
+
+Due to the way that the module is put together this should have no effect on
+code using the module.  The only issues will be where the distribution name was
+used within dependancies.
 
 =head1 SEE ALSO
 
