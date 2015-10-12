@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+2.13      2015-10-12 16:26:46+01:00 Europe/London (TRIAL RELEASE)
     - Renamed distribution from HTML-Format -> HTML-Formatter
     - Documentation update within the main POD to reflect name change
     - No functional changes
