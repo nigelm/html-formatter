@@ -29,4 +29,6 @@ install:
   - dzil listdeps | grep -vP '[^\w:]' | cpanm --verbose
 
 script:
+  - pwd
+  - ls -l
   - dzil test
