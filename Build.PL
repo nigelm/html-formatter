@@ -23,7 +23,7 @@ my %module_build_args = (
     "Gisle Aas <gisle\@ActiveState.com>"
   ],
   "dist_name" => "HTML-Formatter",
-  "dist_version" => "2.13",
+  "dist_version" => "2.14",
   "license" => "perl",
   "module_name" => "HTML::Formatter",
   "recursive_test_files" => 1,

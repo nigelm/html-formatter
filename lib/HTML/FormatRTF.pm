@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.13'; # TRIAL VERSION
+our $VERSION = '2.14'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -510,7 +510,7 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.13
+version 2.14
 
 =head1 SYNOPSIS
 

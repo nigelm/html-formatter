@@ -85,26 +85,26 @@
    "provides" : {
       "HTML::FormatMarkdown" : {
          "file" : "lib/HTML/FormatMarkdown.pm",
-         "version" : "2.13"
+         "version" : "2.14"
       },
       "HTML::FormatPS" : {
          "file" : "lib/HTML/FormatPS.pm",
-         "version" : "2.13"
+         "version" : "2.14"
       },
       "HTML::FormatRTF" : {
          "file" : "lib/HTML/FormatRTF.pm",
-         "version" : "2.13"
+         "version" : "2.14"
       },
       "HTML::FormatText" : {
          "file" : "lib/HTML/FormatText.pm",
-         "version" : "2.13"
+         "version" : "2.14"
       },
       "HTML::Formatter" : {
          "file" : "lib/HTML/Formatter.pm",
-         "version" : "2.13"
+         "version" : "2.14"
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "mailto" : "bug-HTML-Formatter@rt.cpan.org",
@@ -117,7 +117,7 @@
          "web" : "https://github.com/nigelm/html-formatter"
       }
    },
-   "version" : "2.13",
+   "version" : "2.14",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.022000"
@@ -601,7 +601,7 @@
                   "branch" : null,
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "release/2.13-TRIAL",
+                  "tag" : "release/2.14",
                   "tag_format" : "release/%v%t",
                   "tag_message" : "Release of %v%t"
                },
@@ -729,7 +729,7 @@
       "zilla" : {
          "class" : "Dist::Zilla::Dist::Builder",
          "config" : {
-            "is_trial" : "1"
+            "is_trial" : "0"
          },
          "version" : "5.039"
       }

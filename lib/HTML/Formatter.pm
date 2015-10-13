@@ -14,7 +14,7 @@ use HTML::Element 3.15 ();
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
-our $VERSION = '2.13'; # TRIAL VERSION
+our $VERSION = '2.14'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 #
@@ -797,13 +797,15 @@ __END__
 
 =for stopwords formatters CPAN homepage
 
+=for HTML <a href="https://travis-ci.org/nigelm/html-formatter"><img src="https://travis-ci.org/nigelm/html-formatter.svg?branch=master"></a>
+
 =head1 NAME
 
 HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.13
+version 2.14
 
 =head1 SYNOPSIS
 

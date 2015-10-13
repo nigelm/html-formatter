@@ -9,7 +9,7 @@ use warnings;
 
 use parent 'HTML::Formatter';
 
-our $VERSION = '2.13'; # TRIAL VERSION
+our $VERSION = '2.14'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 sub default_values {
@@ -308,7 +308,7 @@ HTML::FormatMarkdown - Format HTML as Markdown
 
 =head1 VERSION
 
-version 2.13
+version 2.14
 
 =head1 SYNOPSIS
 
