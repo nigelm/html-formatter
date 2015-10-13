@@ -8,7 +8,7 @@ package HTML::Formatter;
 1;
 __END__
 
-=for stopwords formatters CPAN homepage
+=for stopwords formatters CPAN homepage dependancies
 
 =for HTML <a href="https://travis-ci.org/nigelm/html-formatter"><img src="https://travis-ci.org/nigelm/html-formatter.svg?branch=master"></a>
 
