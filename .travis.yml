@@ -11,7 +11,7 @@ perl:
 sudo: false             # faster builds as long as you don't need sudo access
 
 before_install:
-  #- eval $(curl https://travis-perl.github.io/init) --auto
+  - eval $(curl https://travis-perl.github.io/init) --auto
 
   # prevent "please tell me who you are" errors for certain DZIL configs
   - git config --global user.name "Travis CI"
