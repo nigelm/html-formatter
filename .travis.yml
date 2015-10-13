@@ -11,7 +11,9 @@ perl:
 sudo: false             # faster builds as long as you don't need sudo access
 
 before_install:
+  - export MY_BASE_DIRECTORY=`pwd`
   - eval $(curl https://travis-perl.github.io/init) --auto
+  - cd ${MY_BASE_DIRECTORY}
 
   # prevent "please tell me who you are" errors for certain DZIL configs
   - git config --global user.name "Travis CI"
