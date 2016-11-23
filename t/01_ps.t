@@ -1,10 +1,9 @@
 use strict;
 use warnings;
-use FindBin;
 use File::Spec;    # try to keep pathnames neutral
 use Test::More 0.96;
 
-use lib "$FindBin::Bin/lib";
+use lib 't/lib';
 use Test::HTML::Formatter;
 
 Test::HTML::Formatter->test_files(
