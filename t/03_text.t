@@ -1,11 +1,11 @@
 use strict;
 use warnings;
+use lib 't/lib';
 use FindBin;
 use File::Spec;    # try to keep pathnames neutral
 use Test::More 0.96;
 
-use lib "$FindBin::Bin/lib";
-use Test::HTML::Formatter;
+use_ok('Test::HTML::Formatter');
 
 Test::HTML::Formatter->test_files(
     class_suffix       => 'FormatText',
@@ -16,7 +16,6 @@ Test::HTML::Formatter->test_files(
         # read file content - use older style slurp
         local (*FH);
         open( FH, $expfile ) or die "Unable to open expected file $expfile - $!\n";
-        $DB::single = 1;
         my $exp_text = do { local ($/); <FH> };
         my $exp_lines = [ split( /\n/, $exp_text ) ];
 
