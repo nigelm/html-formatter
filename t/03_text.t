@@ -16,6 +16,7 @@ Test::HTML::Formatter->test_files(
         # read file content - use older style slurp
         local (*FH);
         open( FH, $expfile ) or die "Unable to open expected file $expfile - $!\n";
+        $DB::single = 1;
         my $exp_text = do { local ($/); <FH> };
         my $exp_lines = [ split( /\n/, $exp_text ) ];
 
@@ -23,8 +24,8 @@ Test::HTML::Formatter->test_files(
         my $text = HTML::FormatText->format_file( $infile, leftmargin => 5, rightmargin => 50 );
         my $got_lines = [ split( /\n/, $text ) ];
 
-        ok( length($text), '  Returned a string from conversion' );
-        is_deeply( $got_lines, $exp_lines, '  Correct text string returned' );
+        ok( length($text), "  $infile:  Returned a string from conversion" );
+        is_deeply( $got_lines, $exp_lines, "  $infile: Correct text string returned" );
     }
 );
 
