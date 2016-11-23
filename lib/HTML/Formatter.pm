@@ -10,6 +10,8 @@ __END__
 
 =for stopwords formatters CPAN homepage
 
+=for HTML <a href="https://travis-ci.org/nigelm/html-formatter"><img src="https://travis-ci.org/nigelm/html-formatter.svg?branch=master"></a>
+
 =end :prelude
 
 =head1 SYNOPSIS
@@ -41,6 +43,9 @@ formats.  Different formatters produce output for different output media.
 Common for all formatters are that they will return the formatted output when
 the format() method is called.  The format() method takes a HTML::Element
 object (usually the HTML::TreeBuilder root object) as parameter.
+
+The distribution name has been changed to C<HTML-Formatter> as detailed in
+L<DISTRIBUTION NAME>
 
 =head1 METHODS
 
@@ -898,6 +903,22 @@ sub _convert_spacelike_characters_to_space {
     };
     return $text;
 }
+
+=head1 DISTRIBUTION NAME
+
+This module was originally named C<HTML-Format> despite not containing a
+C<HTML::Format> module within it.  As rules on naming have been taken more
+seriously, and the L<PAUSE|https://pause.perl.org/> toolchain adapted so that
+getting the distribution indexed was more difficult, it became obvious that I
+should rename the distribution to C<HTML-Formatter> matching the base
+L<HTML::Formatter> module.
+
+As of release 2.13 this is released as the C<HTML-Formatter> distribution with
+corresponding changes to the git repository name and associated items.
+
+Due to the way that the module is put together this should have no effect on
+code using the module.  The only issues will be where the distribution name was
+used within dependancies.
 
 =head1 SEE ALSO
 

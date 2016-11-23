@@ -5,13 +5,15 @@ __END__
 
 =for stopwords formatters CPAN homepage
 
+=for HTML <a href="https://travis-ci.org/nigelm/html-formatter"><img src="https://travis-ci.org/nigelm/html-formatter.svg?branch=master"></a>
+
 =head1 NAME
 
 HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.11
+version 2.14
 
 =head1 SYNOPSIS
 
@@ -42,6 +44,9 @@ formats.  Different formatters produce output for different output media.
 Common for all formatters are that they will return the formatted output when
 the format() method is called.  The format() method takes a HTML::Element
 object (usually the HTML::TreeBuilder root object) as parameter.
+
+The distribution name has been changed to C<HTML-Formatter> as detailed in
+L<DISTRIBUTION NAME>
 
 =head1 METHODS
 
@@ -90,6 +95,22 @@ This renders the given HTML object according to the options set for $formatter.
 After you've used a particular formatter object to format a particular HTML
 tree object, you probably should not use either again.
 
+=head1 DISTRIBUTION NAME
+
+This module was originally named C<HTML-Format> despite not containing a
+C<HTML::Format> module within it.  As rules on naming have been taken more
+seriously, and the L<PAUSE|https://pause.perl.org/> toolchain adapted so that
+getting the distribution indexed was more difficult, it became obvious that I
+should rename the distribution to C<HTML-Formatter> matching the base
+L<HTML::Formatter> module.
+
+As of release 2.13 this is released as the C<HTML-Formatter> distribution with
+corresponding changes to the git repository name and associated items.
+
+Due to the way that the module is put together this should have no effect on
+code using the module.  The only issues will be where the distribution name was
+used within dependancies.
+
 =head1 SEE ALSO
 
 The three specific formatters:-
@@ -120,15 +141,15 @@ See perlmodinstall for information and options on installing Perl modules.
 =head1 BUGS AND LIMITATIONS
 
 You can make new bug reports, and view existing ones, through the
-web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Format>.
+web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter>.
 
 =head1 AVAILABILITY
 
-The project homepage is L<https://metacpan.org/release/HTML-Format>.
+The project homepage is L<https://metacpan.org/release/HTML-Formatter>.
 
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<https://metacpan.org/module/HTML::Format/>.
+site near you, or see L<https://metacpan.org/module/HTML::Formatter/>.
 
 =head1 AUTHORS
 
@@ -150,8 +171,9 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
+=cut
