@@ -22,7 +22,7 @@ sub test_files {
         if (-f $expfile) {
             SKIP:
             {
-                if (-l $expfile && readlink($expfile) =~ m{(^|/)skip}i) {
+                if (-s $expfile == 0) {
                     skip "No idea what $expfile should look like", 1;
                 }
                 $args{callback_test_file}->($obj, $infile, $expfile);
