@@ -881,6 +881,25 @@ sub adjust_lm { confess "Must be overridden by subclass"; }
 sub adjust_rm { confess "Must be overridden by subclass"; }
 
 # ------------------------------------------------------------------------
+# Supplied with a string in bytes, takes any characters that look like
+# they really should be spaces and turns them into spaces.
+# Currently only handles the following characters:
+# 0x00A0 NO-BREAK SPACE
+# 0x00AD SOFT HYPHEN.
+
+sub _convert_spacelike_characters_to_space {
+    my ($self, $text) = @_;
+
+    eval {
+        require Encode;
+        $text = decode('UTF-8', $text);
+        $text =~ s/ ( \xA0 | \xAD ) / /gx;
+        $text = encode('UTF-8', $text);
+    };
+    return $text;
+}
+
+# ------------------------------------------------------------------------
 
 =head1 DISTRIBUTION NAME
 
