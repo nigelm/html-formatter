@@ -31,9 +31,6 @@ install:
   - dzil authordeps --missing | cpanm --quiet --notest --skip-satisfied
   - dzil listdeps --author --develop --missing | cpanm --notest --skip-satisfied
   - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=j10:c HARNESS_TIMER=1
-  - cpanm --info Dist::Zilla::PluginBundle::NIGELM
 
 script:
-  - pwd
-  - ls -l
   - dzil test
