@@ -452,8 +452,9 @@ sub header_start {
     #$self->adjust_lm(0); # assert new paragraph
     $self->vspace(1.5);
 
+    ## TODO: work out why that extra $level was there and what its for
     $self->out(
-        \(  sprintf '\s3%s\ql\keepn\f2\fs%s\ul' . "\n", $level, $self->{ 'head' . $level . '_halfpoint_size' }, $level,
+        \(  sprintf '\s3%s\ql\keepn\f2\fs%s\ul' . "\n", $level, $self->{ 'head' . $level . '_halfpoint_size' }, #$level,
         )
     );
 
