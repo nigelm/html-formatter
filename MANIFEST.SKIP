@@ -60,4 +60,4 @@
 \B\.prove$
 
 # Avoid MYMETA files
-^MYMETA\.
+\bMYMETA\.
