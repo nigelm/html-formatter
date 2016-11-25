@@ -905,6 +905,27 @@ sub _convert_spacelike_characters_to_space {
 
 # ------------------------------------------------------------------------
 
+# Supplied with a string in bytes, takes any characters that look like
+# they really should be spaces and turns them into spaces.
+# Currently only handles the following characters:
+# 0x00A0 NO-BREAK SPACE
+# 0x00AD SOFT HYPHEN.
+
+sub _convert_spacelike_characters_to_space {
+    my ($self, $text) = @_;
+
+    return if !defined $text;
+
+    eval {
+        require Encode;
+        my $unicode_text = Encode::decode('UTF-8', $text);
+        if ($unicode_text =~ s/ ( \xA0 | \xAD ) / /gx) {
+            $text = Encode::encode('UTF-8', $unicode_text);
+        }
+    };
+    return $text;
+}
+
 =head1 DISTRIBUTION NAME
 
 This module was originally named C<HTML-Format> despite not containing a
