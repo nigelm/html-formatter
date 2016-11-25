@@ -124,7 +124,7 @@ sub hr_start {
 sub img_start {
     my ( $self, $node ) = @_;
 
-    my $alt = $node->attr('alt');
+    my $alt = $node->attr('alt') || '';
     my $src = $node->attr('src');
 
     $self->out("![$alt]($src)");
@@ -142,8 +142,8 @@ sub a_start {
     }
     else {
         $self->out("[");
+        1;
     }
-
 }
 
 sub a_end {
