@@ -1,4 +1,5 @@
 {{$NEXT}}
+    - Deal with some relatively harmless test failures
 
 2.14      2015-10-13 14:46:01+01:00 Europe/London
     - Added Travis CI status to main documentation
