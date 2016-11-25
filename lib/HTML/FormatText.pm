@@ -31,7 +31,7 @@ or, more simply:
 
 =head1 DESCRIPTION
 
-HTML::FormatText is a formatter that outputs plain latin1 text. All character
+HTML::FormatText is a formatter that outputs plain text. All character
 attributes (bold/italic/underline) are ignored. Formatting of HTML tables and
 forms is not implemented.
 
@@ -183,8 +183,6 @@ sub pre_out {
 sub out {
     my $self = shift;
     my $text = shift;
-
-    $text =~ tr/\xA0\xAD/ /d;
 
     if ( $text =~ /^\s*$/ ) {
         $self->{hspace} = 1;
