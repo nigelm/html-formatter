@@ -1,18 +1,17 @@
 use strict;
 use warnings;
+use FindBin;
 use File::Spec;    # try to keep pathnames neutral
 use Test::More 0.96;
 
-BEGIN { use_ok("HTML::FormatText"); }
+use lib 't/lib';
+use Test::HTML::Formatter;
 
-foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) ) {
-    my $obj = new_ok("HTML::FormatText");
-    ok( -f $infile, "Testing file handling for $infile" );
-    my $expfilename = ( File::Spec->splitpath($infile) )[2];
-    $expfilename =~ s/\.html$/.txt/i;
-    my $expfile = File::Spec->catfile( 't', 'data', 'expected', $expfilename );
-    ok( -f $expfile, '  Expected result file exists' );
-    if ( -f $expfile ) {
+Test::HTML::Formatter->test_files(
+    class_suffix       => 'FormatText',
+    filename_extension => 'txt',
+    callback_test_file => sub {
+        my ($self, $infile, $expfile) = @_;
 
         # read file content - use older style slurp
         local (*FH);
@@ -24,10 +23,10 @@ foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) 
         my $text = HTML::FormatText->format_file( $infile, leftmargin => 5, rightmargin => 50 );
         my $got_lines = [ split( /\n/, $text ) ];
 
-        ok( length($text), '  Returned a string from conversion' );
-        is_deeply( $got_lines, $exp_lines, '  Correct text string returned' );
+        ok( length($text), "  $infile:  Returned a string from conversion" );
+        is_deeply( $got_lines, $exp_lines, "  $infile: Correct text string returned" );
     }
-}
+);
 
 # build a set of tests
 my @test_fragments = (

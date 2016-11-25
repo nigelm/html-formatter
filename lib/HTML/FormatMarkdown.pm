@@ -254,8 +254,6 @@ sub out {
     my $self = shift;
     my $text = shift;
 
-    $text =~ tr/\xA0\xAD/ /d;
-
     if ( $text =~ /^\s*$/ ) {
         $self->{hspace} = 1;
         return;
