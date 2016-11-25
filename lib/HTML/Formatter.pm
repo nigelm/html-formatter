@@ -836,6 +836,7 @@ sub textflow {
         $self->blockquote_out( $_[0] );
     }
     else {
+        $_[0] = $self->_convert_spacelike_characters_to_space( $_[0] );
         for ( split( /(\s+)/, $_[0] ) ) {
             next unless length $_;
             $self->out($_);
@@ -879,6 +880,28 @@ sub out       { confess "Must be overridden by subclass"; }    # Output a word
 sub pre_out   { confess "Must be overridden by subclass"; }
 sub adjust_lm { confess "Must be overridden by subclass"; }
 sub adjust_rm { confess "Must be overridden by subclass"; }
+
+# ------------------------------------------------------------------------
+# Supplied with a string in bytes, takes any characters that look like
+# they really should be spaces and turns them into spaces.
+# Currently only handles the following characters:
+# 0x00A0 NO-BREAK SPACE
+# 0x00AD SOFT HYPHEN.
+
+sub _convert_spacelike_characters_to_space {
+    my ( $self, $text ) = @_;
+
+    return if !defined $text;
+
+    eval {
+        require Encode;
+        my $unicode_text = Encode::decode( 'UTF-8', $text );
+        if ( $unicode_text =~ s/ ( \xA0 | \xAD ) / /gx ) {
+            $text = Encode::encode( 'UTF-8', $unicode_text );
+        }
+    };
+    return $text;
+}
 
 # ------------------------------------------------------------------------
 

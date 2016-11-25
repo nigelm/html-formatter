@@ -3,16 +3,14 @@ use warnings;
 use File::Spec;    # try to keep pathnames neutral
 use Test::More 0.96;
 
-BEGIN { use_ok("HTML::FormatPS"); }
+use lib 't/lib';
+use Test::HTML::Formatter;
 
-foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) ) {
-    my $obj = new_ok("HTML::FormatPS");
-    ok( -f $infile, "Testing file handling for $infile" );
-    my $expfilename = ( File::Spec->splitpath($infile) )[2];
-    $expfilename =~ s/\.html$/.ps/i;
-    my $expfile = File::Spec->catfile( 't', 'data', 'expected', $expfilename );
-    ok( -f $expfile, '  Expected result file exists' );
-    if ( -f $expfile ) {
+Test::HTML::Formatter->test_files(
+    class_suffix       => 'FormatPS',
+    filename_extension => 'ps',
+    callback_test_file => sub {
+        my ( $self, $infile, $expfile ) = @_;
 
         # read file content - split into lines, but we exclude the
         # structured comment lines starting with %% since they include
@@ -50,8 +48,8 @@ foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) 
             ok( ( ( scalar( @{$got_lines} ) - $ok_count ) <= ( scalar( @{$got_lines} ) / 10 ) ),
                 '  Better than 90% output lines match' );
         }
-    }
-}
+    },
+);
 
 # finish up
 done_testing();
