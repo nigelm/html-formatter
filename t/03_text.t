@@ -11,7 +11,7 @@ Test::HTML::Formatter->test_files(
     class_suffix       => 'FormatText',
     filename_extension => 'txt',
     callback_test_file => sub {
-        my ($self, $infile, $expfile) = @_;
+        my ( $self, $infile, $expfile ) = @_;
 
         # read file content - use older style slurp
         local (*FH);

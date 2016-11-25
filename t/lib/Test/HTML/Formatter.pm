@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 
 sub test_files {
-    my ($test_class, %args) = @_;
+    my ( $test_class, %args ) = @_;
 
     # Pull in our class.
     my $class = 'HTML::' . $args{class_suffix};
@@ -19,13 +19,13 @@ sub test_files {
         $expfilename =~ s/\.html$/.$args{filename_extension}/i;
         my $expfile = File::Spec->catfile( 't', 'data', 'expected', $expfilename );
         ok( -f $expfile, "  Expected result file $expfile exists" );
-        if (-f $expfile) {
+        if ( -f $expfile ) {
             SKIP:
             {
-                if (-s $expfile == 0) {
+                if ( -s $expfile == 0 ) {
                     skip "No idea what $expfile should look like", 1;
                 }
-                $args{callback_test_file}->($obj, $infile, $expfile);
+                $args{callback_test_file}->( $obj, $infile, $expfile );
             }
         }
     }

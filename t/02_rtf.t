@@ -10,7 +10,7 @@ Test::HTML::Formatter->test_files(
     class_suffix       => 'FormatRTF',
     filename_extension => 'rtf',
     callback_test_file => sub {
-        my ($self, $infile, $expfile) = @_;
+        my ( $self, $infile, $expfile ) = @_;
 
         # read file content - split into lines, but we exclude the
         # doccomm line since it includes a timestamp and version information

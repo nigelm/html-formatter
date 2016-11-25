@@ -10,7 +10,7 @@ Test::HTML::Formatter->test_files(
     class_suffix       => 'FormatPS',
     filename_extension => 'ps',
     callback_test_file => sub {
-        my ($self, $infile, $expfile) = @_;
+        my ( $self, $infile, $expfile ) = @_;
 
         # read file content - split into lines, but we exclude the
         # structured comment lines starting with %% since they include
@@ -47,7 +47,7 @@ Test::HTML::Formatter->test_files(
             # we test for a 90% or better match
             ok( ( ( scalar( @{$got_lines} ) - $ok_count ) <= ( scalar( @{$got_lines} ) / 10 ) ),
                 '  Better than 90% output lines match' );
-        }        
+        }
     },
 );
 
