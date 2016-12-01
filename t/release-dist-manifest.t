@@ -2,8 +2,8 @@
 
 BEGIN {
   unless ($ENV{RELEASE_TESTING}) {
-    require Test::More;
-    Test::More::plan(skip_all => 'these tests are for release candidate testing');
+    print "1..0 # SKIP these tests are for release candidate testing\n";
+    exit
   }
 }
 

@@ -13,7 +13,7 @@ use utf8;    # for the is_utf8 function
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.14'; # VERSION
+our $VERSION = '2.15'; # TRIAL VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # We now use Smart::Comments in place of the old DEBUG framework.
@@ -878,7 +878,7 @@ HTML::FormatPS - Format HTML as PostScript
 
 =head1 VERSION
 
-version 2.14
+version 2.15
 
 =head1 SYNOPSIS
 
@@ -1091,7 +1091,7 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2016 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

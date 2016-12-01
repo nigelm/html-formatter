@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.14'; # VERSION
+our $VERSION = '2.15'; # TRIAL VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -132,8 +132,6 @@ sub out {
     my $self = shift;
     my $text = shift;
 
-    $text =~ tr/\xA0\xAD/ /d;
-
     if ( $text =~ /^\s*$/ ) {
         $self->{hspace} = 1;
         return;
@@ -222,7 +220,7 @@ HTML::FormatText - Format HTML as plaintext
 
 =head1 VERSION
 
-version 2.14
+version 2.15
 
 =head1 SYNOPSIS
 
@@ -243,7 +241,7 @@ or, more simply:
 
 =head1 DESCRIPTION
 
-HTML::FormatText is a formatter that outputs plain latin1 text. All character
+HTML::FormatText is a formatter that outputs plain text. All character
 attributes (bold/italic/underline) are ignored. Formatting of HTML tables and
 forms is not implemented.
 
@@ -306,7 +304,7 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2016 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

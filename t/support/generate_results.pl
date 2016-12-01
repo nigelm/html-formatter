@@ -21,5 +21,6 @@ foreach my $infile ( glob( File::Spec->catfile( 't', 'data', 'in', '*.html' ) ) 
     write_binary( ( $outfile . 'ps' ), HTML::FormatPS->format_file( $infile, leftmargin => 5, rightmargin => 50 ) );
     write_binary( ( $outfile . 'rtf' ), HTML::FormatRTF->format_file( $infile, leftmargin => 5, rightmargin => 50 ) );
     write_binary( ( $outfile . 'txt' ), HTML::FormatText->format_file( $infile, leftmargin => 5, rightmargin => 50 ) );
-    write_binary( ( $outfile . 'md' ), HTML::FormatMarkdown->format_file( $infile, leftmargin => 5, rightmargin => 50 ) );
+    write_binary( ( $outfile . 'md' ),
+        HTML::FormatMarkdown->format_file( $infile, leftmargin => 5, rightmargin => 50 ) );
 }

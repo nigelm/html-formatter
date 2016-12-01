@@ -9,7 +9,7 @@ use warnings;
 
 use parent 'HTML::Formatter';
 
-our $VERSION = '2.14'; # VERSION
+our $VERSION = '2.15'; # TRIAL VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 sub default_values {
@@ -93,7 +93,7 @@ sub hr_start {
 sub img_start {
     my ( $self, $node ) = @_;
 
-    my $alt = $node->attr('alt');
+    my $alt = $node->attr('alt') || '';
     my $src = $node->attr('src');
 
     $self->out("![$alt]($src)");
@@ -111,8 +111,8 @@ sub a_start {
     }
     else {
         $self->out("[");
+        1;
     }
-
 }
 
 sub a_end {
@@ -223,8 +223,6 @@ sub out {
     my $self = shift;
     my $text = shift;
 
-    $text =~ tr/\xA0\xAD/ /d;
-
     if ( $text =~ /^\s*$/ ) {
         $self->{hspace} = 1;
         return;
@@ -308,7 +306,7 @@ HTML::FormatMarkdown - Format HTML as Markdown
 
 =head1 VERSION
 
-version 2.14
+version 2.15
 
 =head1 SYNOPSIS
 
@@ -367,7 +365,7 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2016 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -14,7 +14,7 @@ use HTML::Element 3.15 ();
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
-our $VERSION = '2.14'; # VERSION
+our $VERSION = '2.15'; # TRIAL VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 #
@@ -739,6 +739,7 @@ sub textflow {
         $self->blockquote_out( $_[0] );
     }
     else {
+        $_[0] = $self->_convert_spacelike_characters_to_space( $_[0] );
         for ( split( /(\s+)/, $_[0] ) ) {
             next unless length $_;
             $self->out($_);
@@ -784,6 +785,28 @@ sub adjust_lm { confess "Must be overridden by subclass"; }
 sub adjust_rm { confess "Must be overridden by subclass"; }
 
 # ------------------------------------------------------------------------
+# Supplied with a string in bytes, takes any characters that look like
+# they really should be spaces and turns them into spaces.
+# Currently only handles the following characters:
+# 0x00A0 NO-BREAK SPACE
+# 0x00AD SOFT HYPHEN.
+
+sub _convert_spacelike_characters_to_space {
+    my ( $self, $text ) = @_;
+
+    return if !defined $text;
+
+    eval {
+        require Encode;
+        my $unicode_text = Encode::decode( 'UTF-8', $text );
+        if ( $unicode_text =~ s/ ( \xA0 | \xAD ) / /gx ) {
+            $text = Encode::encode( 'UTF-8', $unicode_text );
+        }
+    };
+    return $text;
+}
+
+# ------------------------------------------------------------------------
 
 
 1;
@@ -795,7 +818,7 @@ __END__
 =for test_synopsis 1;
 __END__
 
-=for stopwords formatters CPAN homepage
+=for stopwords dependancies formatters CPAN homepage
 
 =for HTML <a href="https://travis-ci.org/nigelm/html-formatter"><img src="https://travis-ci.org/nigelm/html-formatter.svg?branch=master"></a>
 
@@ -805,7 +828,7 @@ HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.14
+version 2.15
 
 =head1 SYNOPSIS
 
@@ -963,7 +986,7 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2016 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

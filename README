@@ -4,7 +4,7 @@ NAME
 
 VERSION
 
-    version 2.14
+    version 2.15
 
 SYNOPSIS
 
@@ -154,7 +154,7 @@ AUTHORS
 
 COPYRIGHT AND LICENSE
 
-    This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005
+    This software is copyright (c) 2016 by Nigel Metheringham, 2002-2005
     Sean M Burke, 1999-2002 Gisle Aas.
 
     This is free software; you can redistribute it and/or modify it under

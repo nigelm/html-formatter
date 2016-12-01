@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.14'; # VERSION
+our $VERSION = '2.15'; # TRIAL VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -326,8 +326,9 @@ sub header_start {
     #$self->adjust_lm(0); # assert new paragraph
     $self->vspace(1.5);
 
+    ## TODO: work out why that extra $level was there and what its for
     $self->out(
-        \(  sprintf '\s3%s\ql\keepn\f2\fs%s\ul' . "\n", $level, $self->{ 'head' . $level . '_halfpoint_size' }, $level,
+        \(  sprintf '\s3%s\ql\keepn\f2\fs%s\ul' . "\n", $level, $self->{ 'head' . $level . '_halfpoint_size' }, #$level,
         )
     );
 
@@ -510,7 +511,7 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.14
+version 2.15
 
 =head1 SYNOPSIS
 
@@ -667,7 +668,7 @@ Gisle Aas <gisle@ActiveState.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
+This software is copyright (c) 2016 by Nigel Metheringham, 2002-2005 Sean M Burke, 1999-2002 Gisle Aas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
