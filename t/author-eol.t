@@ -21,6 +21,8 @@ my @files = (
     'lib/HTML/FormatText.pm',
     'lib/HTML/Formatter.pm',
     't/00-compile.t',
+    't/00-report-prereqs.dd',
+    't/00-report-prereqs.t',
     't/01_ps.t',
     't/02_rtf.t',
     't/03_text.t',

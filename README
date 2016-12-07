@@ -4,7 +4,7 @@ NAME
 
 VERSION
 
-    version 2.15
+    version 2.16
 
 SYNOPSIS
 
@@ -124,25 +124,22 @@ SEE ALSO
     Also the HTML manipulation libraries used - HTML::TreeBuilder,
     HTML::Element and HTML::Tree
 
-INSTALLATION
+SUPPORT
 
-    See perlmodinstall for information and options on installing Perl
-    modules.
+ Bugs / Feature Requests
 
-BUGS AND LIMITATIONS
+    Please report any bugs or feature requests through the issue tracker at
+    http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter. You
+    will be notified automatically of any progress on your issue.
 
-    You can make new bug reports, and view existing ones, through the web
-    interface at
-    http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter.
+ Source Code
 
-AVAILABILITY
+    This is open source software. The code repository is available for
+    public review and contribution under the terms of the license.
 
-    The project homepage is https://metacpan.org/release/HTML-Formatter.
+    https://github.com/nigelm/html-formatter
 
-    The latest version of this module is available from the Comprehensive
-    Perl Archive Network (CPAN). Visit http://www.perl.com/CPAN/ to find a
-    CPAN site near you, or see
-    https://metacpan.org/module/HTML::Formatter/.
+      git clone https://github.com/nigelm/html-formatter.git
 
 AUTHORS
 

@@ -14,7 +14,7 @@ use HTML::Element 3.15 ();
 # this should be commented out in release versions....
 ##use Smart::Comments;
 
-our $VERSION = '2.15'; # TRIAL VERSION
+our $VERSION = '2.16'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 #
@@ -815,12 +815,7 @@ __END__
 
 =pod
 
-=for test_synopsis 1;
-__END__
-
-=for stopwords dependancies formatters CPAN homepage
-
-=for HTML <a href="https://travis-ci.org/nigelm/html-formatter"><img src="https://travis-ci.org/nigelm/html-formatter.svg?branch=master"></a>
+=encoding UTF-8
 
 =head1 NAME
 
@@ -828,7 +823,14 @@ HTML::Formatter - Base class for HTML formatters
 
 =head1 VERSION
 
-version 2.15
+version 2.16
+
+=for test_synopsis 1;
+__END__
+
+=for stopwords dependancies formatters CPAN homepage
+
+=for HTML <a href="https://travis-ci.org/nigelm/html-formatter"><img src="https://travis-ci.org/nigelm/html-formatter.svg?branch=master"></a>
 
 =head1 SYNOPSIS
 
@@ -949,22 +951,24 @@ Format HTML into Rich Text Format
 Also the HTML manipulation libraries used - L<HTML::TreeBuilder>,
 L<HTML::Element> and L<HTML::Tree>
 
-=head1 INSTALLATION
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
 
-See perlmodinstall for information and options on installing Perl modules.
+=head1 SUPPORT
 
-=head1 BUGS AND LIMITATIONS
+=head2 Bugs / Feature Requests
 
-You can make new bug reports, and view existing ones, through the
-web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter>.
+Please report any bugs or feature requests through the issue tracker
+at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter>.
+You will be notified automatically of any progress on your issue.
 
-=head1 AVAILABILITY
+=head2 Source Code
 
-The project homepage is L<https://metacpan.org/release/HTML-Formatter>.
+This is open source software.  The code repository is available for
+public review and contribution under the terms of the license.
 
-The latest version of this module is available from the Comprehensive Perl
-Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<https://metacpan.org/module/HTML::Formatter/>.
+L<https://github.com/nigelm/html-formatter>
+
+  git clone https://github.com/nigelm/html-formatter.git
 
 =head1 AUTHORS
 

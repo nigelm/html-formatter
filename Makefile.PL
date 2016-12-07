@@ -43,6 +43,7 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
+    "ExtUtils::MakeMaker" => 0,
     "File::Slurper" => 0,
     "File::Spec" => 0,
     "FindBin" => 0,
@@ -54,7 +55,7 @@ my %WriteMakefileArgs = (
     "bytes" => 0,
     "lib" => 0
   },
-  "VERSION" => "2.15",
+  "VERSION" => "2.16",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -65,6 +66,7 @@ my %FallbackPrereqs = (
   "Carp" => 0,
   "Data::Dumper" => 0,
   "Encode" => 0,
+  "ExtUtils::MakeMaker" => 0,
   "File::Slurper" => 0,
   "File::Spec" => 0,
   "FindBin" => 0,

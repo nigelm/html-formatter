@@ -13,7 +13,7 @@ use warnings;
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.15'; # TRIAL VERSION
+our $VERSION = '2.16'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # ------------------------------------------------------------------------
@@ -499,11 +499,7 @@ __END__
 
 =pod
 
-=for test_synopsis 1;
-__END__
-
-=for stopwords arial bookman lm pagenumber prolog rtf tahoma verdana CPAN
-    homepage rm sans serif twentieths
+=encoding UTF-8
 
 =head1 NAME
 
@@ -511,7 +507,13 @@ HTML::FormatRTF - Format HTML as RTF
 
 =head1 VERSION
 
-version 2.15
+version 2.16
+
+=for test_synopsis 1;
+__END__
+
+=for stopwords arial bookman lm pagenumber prolog rtf tahoma verdana CPAN
+    homepage rm sans serif twentieths
 
 =head1 SYNOPSIS
 
@@ -630,23 +632,6 @@ document.  This option is of interest only to advanced users.
 =head1 SEE ALSO
 
 L<HTML::Formatter>, L<RTF::Writer>
-
-=head1 INSTALLATION
-
-See perlmodinstall for information and options on installing Perl modules.
-
-=head1 BUGS AND LIMITATIONS
-
-You can make new bug reports, and view existing ones, through the
-web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter>.
-
-=head1 AVAILABILITY
-
-The project homepage is L<https://metacpan.org/release/HTML-Formatter>.
-
-The latest version of this module is available from the Comprehensive Perl
-Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<https://metacpan.org/module/HTML::Formatter/>.
 
 =head1 AUTHORS
 

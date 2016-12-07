@@ -1,5 +1,11 @@
+2.16      2016-12-07 09:12:41+00:00 Europe/London
+    - Public release after a period on test with the smokers
+
 2.15      2016-12-01 15:40:16+00:00 Europe/London (TRIAL RELEASE)
     - Deal with some relatively harmless test failures
+    - RT#11783 fixes for Markdown fragment issues
+    - Series of changes for UTF support from Sam Kington
+    - Better travis handling
 
 2.14      2015-10-13 14:46:01+01:00 Europe/London
     - Added Travis CI status to main documentation

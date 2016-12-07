@@ -9,7 +9,7 @@ use warnings;
 
 use parent 'HTML::Formatter';
 
-our $VERSION = '2.15'; # TRIAL VERSION
+our $VERSION = '2.16'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 sub default_values {
@@ -295,10 +295,7 @@ __END__
 
 =pod
 
-=for stopwords CPAN Markdown homepage
-
-=for test_synopsis 1;
-__END__
+=encoding UTF-8
 
 =head1 NAME
 
@@ -306,7 +303,12 @@ HTML::FormatMarkdown - Format HTML as Markdown
 
 =head1 VERSION
 
-version 2.15
+version 2.16
+
+=for stopwords CPAN Markdown homepage
+
+=for test_synopsis 1;
+__END__
 
 =head1 SYNOPSIS
 
@@ -327,23 +329,6 @@ HTML::FormatMarkdown is a formatter that outputs Markdown.
 HTML::FormatMarkdown is built on L<HTML::Formatter> and documentation for that
 module applies to this - especially L<HTML::Formatter/new>,
 L<HTML::Formatter/format_file> and L<HTML::Formatter/format_string>.
-
-=head1 INSTALLATION
-
-See perlmodinstall for information and options on installing Perl modules.
-
-=head1 BUGS AND LIMITATIONS
-
-You can make new bug reports, and view existing ones, through the
-web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter>.
-
-=head1 AVAILABILITY
-
-The project homepage is L<https://metacpan.org/release/HTML-Formatter>.
-
-The latest version of this module is available from the Comprehensive Perl
-Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<https://metacpan.org/module/HTML::Formatter/>.
 
 =head1 AUTHORS
 

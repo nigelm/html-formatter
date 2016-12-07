@@ -13,7 +13,7 @@ use utf8;    # for the is_utf8 function
 
 use base 'HTML::Formatter';
 
-our $VERSION = '2.15'; # TRIAL VERSION
+our $VERSION = '2.16'; # VERSION
 our $AUTHORITY = 'cpan:NIGELM'; # AUTHORITY
 
 # We now use Smart::Comments in place of the old DEBUG framework.
@@ -863,6 +863,16 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
+=head1 NAME
+
+HTML::FormatPS - Format HTML as PostScript
+
+=head1 VERSION
+
+version 2.16
+
 =for test_synopsis 1;
 __END__
 
@@ -871,14 +881,6 @@ __END__
     paperheight papersize paperwidth postscript rightmargin
     startpage topmargin verticalmargin ledding leeding prolog
     CPAN Quarto Tabloid Unicode homepage
-
-=head1 NAME
-
-HTML::FormatPS - Format HTML as PostScript
-
-=head1 VERSION
-
-version 2.15
 
 =head1 SYNOPSIS
 
@@ -1053,23 +1055,6 @@ And, if it's ever even reasonably possible, support for tables.
 
 I would welcome email from people who can help me out or advise me on the
 above.
-
-=head1 INSTALLATION
-
-See perlmodinstall for information and options on installing Perl modules.
-
-=head1 BUGS AND LIMITATIONS
-
-You can make new bug reports, and view existing ones, through the
-web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter>.
-
-=head1 AVAILABILITY
-
-The project homepage is L<https://metacpan.org/release/HTML-Formatter>.
-
-The latest version of this module is available from the Comprehensive Perl
-Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see L<https://metacpan.org/module/HTML::Formatter/>.
 
 =head1 AUTHORS
 

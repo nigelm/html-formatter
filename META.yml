@@ -5,6 +5,7 @@ author:
   - 'Sean M Burke <sburke@cpan.org>'
   - 'Gisle Aas <gisle@ActiveState.com>'
 build_requires:
+  ExtUtils::MakeMaker: '0'
   File::Slurper: '0'
   File::Spec: '0'
   FindBin: '0'
@@ -27,19 +28,19 @@ name: HTML-Formatter
 provides:
   HTML::FormatMarkdown:
     file: lib/HTML/FormatMarkdown.pm
-    version: '2.15'
+    version: '2.16'
   HTML::FormatPS:
     file: lib/HTML/FormatPS.pm
-    version: '2.15'
+    version: '2.16'
   HTML::FormatRTF:
     file: lib/HTML/FormatRTF.pm
-    version: '2.15'
+    version: '2.16'
   HTML::FormatText:
     file: lib/HTML/FormatText.pm
-    version: '2.15'
+    version: '2.16'
   HTML::Formatter:
     file: lib/HTML/Formatter.pm
-    version: '2.15'
+    version: '2.16'
 requires:
   Carp: '0'
   Data::Dumper: '0'
@@ -70,7 +71,7 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Formatter
   homepage: https://metacpan.org/release/HTML-Formatter
   repository: https://github.com/nigelm/html-formatter.git
-version: '2.15'
+version: '2.16'
 x_Dist_Zilla:
   perl:
     version: '5.024000'
@@ -213,6 +214,10 @@ x_Dist_Zilla:
       name: '@NIGELM/Test::EOL'
       version: '0.19'
     -
+      class: Dist::Zilla::Plugin::Test::ReportPrereqs
+      name: '@NIGELM/Test::ReportPrereqs'
+      version: '0.025'
+    -
       class: Dist::Zilla::Plugin::InlineFiles
       name: '@NIGELM/InlineFiles'
       version: '6.007'
@@ -291,11 +296,19 @@ x_Dist_Zilla:
       config:
         Dist::Zilla::Plugin::PodWeaver:
           config_plugins:
-            - '@MARCEL'
+            - '@DAGOLDEN'
           finder:
             - ':InstallModules'
             - ':ExecFiles'
           plugins:
+            -
+              class: Pod::Weaver::Plugin::SingleEncoding
+              name: '@DAGOLDEN/SingleEncoding'
+              version: '4.014'
+            -
+              class: Pod::Weaver::Plugin::WikiDoc
+              name: '@DAGOLDEN/WikiDoc'
+              version: '0.093004'
             -
               class: Pod::Weaver::Plugin::EnsurePod5
               name: '@CorePrep/EnsurePod5'
@@ -305,68 +318,84 @@ x_Dist_Zilla:
               name: '@CorePrep/H1Nester'
               version: '4.014'
             -
-              class: Pod::Weaver::Section::Region
-              name: '@Default/prelude'
-              version: '4.014'
-            -
               class: Pod::Weaver::Section::Name
-              name: '@Default/Name'
+              name: '@DAGOLDEN/Name'
               version: '4.014'
             -
               class: Pod::Weaver::Section::Version
-              name: '@Default/Version'
-              version: '4.014'
-            -
-              class: Pod::Weaver::Section::Generic
-              name: SYNOPSIS
-              version: '4.014'
-            -
-              class: Pod::Weaver::Section::Generic
-              name: DESCRIPTION
-              version: '4.014'
-            -
-              class: Pod::Weaver::Section::Generic
-              name: OVERVIEW
-              version: '4.014'
-            -
-              class: Pod::Weaver::Section::Collect
-              name: ATTRIBUTES
-              version: '4.014'
-            -
-              class: Pod::Weaver::Section::Collect
-              name: METHODS
-              version: '4.014'
-            -
-              class: Pod::Weaver::Section::Collect
-              name: FUNCTIONS
-              version: '4.014'
-            -
-              class: Pod::Weaver::Section::Leftovers
-              name: '@Default/Leftovers'
+              name: '@DAGOLDEN/Version'
               version: '4.014'
             -
               class: Pod::Weaver::Section::Region
-              name: '@Default/postlude'
+              name: '@DAGOLDEN/Prelude'
               version: '4.014'
             -
-              class: Pod::Weaver::Section::Installation
-              name: '@Default/Installation'
-              version: '1.101421'
+              class: Pod::Weaver::Section::Generic
+              name: '@DAGOLDEN/Synopsis'
+              version: '4.014'
             -
-              class: Pod::Weaver::Section::BugsAndLimitations
-              name: '@Default/BugsAndLimitations'
-              version: '1.20'
+              class: Pod::Weaver::Section::Generic
+              name: '@DAGOLDEN/Description'
+              version: '4.014'
             -
-              class: Pod::Weaver::Section::Availability
-              name: '@Default/Availability'
-              version: '1.20'
+              class: Pod::Weaver::Section::Generic
+              name: '@DAGOLDEN/Usage'
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Generic
+              name: '@DAGOLDEN/Overview'
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Generic
+              name: '@DAGOLDEN/Stability'
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Collect
+              name: Requirements
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Collect
+              name: Attributes
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Collect
+              name: Constructors
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Collect
+              name: Methods
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Collect
+              name: Functions
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Leftovers
+              name: '@DAGOLDEN/Leftovers'
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Region
+              name: '@DAGOLDEN/postlude'
+              version: '4.014'
+            -
+              class: Pod::Weaver::Section::Support
+              name: '@DAGOLDEN/Support'
+              version: '1.007'
             -
               class: Pod::Weaver::Section::Authors
-              name: '@Default/Authors'
+              name: '@DAGOLDEN/Authors'
               version: '4.014'
             -
+              class: Pod::Weaver::Section::Contributors
+              name: '@DAGOLDEN/Contributors'
+              version: '0.009'
+            -
               class: Pod::Weaver::Section::Legal
-              name: '@Default/Legal'
+              name: '@DAGOLDEN/Legal'
+              version: '4.014'
+            -
+              class: Pod::Weaver::Plugin::Transformer
+              name: '@DAGOLDEN/List'
               version: '4.014'
       name: '@NIGELM/PodWeaver'
       version: '4.008'
@@ -438,7 +467,7 @@ x_Dist_Zilla:
           branch: ~
           changelog: Changes
           signed: 0
-          tag: release/2.15-TRIAL
+          tag: release/2.16
           tag_format: release/%v%t
           tag_message: 'Release of %v%t'
         Dist::Zilla::Role::Git::Repo:
@@ -545,7 +574,7 @@ x_Dist_Zilla:
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
-      is_trial: '1'
+      is_trial: '0'
     version: '6.007'
 x_authority: cpan:NIGELM
 x_serialization_backend: 'YAML::Tiny version 1.69'
